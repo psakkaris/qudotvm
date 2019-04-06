@@ -1,25 +1,25 @@
 #include "common.h"
 #include "quworld.h"
 
-QuWorld::QuWorld(short int numQubits, unsigned int id, QuAmp amp, bool bval) : 
-        numQubits(numQubits), id(id), amplitude(amp), enablingQubit(bval)
+QuWorld::QuWorld(short int _num_qubits, unsigned int id, QuAmp amp, bool bval) : 
+        num_qubits(_num_qubits), id(id), amplitude(amp), enablingQubit(bval)
 {
-    qudotNet = new QuAmp[numQubits*4];   
-    for (int i=0; i < numQubits; i++) {
+    qudot_net = new QuAmp[num_qubits*4];   
+    for (int i=0; i < num_qubits; i++) {
         const int row = i*qu_stride;
-        qudotNet[row + 0] = 1;
-        qudotNet[row + 1] = 0;
-        qudotNet[row + 2] = 0;
-        qudotNet[row + 3] = 0;
+        qudot_net[row + 0] = 1;
+        qudot_net[row + 1] = 0;
+        qudot_net[row + 2] = 0;
+        qudot_net[row + 3] = 0;
     } 
 }
 
 QuWorld::~QuWorld() {
-    delete[] qudotNet;
+    delete[] qudot_net;
 }
 
 int QuWorld::getNumQubits() const {
-    return numQubits;
+    return num_qubits;
 }
 
 int QuWorld::getId() const {
@@ -45,9 +45,9 @@ void QuWorld::setEnablingQubit(bool bval) {
 bool QuWorld::isActive(int q, Qubit qval) const {
     int row = getRow(q);
     if (qval == ZERO) {
-        return isNotZero(qudotNet[row]) || isNotZero(qudotNet[row+2]);
+        return isNotZero(qudot_net[row]) || isNotZero(qudot_net[row+2]);
     } else {
-        return isNotZero(qudotNet[row+1]) || isNotZero(qudotNet[row+3]);
+        return isNotZero(qudot_net[row+1]) || isNotZero(qudot_net[row+3]);
     }
 }
 
@@ -66,27 +66,27 @@ int QuWorld::getRow(int q) const {
 
 QuAmp QuWorld::getZeroAmplitude(int q) const {
     int row = getRow(q);
-    QuAmp amp = qudotNet[row];
+    QuAmp amp = qudot_net[row];
     if (isNotZero(amp)) {
         return amp;
     }
 
-    return qudotNet[row+2];
+    return qudot_net[row+2];
 }
 
 QuAmp QuWorld::getOneAmplitude(int q) const {
     int row = getRow(q);
-    QuAmp amp = qudotNet[row+1];
+    QuAmp amp = qudot_net[row+1];
     if (isNotZero(amp)) {
         return amp;
     }
 
-    return qudotNet[row+3];
+    return qudot_net[row+3];
 }
 
 void QuWorld::setDotAmplitude(int q, Qubit qval, const QuAmp& amp) {
-    qudotNet[getRow(q) + qval] = amp;
-    qudotNet[getRow(q) + qval + 2] = amp;
+    qudot_net[getRow(q) + qval] = amp;
+    qudot_net[getRow(q) + qval + 2] = amp;
 }
 
 float QuWorld::getQubitProbability(int q, Qubit qval) const {
@@ -105,25 +105,25 @@ bool QuWorld::isSplitWorlds(int q) const {
 
 void QuWorld::deactivate(int q, Qubit qval) {
     int row = getRow(q);
-    qudotNet[row+qval] = ZERO_AMP;
-    qudotNet[row+qval+2] = ZERO_AMP;
+    qudot_net[row+qval] = ZERO_AMP;
+    qudot_net[row+qval+2] = ZERO_AMP;
 }
 
 void QuWorld::activate(int q, Qubit qval) {
     int row = getRow(q);
     if (isActive(q, qval)) {
-        qudotNet[row+qval] = ONE_AMP;
-        qudotNet[row+qval+2] = ONE_AMP;
+        qudot_net[row+qval] = ONE_AMP;
+        qudot_net[row+qval+2] = ONE_AMP;
     }
 }
 
 void QuWorld::deactivateChildren(int q, Qubit qval) {
     int row = getRow(q+1);
     if (qval == ZERO) {
-        qudotNet[row] = ZERO_AMP;
-        qudotNet[row+1] = ZERO_AMP;
+        qudot_net[row] = ZERO_AMP;
+        qudot_net[row+1] = ZERO_AMP;
     } else {
-        qudotNet[row+2] = ZERO_AMP;
-        qudotNet[row+3] = ZERO_AMP;
+        qudot_net[row+2] = ZERO_AMP;
+        qudot_net[row+3] = ZERO_AMP;
     }
 }

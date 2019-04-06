@@ -15,17 +15,17 @@
 
 class QuWorld {
     private:
-        const short int numQubits;
+        const short int num_qubits;
         const unsigned int id;
         QuAmp amplitude;
-        QuAmp* qudotNet;
+        QuAmp* qudot_net;
         bool enablingQubit;
 
         //void swapDots(int qubitA, QuAmp qBZeroAmp, QuAmp qBOneAmp);
         int getRow(int q) const;
 
     public:
-        QuWorld(short int numQubits, unsigned int id, QuAmp amp, bool bval = true);
+        QuWorld(short int num_qubits, unsigned int id, QuAmp amp, bool bval = true);
         ~QuWorld();
 
         // void setQuDotNet(QuAmp& qudotnet);
