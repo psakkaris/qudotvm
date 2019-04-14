@@ -1,7 +1,7 @@
 #include "common.h"
 #include "quworld.h"
 
-QuWorld::QuWorld(short int _num_qubits, unsigned int id, QuAmp amp, bool bval) : 
+QuWorld::QuWorld(short int _num_qubits, unsigned int id, QuAmp64 amp, bool bval) : 
         num_qubits(_num_qubits), id(id), amplitude(amp), enablingQubit(bval)
 {
     qudot_net = new QuAmp[num_qubits*4];   
@@ -26,11 +26,11 @@ int QuWorld::getId() const {
     return id;
 }
 
-QuAmp QuWorld::getWorldAmplitude() const {
+QuAmp64 QuWorld::getWorldAmplitude() const {
     return amplitude;
 }
 
-void QuWorld::setWorldAmplitude(QuAmp& amp) {
+void QuWorld::setWorldAmplitude(QuAmp64& amp) {
     amplitude = amp;
 }
 
@@ -126,4 +126,18 @@ void QuWorld::deactivateChildren(int q, Qubit qval) {
         qudot_net[row+2] = ZERO_AMP;
         qudot_net[row+3] = ZERO_AMP;
     }
+}
+
+bool QuWorld::areNetsEqual(QuWorld& other) {
+    if (num_qubits != other.getNumQubits()) {
+        return false;
+    }
+    QuAmp delta = ZERO_AMP;
+    for (int i=0; i < num_qubits; i++) {
+        const int stride = i*qu_stride;
+        for (int j=0; j < qu_stride; j++) {
+            delta += qudot_net[stride + j] - other.qudot_net[stride + j];        
+        }
+    }
+    return !isNotZero(delta);
 }

@@ -4,7 +4,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(kratostest)
 
 #Bring the headers, into the project
-include_directories(${CMAKE_SOURCE_DIR}/../include)
+include_directories(${CMAKE_SOURCE_DIR}/../include "/opt/intel/mkl/include")
+link_directories(/opt/intel/mkl/lib/intel64)
  
 #Can manually add the sources using the set command as follows:
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
@@ -15,4 +16,4 @@ file(GLOB SOURCES "*.cpp")
 add_executable(testmain ${SOURCES})
 
 # link the libraries to the executable
-target_link_libraries(testmain gtest ${CMAKE_SOURCE_DIR}/../build/libqudot.a)
+target_link_libraries(testmain gtest mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl ${CMAKE_SOURCE_DIR}/../build/libqudot.a)

@@ -17,7 +17,7 @@ class QuWorld {
     private:
         const short int num_qubits;
         const unsigned int id;
-        QuAmp amplitude;
+        QuAmp64 amplitude;
         QuAmp* qudot_net;
         bool enablingQubit;
 
@@ -25,7 +25,7 @@ class QuWorld {
         int getRow(int q) const;
 
     public:
-        QuWorld(short int num_qubits, unsigned int id, QuAmp amp, bool bval = true);
+        QuWorld(short int num_qubits, unsigned int id, QuAmp64 amp, bool bval = true);
         ~QuWorld();
 
         // void setQuDotNet(QuAmp& qudotnet);
@@ -33,8 +33,8 @@ class QuWorld {
         void setEnablingQubit(bool bval);
         int getId() const;
         void setDotAmplitude(int q, Qubit qval, const QuAmp& amp);
-        QuAmp getWorldAmplitude() const;
-        void setWorldAmplitude(QuAmp& amp);
+        QuAmp64 getWorldAmplitude() const;
+        void setWorldAmplitude(QuAmp64& amp);
         QuAmp getZeroAmplitude(int q) const;
         QuAmp getOneAmplitude(int q) const;
         float getQubitProbability(int q, Qubit qval) const;
@@ -44,10 +44,11 @@ class QuWorld {
         bool areActive(int qubits[], int size, Qubit qval) const;
         void deactivate(int q, Qubit qval);
         void deactivateChildren(int q, Qubit qval);
+        // will only activate if it does not have zero amplitudes
         void activate(int q, Qubit qval);
         // void swapQubits(int qubitA, int qubitB, Qubit enablingQubit);
         // std::string measure();
-        // bool areNetsEqual(QuAmp& other);
+        bool areNetsEqual(QuWorld& other);
         // std::string getWorldSigniture();
 };
 

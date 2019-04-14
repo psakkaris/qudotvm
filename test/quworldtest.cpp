@@ -3,17 +3,20 @@
 
 TEST(QuWorldTest, testCreate) {
     QuAmp oneAmp = QuAmp(1,0);
+    QuAmp64 oneAmp64 = QuAmp64(1,0);
     QuAmp zeroAmp = QuAmp(0,0);
+    QuAmp64 zeroAmp64 = QuAmp64(0,0);
     QuAmp iAmp = QuAmp(0,1);
+    QuAmp64 iAmp64 = QuAmp64(0,1);
 
-    QuWorld* quworld = new QuWorld(5, 0, oneAmp);
+    QuWorld* quworld = new QuWorld(5, 0, oneAmp64);
     ASSERT_EQ(quworld->getId(), 0);
     ASSERT_EQ(quworld->getNumQubits(), 5);
-    ASSERT_EQ(quworld->getWorldAmplitude(), QuAmp(1,0));
-    ASSERT_NE(quworld->getWorldAmplitude(), zeroAmp);
-    quworld->setWorldAmplitude(iAmp);
+    ASSERT_EQ(quworld->getWorldAmplitude(), QuAmp64(1,0));
+    ASSERT_NE(quworld->getWorldAmplitude(), zeroAmp64);
+    quworld->setWorldAmplitude(iAmp64);
 
-    ASSERT_EQ(quworld->getWorldAmplitude(), iAmp);
+    ASSERT_EQ(quworld->getWorldAmplitude(), iAmp64);
     ASSERT_EQ(quworld->getEnablingQubit(), true);
     quworld->setEnablingQubit(false);
     ASSERT_FALSE(quworld->getEnablingQubit());
@@ -21,7 +24,7 @@ TEST(QuWorldTest, testCreate) {
 }
 
 TEST(QuWorldTest, testQuDotNet) {
-    QuWorld myWorld(5, 1, QuAmp(1,0));
+    QuWorld myWorld(5, 1, QuAmp64(1,0));
     ASSERT_TRUE(myWorld.isActive(1, ZERO));
     ASSERT_TRUE(myWorld.isActive(2, ZERO));
     ASSERT_TRUE(myWorld.isActive(3, ZERO));
@@ -44,7 +47,7 @@ TEST(QuWorldTest, testQuDotNet) {
 }
 
 TEST(QuWorldTest, testAmplitudes) {
-    QuWorld myWorld(5, 1, ONE_AMP);
+    QuWorld myWorld(5, 1, ONE_AMP64);
     ASSERT_EQ(myWorld.getOneAmplitude(3), ZERO_AMP);
     ASSERT_EQ(myWorld.getOneAmplitude(1), ZERO_AMP);
     ASSERT_EQ(myWorld.getOneAmplitude(5), ZERO_AMP);
@@ -55,7 +58,7 @@ TEST(QuWorldTest, testAmplitudes) {
 }
 
 TEST(QuWorldTest, testProbability) {
-    QuWorld myWorld(3, 1, ONE_AMP);
+    QuWorld myWorld(3, 1, ONE_AMP64);
     ASSERT_EQ(myWorld.getQubitProbability(1, ZERO), 1);
     ASSERT_EQ(myWorld.getQubitProbability(3, ONE), 0);
 
@@ -69,7 +72,7 @@ TEST(QuWorldTest, testProbability) {
 }
 
 TEST(QuWorldTest, testSplitWorlds) {
-    QuWorld myWorld(3, 1, ONE_AMP);
+    QuWorld myWorld(3, 1, ONE_AMP64);
     myWorld.setDotAmplitude(2, ZERO, ROOT2);
     myWorld.setDotAmplitude(2, ONE, ROOT2);    
 
@@ -83,7 +86,7 @@ TEST(QuWorldTest, testSplitWorlds) {
 }
 
 TEST(QuWorldTest, testActivation) {
-    QuWorld myWorld(5, 1, ONE_AMP);
+    QuWorld myWorld(5, 1, ONE_AMP64);
     myWorld.setDotAmplitude(2, ZERO, ROOT2);
     myWorld.setDotAmplitude(2, ONE, ROOT2);
     myWorld.setDotAmplitude(3, ZERO, ROOT2);
@@ -105,4 +108,32 @@ TEST(QuWorldTest, testActivation) {
     // should only activate if not (0,0)
     myWorld.activate(2, ZERO);
     ASSERT_FALSE(myWorld.isSplitWorlds(2));
+}
+
+TEST(QuWorldTest, testNetEquality) {
+    QuWorld myWorld(5, 1, ONE_AMP64);
+    myWorld.setDotAmplitude(2, ZERO, ROOT2);
+    myWorld.setDotAmplitude(2, ONE, ROOT2);
+    myWorld.setDotAmplitude(3, ZERO, ROOT2);
+    myWorld.setDotAmplitude(3, ONE, ROOT2);
+    myWorld.setDotAmplitude(4, ZERO, ROOT2);
+    myWorld.setDotAmplitude(4, ONE, ROOT2);  
+
+    QuWorld myWorld2(5, 2, ONE_AMP64);
+
+    ASSERT_FALSE(myWorld.areNetsEqual(myWorld2));    
+
+    myWorld2.setDotAmplitude(2, ZERO, ROOT2);
+    myWorld2.setDotAmplitude(2, ONE, ROOT2);
+    myWorld2.setDotAmplitude(3, ZERO, ROOT2);
+    myWorld2.setDotAmplitude(3, ONE, ROOT2);
+    myWorld2.setDotAmplitude(4, ZERO, ROOT2);
+    myWorld2.setDotAmplitude(4, ONE, ROOT2);  
+
+    ASSERT_TRUE(myWorld2.areNetsEqual(myWorld));
+
+    QuWorld myWorld3 = QuWorld(3, 3, ONE_AMP64);
+
+    ASSERT_FALSE(myWorld.areNetsEqual(myWorld3));
+    ASSERT_FALSE(myWorld2.areNetsEqual(myWorld3));
 }
