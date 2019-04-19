@@ -1,7 +1,8 @@
 #ifndef __QUWORLD_H
 #define __QUWORLD_H
 
-#include <common.h>
+#include <mkl_vsl.h>
+#include "common.h"
 /**
  * QuWorlds represents a single source of probabilistic quantum states. You can view this a a Ergodic Discrete
  * Information Source or a World in Many Worlds Quantum Mechanics. It is able to represent any linear combination
@@ -20,6 +21,7 @@ class QuWorld {
         QuAmp64 amplitude;
         QuAmp* qudot_net;
         bool enablingQubit;
+        VSLStreamStatePtr stream;
 
         //void swapDots(int qubitA, QuAmp qBZeroAmp, QuAmp qBOneAmp);
         int getRow(int q) const;
@@ -28,7 +30,6 @@ class QuWorld {
         QuWorld(short int num_qubits, unsigned int id, QuAmp64 amp, bool bval = true);
         ~QuWorld();
 
-        // void setQuDotNet(QuAmp& qudotnet);
         bool getEnablingQubit() const;
         void setEnablingQubit(bool bval);
         int getId() const;
@@ -47,7 +48,7 @@ class QuWorld {
         // will only activate if it does not have zero amplitudes
         void activate(int q, Qubit qval);
         // void swapQubits(int qubitA, int qubitB, Qubit enablingQubit);
-        // std::string measure();
+        std::string measure();
         bool areNetsEqual(QuWorld& other);
         // std::string getWorldSigniture();
 };

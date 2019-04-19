@@ -1,3 +1,5 @@
+#include <string>
+
 #include "gtest/gtest.h"
 #include "quworld.h"
 
@@ -136,4 +138,18 @@ TEST(QuWorldTest, testNetEquality) {
 
     ASSERT_FALSE(myWorld.areNetsEqual(myWorld3));
     ASSERT_FALSE(myWorld2.areNetsEqual(myWorld3));
+}
+
+TEST(QuWorldTest, testMeasure) {
+   QuWorld myWorld(3, 1, ONE_AMP64);
+   myWorld.setDotAmplitude(2, ZERO, ROOT2);
+   myWorld.setDotAmplitude(2, ONE, ROOT2);
+
+   std::string results[10];
+   for (int i = 0; i < 10; i++) {
+       results[i] = myWorld.measure();
+       ASSERT_TRUE(results[i] == "000" || results[i] == "010"); 
+   }    
+
+   ASSERT_NE(myWorld.measure(), "111");
 }

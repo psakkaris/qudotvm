@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "-Wall" )
 project(kratos)
 
 #Bring the headers, into the project
@@ -12,8 +13,9 @@ link_directories(/opt/intel/mkl/lib/intel64)
 #However, the file(GLOB...) allows for wildcard additions:
 file(GLOB SOURCES "src/*.cpp")
 
-add_library(qudot STATIC ${SOURCES})
+add_library(qudot SHARED ${SOURCES})
 add_executable(kratosvm ${SOURCES})
 
 target_link_libraries(kratosvm mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
+# -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
 target_link_libraries(qudot mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)

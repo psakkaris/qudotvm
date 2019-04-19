@@ -1,3 +1,8 @@
+#include <ctime>
+#include <string>
+
+#include <mkl_vsl.h>
+
 #include "common.h"
 #include "quworld.h"
 
@@ -12,10 +17,12 @@ QuWorld::QuWorld(short int _num_qubits, unsigned int id, QuAmp64 amp, bool bval)
         qudot_net[row + 2] = 0;
         qudot_net[row + 3] = 0;
     } 
+    vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
 }
 
 QuWorld::~QuWorld() {
     delete[] qudot_net;
+    vslDeleteStream(&stream);
 }
 
 int QuWorld::getNumQubits() const {
@@ -140,4 +147,36 @@ bool QuWorld::areNetsEqual(QuWorld& other) {
         }
     }
     return !isNotZero(delta);
+}
+
+std::string QuWorld::measure() {
+    double r[1];   
+    const double a=0.0;
+    const double b=1.0;
+
+    std::string result = "";
+    int m=0;
+    for (int q=0; q < num_qubits; q++) {
+            bool zeroActive = isActive(q+1, ZERO);
+            bool oneActive = isActive(q+1, ONE);
+
+            // The isActive test above takes into account our tolerence level for machine epsilon
+            // also doing a test for 0/1 active first let's us skip random number generation for very many cases
+            if (zeroActive && oneActive) {
+                vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, 1, r, a, b);
+                double randNum = r[0];
+                double zeroProb = getQubitProbability(q+1, ZERO);
+                if ((randNum + TOLERANCE <= zeroProb) || (randNum - TOLERANCE) <= zeroProb) {
+                    m = 0;
+                } else {
+                    m = 1;
+                }
+            } else if (zeroActive) {
+                m = 0;
+            } else if (oneActive) {
+                m = 1;
+            }
+            result += QUBIT_LABEL[m];
+    }
+    return result;
 }
