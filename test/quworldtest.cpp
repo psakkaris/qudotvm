@@ -166,3 +166,22 @@ TEST(QuWorldTest, testGetWorldSigniture) {
 
     ASSERT_EQ(myWorld2.getWorldSigniture(), "0a1d0a1a0a1a0a1a0a1d");
 }
+
+TEST(QuWorldTest, testSwap) {
+   QuWorld myWorld(4, 1, ONE_AMP64);
+   myWorld.setDotAmplitude(2, ZERO, ROOT2);
+   myWorld.setDotAmplitude(2, ONE, ROOT2);
+
+   myWorld.swapQubits(2, 1, false);
+   std::string results[10];
+   for (int i = 0; i < 10; i++) {
+       results[i] = myWorld.measure();
+       ASSERT_TRUE(results[i] == "0000" || results[i] == "1000"); 
+   }   
+
+   myWorld.swapQubits(1, 3, false); 
+   for (int i = 0; i < 10; i++) {
+       results[i] = myWorld.measure();
+       ASSERT_TRUE(results[i] == "0000" || results[i] == "0010"); 
+   }   
+}

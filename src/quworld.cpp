@@ -1,4 +1,5 @@
 #include <ctime>
+#include <iostream>
 #include <string>
 
 #include <mkl_vsl.h>
@@ -181,6 +182,18 @@ std::string QuWorld::measure() {
     return result;
 }
 
+void QuWorld::swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit) {
+    if (!check_enabling_qubit || enablingQubit) {
+        QuAmp qa_zero_amp = QuAmp(getZeroAmplitude(qubit_a));
+        QuAmp qa_one_amp = QuAmp(getOneAmplitude(qubit_a));
+        QuAmp qb_zero_amp = QuAmp(getZeroAmplitude(qubit_b));
+        QuAmp qb_one_amp = QuAmp(getOneAmplitude(qubit_b));
+
+        swapDots(qubit_a, qb_zero_amp, qb_one_amp);
+        swapDots(qubit_b, qa_zero_amp, qa_one_amp);
+    }
+}
+
 std::string QuWorld::getWorldSigniture() const {
     std::string sig = "";
     for (int q=1; q <= num_qubits; q++) {
@@ -188,4 +201,60 @@ std::string QuWorld::getWorldSigniture() const {
         sig += (isActive(q, ONE)  ? "1a" : "1d");
     }
     return sig;
+}
+
+//#################### PRIVATE #####################/
+
+void QuWorld::swapDots(const int qubit_a, const QuAmp qb_zero_amp, const QuAmp qb_one_amp) {
+    // The active parents of qa point to the active qb dots
+    const int qubit_a_parents = qubit_a-1;
+    if (qubit_a == 1) {
+        int row = getRow(qubit_a);
+        qudot_net[row + 0] = qb_zero_amp;
+        qudot_net[row + 1] = qb_one_amp;
+    } else {
+        int row = getRow(qubit_a);
+        if (isActive(qubit_a_parents, ZERO)) {
+            qudot_net[row + 0] = qb_zero_amp;
+            qudot_net[row + 1] = qb_one_amp;
+        }   
+        if (isActive(qubit_a_parents, ONE)) {
+            qudot_net[row + 2] = qb_zero_amp;
+            qudot_net[row + 3] = qb_one_amp;
+        } 
+    }
+
+    // The active children of qa need to remain the same
+    const int qubit_a_children = qubit_a + 1;
+    if (qubit_a < num_qubits) {
+        int row = getRow(qubit_a_children);
+        QuAmp qa_child_zero_amp = getZeroAmplitude(qubit_a_children);
+        QuAmp qa_child_one_amp = getOneAmplitude(qubit_a_children);
+        bool zeroChildActive = isActive(qubit_a_children, ZERO);
+        bool oneChildActive = isActive(qubit_a_children, ONE);
+        bool zeroActive = isActive(qubit_a, ZERO);
+        bool oneActive = isActive(qubit_a, ONE);
+
+        for (int i=0; i < qu_stride; i++) {
+            qudot_net[row+i] = ZERO_AMP;
+        }
+
+        if (zeroChildActive) {
+            if (zeroActive) {
+                qudot_net[row + 0] = qa_child_zero_amp;
+            }
+            if (oneActive) {
+                qudot_net[row + 2] = qa_child_zero_amp;
+            }
+        }
+
+        if (oneChildActive) {
+            if (zeroActive) {
+                qudot_net[row + 1] = qa_child_one_amp;
+            }
+            if (oneActive) {
+                qudot_net[row + 3] = qa_child_one_amp;
+            }
+        }
+    } 
 }

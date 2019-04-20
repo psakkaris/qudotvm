@@ -12,7 +12,9 @@ int main(int argc, char *argv[]){
    myWorld.setDotAmplitude(5, ZERO, ROOT2);
    myWorld.setDotAmplitude(5, ONE, ROOT2);   
    
-   for (int i=0; i < 100; i++) {
+   myWorld.swapQubits(2,4);
+   myWorld.swapQubits(5,1);
+   for (int i=0; i < 10; i++) {
       std::cout << myWorld.measure() << std::endl;
    }
    return 0;

@@ -23,7 +23,7 @@ class QuWorld {
         bool enablingQubit;
         VSLStreamStatePtr stream;
 
-        //void swapDots(int qubitA, QuAmp qBZeroAmp, QuAmp qBOneAmp);
+        void swapDots(const int qubit_a, const QuAmp qb_zero_amp, const QuAmp qb_one_amp);
         int getRow(int q) const;
 
     public:
@@ -47,7 +47,7 @@ class QuWorld {
         void deactivateChildren(int q, Qubit qval);
         // will only activate if it does not have zero amplitudes
         void activate(int q, Qubit qval);
-        // void swapQubits(int qubitA, int qubitB, Qubit enablingQubit);
+        void swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit=false);
         std::string measure();
         bool areNetsEqual(QuWorld& other);
         std::string getWorldSigniture() const;
