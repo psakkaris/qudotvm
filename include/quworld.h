@@ -50,7 +50,7 @@ class QuWorld {
         // void swapQubits(int qubitA, int qubitB, Qubit enablingQubit);
         std::string measure();
         bool areNetsEqual(QuWorld& other);
-        // std::string getWorldSigniture();
+        std::string getWorldSigniture() const;
 };
 
 #endif

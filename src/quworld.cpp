@@ -180,3 +180,12 @@ std::string QuWorld::measure() {
     }
     return result;
 }
+
+std::string QuWorld::getWorldSigniture() const {
+    std::string sig = "";
+    for (int q=1; q <= num_qubits; q++) {
+        sig += (isActive(q, ZERO) ? "0a" : "0d");
+        sig += (isActive(q, ONE)  ? "1a" : "1d");
+    }
+    return sig;
+}

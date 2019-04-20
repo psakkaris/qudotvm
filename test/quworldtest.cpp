@@ -153,3 +153,16 @@ TEST(QuWorldTest, testMeasure) {
 
    ASSERT_NE(myWorld.measure(), "111");
 }
+
+TEST(QuWorldTest, testGetWorldSigniture) {
+    QuWorld myWorld2(5, 2, ONE_AMP64);
+
+    myWorld2.setDotAmplitude(2, ZERO, ROOT2);
+    myWorld2.setDotAmplitude(2, ONE, ROOT2);
+    myWorld2.setDotAmplitude(3, ZERO, ROOT2);
+    myWorld2.setDotAmplitude(3, ONE, ROOT2);
+    myWorld2.setDotAmplitude(4, ZERO, ROOT2);
+    myWorld2.setDotAmplitude(4, ONE, ROOT2);      
+
+    ASSERT_EQ(myWorld2.getWorldSigniture(), "0a1d0a1a0a1a0a1a0a1d");
+}
