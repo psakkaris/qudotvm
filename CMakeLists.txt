@@ -17,6 +17,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/common.cpp
   ${PROJECT_SOURCE_DIR}/src/quworld.cpp
   ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
+  ${PROJECT_SOURCE_DIR}/src/bytecodes.cpp
 )
 
 add_library(qudot SHARED ${KRATOS_SRC})
