@@ -1,20 +1,26 @@
 cmake_minimum_required(VERSION 3.9)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall" )
 project(kratos)
 
 #Bring the headers, into the project
-include_directories("include" "/opt/intel/mkl/include")
-link_directories(/opt/intel/mkl/lib/intel64)
+include_directories(include $ENV{MKLROOT}/include)
+link_directories($ENV{MKLROOT}/lib/intel64)
  
 #Can manually add the sources using the set command as follows:
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
  
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES "src/*.cpp")
+#file(GLOB SOURCES "src/*.cpp")
+set(KRATOS_SRC 
+  ${PROJECT_SOURCE_DIR}/src/common.cpp
+  ${PROJECT_SOURCE_DIR}/src/quworld.cpp
+  ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
+)
 
-add_library(qudot SHARED ${SOURCES})
-add_executable(kratosvm ${SOURCES})
+add_library(qudot SHARED ${KRATOS_SRC})
+add_executable(kratosvm ${KRATOS_SRC})
 
 target_link_libraries(kratosvm mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl

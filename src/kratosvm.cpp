@@ -3,9 +3,7 @@
 #include "common.h"
 #include "quworld.h"
 
-int main(int argc, char *argv[]){
-   std::cout << "QuDot Kratos Virtual Machine" << std::endl;
-
+void doSomeQuantum() {
    QuWorld myWorld(5, 1, ONE_AMP64);
    myWorld.setDotAmplitude(2, ZERO, ROOT2);
    myWorld.setDotAmplitude(2, ONE, ROOT2);
@@ -17,5 +15,11 @@ int main(int argc, char *argv[]){
    for (int i=0; i < 10; i++) {
       std::cout << myWorld.measure() << std::endl;
    }
+}
+
+int main(int argc, char *argv[]){
+   std::cout << "QuDot Kratos Virtual Machine" << std::endl;
+
+   doSomeQuantum();
    return 0;
 }
