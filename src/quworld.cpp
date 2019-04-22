@@ -205,7 +205,7 @@ std::string QuWorld::getWorldSigniture() const {
 
 //#################### PRIVATE #####################/
 
-void QuWorld::swapDots(const int qubit_a, const QuAmp qb_zero_amp, const QuAmp qb_one_amp) {
+void QuWorld::swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp) {
     // The active parents of qa point to the active qb dots
     const int qubit_a_parents = qubit_a-1;
     if (qubit_a == 1) {

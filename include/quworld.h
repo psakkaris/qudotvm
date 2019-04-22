@@ -23,7 +23,7 @@ class QuWorld {
         bool enablingQubit;
         VSLStreamStatePtr stream;
 
-        void swapDots(const int qubit_a, const QuAmp qb_zero_amp, const QuAmp qb_one_amp);
+        void swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp);
         int getRow(int q) const;
 
     public:
