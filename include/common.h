@@ -1,5 +1,5 @@
-#ifndef __QUCOMMON_H
-#define __QUCOMMON_H
+#ifndef __QUDOT_QUCOMMON_H
+#define __QUDOT_QUCOMMON_H
 
 #include <complex>
 #include <limits>

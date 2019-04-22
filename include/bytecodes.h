@@ -1,5 +1,5 @@
-#ifndef __QUBYTECODES_H
-#define __QUBYTECODES_H
+#ifndef __QUDOT_QUBYTECODES_H
+#define __QUDOT_QUBYTECODES_H
 
 namespace qudot {
     const unsigned char HALT = 0;

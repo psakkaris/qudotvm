@@ -1,5 +1,5 @@
-#ifndef __QUWORLD_H
-#define __QUWORLD_H
+#ifndef __QUDOT_QUWORLD_H
+#define __QUDOT_QUWORLD_H
 
 #include <mkl_vsl.h>
 #include "common.h"
