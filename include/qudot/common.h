@@ -22,7 +22,7 @@ namespace qudot {
     const QuAmp64 ONE_AMP64 = QuAmp64(1,0);
     const char QUBIT_LABEL[2] = {'0', '1'}; 
 
-    bool isNotZero(QuAmp& amp);
+    bool isNotZero(const QuAmp& amp);
 }
 
 #endif

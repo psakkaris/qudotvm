@@ -138,7 +138,7 @@ namespace qudot {
         }
     }
 
-    bool QuWorld::areNetsEqual(QuWorld& other) {
+    bool QuWorld::areNetsEqual(const QuWorld& other) {
         if (num_qubits != other.getNumQubits()) {
             return false;
         }

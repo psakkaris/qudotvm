@@ -50,7 +50,7 @@ namespace qudot {
             void activate(int q, Qubit qval);
             void swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit=false);
             std::string measure();
-            bool areNetsEqual(QuWorld& other);
+            bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
     };
 }
