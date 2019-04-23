@@ -5,6 +5,7 @@
 #include <string>
 
 namespace qudot {
+    // supported bytecodes
     const unsigned char HALT = 0;
     const unsigned char PATHS = 1;
     const unsigned char X = 2;
@@ -72,6 +73,9 @@ namespace qudot {
     const unsigned char SDAGON = 64;
     const unsigned char TDAG = 65;
     const unsigned char TDAGON = 66;
+    // end supported bytecodes
+
+    const int QUDOT_FILE_VERSION = 1;
 
     int getInt(const unsigned char memory[], int index);
     int writeInt(unsigned char bytes[], int index, int value);

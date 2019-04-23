@@ -16,14 +16,14 @@ link_directories($ENV{MKLROOT}/lib/intel64)
 set(KRATOS_SRC 
   ${PROJECT_SOURCE_DIR}/src/common.cpp
   ${PROJECT_SOURCE_DIR}/src/quworld.cpp
-  ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
+  ${PROJECT_SOURCE_DIR}/src/kratosapp.cpp
   ${PROJECT_SOURCE_DIR}/src/bytecodes.cpp
   ${PROJECT_SOURCE_DIR}/src/qudotconfig.cpp
 )
 
 add_library(qudot SHARED ${KRATOS_SRC})
-add_executable(kratosvm ${KRATOS_SRC})
+add_executable(kratosapp ${KRATOS_SRC})
 
-target_link_libraries(kratosvm mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
+target_link_libraries(kratosapp mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
 target_link_libraries(qudot mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
