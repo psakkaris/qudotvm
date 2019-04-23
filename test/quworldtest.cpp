@@ -3,6 +3,8 @@
 #include "gtest/gtest.h"
 #include "quworld.h"
 
+using namespace qudot;
+
 TEST(QuWorldTest, testCreate) {
     QuAmp oneAmp = QuAmp(1,0);
     QuAmp64 oneAmp64 = QuAmp64(1,0);

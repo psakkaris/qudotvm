@@ -1,5 +1,7 @@
 #include "common.h"
 
- bool isNotZero(QuAmp& amp) {
-    return fabs(amp.real()) > TOLERANCE || fabs(amp.imag()) > TOLERANCE;
-}
+namespace qudot {
+    bool isNotZero(qudot::QuAmp& amp) {
+        return fabs(amp.real()) > qudot::TOLERANCE || fabs(amp.imag()) > qudot::TOLERANCE;
+    }
+} // namespace qudot

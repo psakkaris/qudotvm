@@ -6,6 +6,8 @@
 #include "quworld.h"
 #include "qudotconfig.h"
 
+using namespace qudot;
+
 void doSomeQuantum() {
    QuWorld myWorld(5, 1, ONE_AMP64);
    myWorld.setDotAmplitude(2, ZERO, ROOT2);
