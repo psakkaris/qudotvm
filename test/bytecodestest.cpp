@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "bytecodes.h"
+#include "qudot/bytecodes.h"
 #include <iostream>
 
 TEST(BytecodesTest, testReadWrite) {

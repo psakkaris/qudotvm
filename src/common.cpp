@@ -1,4 +1,4 @@
-#include "common.h"
+#include "qudot/common.h"
 
 namespace qudot {
     bool isNotZero(qudot::QuAmp& amp) {

@@ -2,9 +2,9 @@
 #include <cstdio>
 #include <string>
 
-#include "common.h"
-#include "quworld.h"
-#include "qudotconfig.h"
+#include "qudot/common.h"
+#include "qudot/quworld.h"
+#include "qudot/qudotconfig.h"
 
 
 void doSomeQuantum() {

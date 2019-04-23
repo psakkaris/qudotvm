@@ -1,4 +1,4 @@
-#include "qudotconfig.h"
+#include "qudot/qudotconfig.h"
 
 namespace qudot {
     QuDotConfig::QuDotConfig() : num_qubits(0), ensemble_size(0), stack_size(DEFAULT_STACK_SIZE),

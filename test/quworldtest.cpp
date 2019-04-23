@@ -1,7 +1,7 @@
 #include <string>
 
 #include "gtest/gtest.h"
-#include "quworld.h"
+#include "qudot/quworld.h"
 
 using namespace qudot;
 

@@ -4,8 +4,8 @@
 
 #include <mkl_vsl.h>
 
-#include "common.h"
-#include "quworld.h"
+#include "qudot/common.h"
+#include "qudot/quworld.h"
 
 namespace qudot {
     QuWorld::QuWorld(short int _num_qubits, unsigned int id, QuAmp64 amp, bool bval) : 

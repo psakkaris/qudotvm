@@ -1,4 +1,4 @@
-#include "bytecodes.h"
+#include "qudot/bytecodes.h"
 
 namespace qudot {
         int getInt(char memory[], int index) {
