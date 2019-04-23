@@ -6,14 +6,13 @@
 #include "quworld.h"
 #include "qudotconfig.h"
 
-using namespace qudot;
 
 void doSomeQuantum() {
-   QuWorld myWorld(5, 1, ONE_AMP64);
-   myWorld.setDotAmplitude(2, ZERO, ROOT2);
-   myWorld.setDotAmplitude(2, ONE, ROOT2);
-   myWorld.setDotAmplitude(5, ZERO, ROOT2);
-   myWorld.setDotAmplitude(5, ONE, ROOT2);   
+   qudot::QuWorld myWorld(5, 1, qudot::ONE_AMP64);
+   myWorld.setDotAmplitude(2, qudot::ZERO, qudot::ROOT2);
+   myWorld.setDotAmplitude(2, qudot::ONE, qudot::ROOT2);
+   myWorld.setDotAmplitude(5, qudot::ZERO, qudot::ROOT2);
+   myWorld.setDotAmplitude(5, qudot::ONE, qudot::ROOT2);   
    
    myWorld.swapQubits(2,4);
    myWorld.swapQubits(5,1);
@@ -25,7 +24,7 @@ void doSomeQuantum() {
 int main(int argc, char *argv[]) {
    std::cout << "QuDot Kratos Virtual Machine |001>" << std::endl;
 
-   QuDotConfig config;
+   qudot::QuDotConfig config;
    int arg_ptr = 1;
    std::string filename;
    while (arg_ptr < argc) {
