@@ -1,6 +1,9 @@
 #ifndef __QUDOT_QUBYTECODES_H
 #define __QUDOT_QUBYTECODES_H
 
+#include <memory>
+#include <string>
+
 namespace qudot {
     const unsigned char HALT = 0;
     const unsigned char PATHS = 1;
@@ -70,8 +73,34 @@ namespace qudot {
     const unsigned char TDAG = 65;
     const unsigned char TDAGON = 66;
 
-    int getInt(char memory[], int index);
-    int writeInt(char bytes[], int index, int value);
+    int getInt(const unsigned char memory[], int index);
+    int writeInt(unsigned char bytes[], int index, int value);
+
+    struct GateAsmSymbolBytes {
+        unsigned char* bytes;
+        unsigned int size;
+    };
+
+    class GateAsmSymbol {
+        private:
+            std::string name;
+            unsigned int args;
+            unsigned int regs;
+            unsigned int qubit_regs;
+            unsigned int address;
+
+        public:
+            static std::unique_ptr<GateAsmSymbol> fromBytes(const unsigned char[]);
+
+            GateAsmSymbol(std::string);
+            GateAsmSymbol(std::string, unsigned int, unsigned int, unsigned int, unsigned int);
+            std::string getName() const;
+            unsigned int getArgs() const;
+            unsigned int getRegs() const;
+            unsigned int getQubitRegs() const;
+            unsigned int getAddress() const;
+            GateAsmSymbolBytes getBytes() const;
+    };
 }
 
 #endif
