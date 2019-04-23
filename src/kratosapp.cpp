@@ -3,6 +3,7 @@
 #include <string>
 
 #include "qudot/common.h"
+#include "qudot/qureg.h"
 #include "qudot/quworld.h"
 #include "qudot/qudotconfig.h"
 
@@ -19,6 +20,13 @@ void doSomeQuantum() {
    for (int i=0; i < 10; i++) {
       std::cout << myWorld.measure() << std::endl;
    }
+
+   qudot::QuReg reg(5, 8);
+   printf("qureg: %d\n", reg.getSize());
+   for (auto i=reg.getQubits().begin(); i != reg.getQubits().end(); i++) {
+      printf("%d\n", *i);
+   }
+
 }
 
 int main(int argc, char *argv[]) {
@@ -57,5 +65,6 @@ int main(int argc, char *argv[]) {
    printf("QuDotConfig: qubits: %d, ensemble: %d, multiverse: %d, stack: %d\n", config.getNumQubits(), config.getEnsembleSize(),
          config.getMultiverseSize(), config.getStackSize());
 
+   doSomeQuantum();
    return 0;
 }
