@@ -94,10 +94,10 @@ namespace qudot {
             unsigned int address;
 
         public:
-            static std::unique_ptr<GateAsmSymbol> fromBytes(const unsigned char[]);
-
             GateAsmSymbol(std::string);
             GateAsmSymbol(std::string, unsigned int, unsigned int, unsigned int, unsigned int);
+            GateAsmSymbol(unsigned char bytes[]);
+
             std::string getName() const;
             unsigned int getArgs() const;
             unsigned int getRegs() const;

@@ -36,12 +36,12 @@ TEST(BytecodesTest, testGateAsmSymbol) {
     ASSERT_EQ(qudot::getInt(symbolBytes.bytes, 0), 15);
     ASSERT_EQ(symbolBytes.size, 35);
     
-    auto daSymbol = qudot::GateAsmSymbol::fromBytes(symbolBytes.bytes);
-    ASSERT_EQ(symbol.getArgs(), daSymbol->getArgs());
-    ASSERT_EQ(symbol.getRegs(), daSymbol->getRegs());
-    ASSERT_EQ(symbol.getQubitRegs(), daSymbol->getQubitRegs());
-    ASSERT_EQ(symbol.getAddress(), daSymbol->getAddress());
+    auto daSymbol = qudot::GateAsmSymbol(symbolBytes.bytes);
+    ASSERT_EQ(symbol.getArgs(), daSymbol.getArgs());
+    ASSERT_EQ(symbol.getRegs(), daSymbol.getRegs());
+    ASSERT_EQ(symbol.getQubitRegs(), daSymbol.getQubitRegs());
+    ASSERT_EQ(symbol.getAddress(), daSymbol.getAddress());
 
-    ASSERT_EQ(symbol.getName(), daSymbol->getName());
+    ASSERT_EQ(symbol.getName(), daSymbol.getName());
     delete[] symbolBytes.bytes;
 }

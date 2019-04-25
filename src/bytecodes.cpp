@@ -29,6 +29,25 @@ namespace qudot {
     GateAsmSymbol::GateAsmSymbol(std::string _name, unsigned int _args, unsigned int _regs, unsigned int _qubit_regs, unsigned int _address) :
         name(_name), args(_args), regs(_regs), qubit_regs(_qubit_regs), address(_address) {}
 
+    GateAsmSymbol::GateAsmSymbol(unsigned char bytes[]) {
+        int ip=0;
+        unsigned int name_length = getInt(bytes, ip);
+        ip += 4;
+        char name_arr[name_length+1];
+        for (std::size_t i=0; i < name_length; i++) {
+                name_arr[i] = bytes[ip++];
+        }         
+        name = std::string(name_arr);   
+        args = getInt(bytes, ip);
+        ip += 4;
+        regs = getInt(bytes, ip);
+        ip += 4;
+        qubit_regs = getInt(bytes, ip);
+        ip += 4;
+        address = getInt(bytes, ip);
+        ip += 4;        
+    }    
+
     std::string GateAsmSymbol::getName() const {
         return name;
     }
@@ -68,26 +87,4 @@ namespace qudot {
 
         return symbolBytes;
     }
-
-    std::unique_ptr<GateAsmSymbol> GateAsmSymbol::fromBytes(const unsigned char bytes[]) {
-        int ip=0;
-        unsigned int name_length = getInt(bytes, ip);
-        ip += 4;
-        char name_arr[name_length+1];
-        for (std::size_t i=0; i < name_length; i++) {
-                name_arr[i] = bytes[ip++];
-        }         
-        std::string name_str = std::string(name_arr);   
-        unsigned int args = getInt(bytes, ip);
-        ip += 4;
-        unsigned int regs = getInt(bytes, ip);
-        ip += 4;
-        unsigned int qubit_regs = getInt(bytes, ip);
-        ip += 4;
-        unsigned int address = getInt(bytes, ip);
-        ip += 4;
-
-        return std::unique_ptr<GateAsmSymbol> {new GateAsmSymbol(name_str, args, regs, qubit_regs, address)};
-    }
-
 } // namespace qudot
