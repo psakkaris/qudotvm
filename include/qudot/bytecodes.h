@@ -77,11 +77,15 @@ namespace qudot {
 
     const int QUDOT_FILE_VERSION = 1;
 
-    int getInt(const unsigned char memory[], int index);
-    int writeInt(unsigned char bytes[], int index, int value);
+    // const poll types
+    enum ConstPoolType { GATE=1 };
+
+    // libarary functions
+    int getInt(const char memory[], int& index);
+    int writeInt(char bytes[], int index, int value);
 
     struct GateAsmSymbolBytes {
-        unsigned char* bytes;
+        char* bytes;
         unsigned int size;
     };
 
@@ -96,7 +100,7 @@ namespace qudot {
         public:
             GateAsmSymbol(std::string);
             GateAsmSymbol(std::string, unsigned int, unsigned int, unsigned int, unsigned int);
-            GateAsmSymbol(unsigned char bytes[]);
+            GateAsmSymbol(char bytes[], int ip=0);
 
             std::string getName() const;
             unsigned int getArgs() const;

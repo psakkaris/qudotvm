@@ -5,7 +5,7 @@
 #include <string>
 
 namespace qudot {
-    int getInt(const unsigned char memory[], int index) {
+    int getInt(const char memory[], int& index) {
         int b1 = memory[index++]&0xFF; // mask off sign-extended bits
         int b2 = memory[index++]&0xFF;
         int b3 = memory[index++]&0xFF;
@@ -15,7 +15,7 @@ namespace qudot {
         return word;    
     }
 
-    int writeInt(unsigned char bytes[], int index, int value) {
+    int writeInt(char bytes[], int index, int value) {
         bytes[index+0] = ((value>>(8*3))&0xFF); // get highest byte
         bytes[index+1] = ((value>>(8*2))&0xFF);
         bytes[index+2] = ((value>>(8*1))&0xFF);
@@ -29,23 +29,17 @@ namespace qudot {
     GateAsmSymbol::GateAsmSymbol(std::string _name, unsigned int _args, unsigned int _regs, unsigned int _qubit_regs, unsigned int _address) :
         name(_name), args(_args), regs(_regs), qubit_regs(_qubit_regs), address(_address) {}
 
-    GateAsmSymbol::GateAsmSymbol(unsigned char bytes[]) {
-        int ip=0;
+    GateAsmSymbol::GateAsmSymbol(char bytes[], int ip) {
         unsigned int name_length = getInt(bytes, ip);
-        ip += 4;
         char name_arr[name_length+1];
         for (std::size_t i=0; i < name_length; i++) {
                 name_arr[i] = bytes[ip++];
         }         
         name = std::string(name_arr);   
         args = getInt(bytes, ip);
-        ip += 4;
         regs = getInt(bytes, ip);
-        ip += 4;
         qubit_regs = getInt(bytes, ip);
-        ip += 4;
         address = getInt(bytes, ip);
-        ip += 4;        
     }    
 
     std::string GateAsmSymbol::getName() const {
@@ -71,7 +65,7 @@ namespace qudot {
     GateAsmSymbolBytes GateAsmSymbol::getBytes() const {
         unsigned int ip=0;
 
-        unsigned char* bytes = new unsigned char[name.size() + 20];
+        char* bytes = new char[name.size() + 20];
         const char* name_bytes = name.c_str();
 
         ip = writeInt(bytes, ip, name.size()); 
