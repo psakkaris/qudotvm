@@ -19,12 +19,14 @@ namespace qudot {
             int fp;
             char* code;
             std::vector<GateAsmSymbol> const_pool_gates;
-            std::stack<std::unique_ptr<GateStackFrame>> calls;
-            std::unique_ptr<GateAsmSymbol> main_gate;
+            std::stack<GateStackFrame> calls;
+            std::shared_ptr<GateAsmSymbol> main_gate;
             unsigned int num_qubits;
             unsigned int ensemble;
             int qudotc_fp;
             int bytecode_length;
+
+             void feynmanProcessor();
 
         public:
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);

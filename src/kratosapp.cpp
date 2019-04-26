@@ -63,17 +63,14 @@ int main(int argc, char *argv[]) {
       std::cerr << "no input file found" << std::endl;
       return 1;
    }
-   
-   printf("QuDotConfig: qubits: %d, ensemble: %d, multiverse: %d, stack: %d\n", config.getNumQubits(), config.getEnsembleSize(),
-         config.getMultiverseSize(), config.getStackSize());
 
    try {
       qudot::KratosVM vm(filename, config);
+      vm.bohr();
    } catch(std::runtime_error &re) {
       std::cerr << re.what() << std::endl;
       return 1;   
    }
 
-   doSomeQuantum();
    return 0;
 }
