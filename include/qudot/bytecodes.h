@@ -91,6 +91,14 @@ namespace qudot {
         unsigned int size;
     };
 
+/**
+ * Class for management of gate symbols defined in .gate declaration.
+ * We track the name, number of argument, number of registers required,
+ * number of qubit registers required and the address of the call.
+ *
+ * @since 0.1.0
+ */
+
     class GateAsmSymbol {
         private:
             std::string name;

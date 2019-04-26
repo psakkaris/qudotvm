@@ -1,6 +1,13 @@
 #ifndef __QUDOT_QUDOTCONFIG_H
 #define __QUDOT_QUDOTCONFIG_H
 
+/**
+ * Configuration object for the QuDotVM.
+ * Has default parameter for the call stack size
+ *
+ * @see QuDotVM
+ * @since 0.1.0
+ */
 namespace qudot {
     class QuDotConfig {
         private:

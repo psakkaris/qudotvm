@@ -3,6 +3,11 @@
 
 #include <vector>
 
+/**
+ * Represents a Qubit Register which supports a list of integers. This register can then be applied to gates.
+ *
+ * @since 0.1.0
+ */
 namespace qudot {
     class QuReg {
         private:

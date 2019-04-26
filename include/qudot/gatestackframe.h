@@ -6,6 +6,14 @@
 #include "qudot/bytecodes.h"
 #include "qudot/qureg.h"
 
+/**
+ * GateStackFrame represents an Activation Record for making gate calls. It tracks the GateAsmSymbol, return address,
+ * number of registers used by the gate and number of qubit registers used by the gate.
+ *
+ * @see GateAsmSymbol
+ * @since 0.1.0
+ */
+
 namespace qudot {
     class GateStackFrame {
         private:
