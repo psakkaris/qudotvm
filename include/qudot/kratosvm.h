@@ -15,7 +15,7 @@
 namespace qudot {
     class KratosVM : public QuDot {
         private:
-            size_t ip;
+            int ip;
             int fp;
             char* code;
             std::vector<GateAsmSymbol> const_pool_gates;
@@ -26,7 +26,7 @@ namespace qudot {
             int qudotc_fp;
             int bytecode_length;
 
-             void feynmanProcessor();
+            void feynmanProcessor();
 
         public:
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);

@@ -85,8 +85,13 @@ namespace qudot {
 
     void KratosVM::feynmanProcessor() {
         char qu_code = code[ip];
+        int r1, r2, r3, r4;
+
         while (qu_code != bytecodes::HALT) {
             ip++;
+            int* int_regs = calls.top().getIntRegs();
+            QuReg* quregs = calls.top().getQuRegs();
+
             switch (qu_code) {
                 case bytecodes::PATHS:
                     std::cout << "PATHS" << std::endl;
@@ -194,7 +199,7 @@ namespace qudot {
                     std::cout << "BRF" << std::endl; 
                     break;                                                       
                 case bytecodes::ILOAD:
-                    std::cout << "ILOAD" << std::endl; 
+                    int_regs[getInt(code, ip)] = getInt(code, ip); 
                     break;
                 case bytecodes::RET:
                     std::cout << "RET" << std::endl;
