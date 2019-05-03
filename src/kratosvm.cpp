@@ -124,9 +124,15 @@ namespace qudot {
                 case bytecodes::CNOT:
                     std::cout << "CNOT" << std::endl; 
                     break;
+                case bytecodes::SEMI_CNOT:
+                    std::cout << "SEMI_CNOT" << std::endl;
+                    break;        
                 case bytecodes::CROT:
                     std::cout << "CROT" << std::endl;
                     break;
+                case bytecodes::SEMI_CROT:
+                    std::cout << "CROT" << std::endl;
+                    break;    
                 case bytecodes::XON:
                     std::cout << "XON" << std::endl;  
                     break;
