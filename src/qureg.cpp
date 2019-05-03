@@ -16,6 +16,10 @@ namespace qudot {
         return qubits;
     }
 
+    void QuReg::addQubit(const int qubit) {
+        qubits.push_back(qubit);
+    } 
+
     int QuReg::getStart() const {
         return start;
     }

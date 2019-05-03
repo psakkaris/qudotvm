@@ -20,6 +20,7 @@ namespace qudot {
             QuReg(int, int);
 
             const std::vector<int>& getQubits() const;
+            void addQubit(const int qubit);
 
             int getStart() const;
             int getEnd() const;

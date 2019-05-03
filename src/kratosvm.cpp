@@ -85,6 +85,8 @@ namespace qudot {
 
     void KratosVM::feynmanProcessor() {
         char qu_code = code[ip];
+        int qureg_index;
+        int value;
         int r1, r2, r3, r4;
 
         while (qu_code != bytecodes::HALT) {
@@ -166,7 +168,9 @@ namespace qudot {
                     std::cout << "SWAPON" << std::endl;
                     break;
                 case bytecodes::QLOAD:
-                    std::cout << "QLOAD" << std::endl;
+                    qureg_index = getInt(code, ip);
+                    value = getInt(code, ip);
+                    quregs[qureg_index].addQubit(value);
                     break;
                 case bytecodes::QLOAD_ARRAY:
                     std::cout << "QLOAD_ARRAY" << std::endl;
