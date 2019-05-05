@@ -5,8 +5,8 @@ set(CMAKE_CXX_FLAGS "-Wall" )
 project(kratos)
 
 #Bring the headers, into the project
-include_directories(include $ENV{MKLROOT}/include)
-link_directories($ENV{MKLROOT}/lib/intel64)
+include_directories(include $ENV{MKLROOT}/include $ENV{TBBROOT}/include)
+link_directories($ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
  
 #Can manually add the sources using the set command as follows:
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
@@ -22,11 +22,12 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/qureg.cpp
   ${PROJECT_SOURCE_DIR}/src/gatestackframe.cpp
   ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
+  ${PROJECT_SOURCE_DIR}/src/qufrequency.cpp
 )
 
 add_library(qudot SHARED ${KRATOS_SRC})
 add_executable(kratosapp ${KRATOS_SRC})
 
-target_link_libraries(kratosapp mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
+target_link_libraries(kratosapp mkl_intel_ilp64 mkl_sequential mkl_core tbb pthread m dl)
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
-target_link_libraries(qudot mkl_intel_ilp64 mkl_sequential mkl_core pthread m dl)
+target_link_libraries(qudot mkl_intel_ilp64 mkl_sequential mkl_core tbb pthread m dl)
