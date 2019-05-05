@@ -88,6 +88,7 @@ namespace qudot {
         int qureg_index;
         int value;
         int r1, r2, r3, r4;
+        QuReg qureg1, qureg2, qureg3;
 
         while (qu_code != bytecodes::HALT) {
             ip++;
@@ -124,44 +125,87 @@ namespace qudot {
                     break;
                 case bytecodes::SWAP_AB:
                     std::cout << "SWAP_AB" << std::endl;
+                    // qureg1 = quregs[getInt(code, ip)];
+                    // qureg2 = quregs[getInt(code, ip)];
+                    // int first = qureg1.getQubits()[0];
+                    // int second = qureg2.getQubits()[0];
+
+                    // std::cout << " on " << first << " " << second << std::endl;
                     break;
                 case bytecodes::MEASURE:
                     std::cout << "MEASURE" << std::endl;
                     break;
                 case bytecodes::CNOT:
-                    std::cout << "CNOT" << std::endl; 
-                    break;
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+
+
+                    std::cout << "CNOT: , control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    break; 
                 case bytecodes::SEMI_CNOT:
-                    std::cout << "SEMI_CNOT" << std::endl;
-                    break;        
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+
+
+                    std::cout << "CNOT: , control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    break;      
                 case bytecodes::CROT:
-                    std::cout << "CROT" << std::endl;
-                    break;
+                    r1 = int_regs[getInt(code, ip)];
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+
+
+                    std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    break; 
                 case bytecodes::SEMI_CROT:
-                    std::cout << "CROT" << std::endl;
+                    r1 = int_regs[getInt(code, ip)];
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+
+
+                    std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
                     break;    
                 case bytecodes::XON:
-                    std::cout << "XON" << std::endl;  
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "XON ";
+                    printQuReg(qureg1);
+                    std::cout << std::endl;
                     break;
                 case bytecodes::YON:
-                    std::cout << "YON" << std::endl;                     
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "YON "; 
+                    printQuReg(qureg1);
+                    std::cout << std::endl;                                        
                     break;
                 case bytecodes::ZON:
-                    std::cout << "ZON" << std::endl;
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "ZON ";
+                    printQuReg(qureg1);
+                    std::cout << std::endl;                    
                     break;
                 case bytecodes::SON:
-                    std::cout << "ZON" << std::endl;
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "SON " << std::endl;
+                    printQuReg(qureg1);
+                    std::cout << std::endl;                    
                     break;
                 case bytecodes::TON:
-                    std::cout << "TON" << std::endl;
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "TON ";
+                    printQuReg(qureg1);
+                    std::cout << std::endl;
                     break;
                 case bytecodes::PHION:
                     std::cout << "PHION" << std::endl;
                     break;                
                 case bytecodes::HON:
-                    std::cout << "HON" << std::endl;
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "HON ";
+                    printQuReg(qureg1);
+                    std::cout << std::endl;                    
                     break; 
                 case bytecodes::MON:
+                    qureg1 = quregs[getInt(code, ip)];
                     std::cout << "MON" << std::endl;  
                     break;
                 case bytecodes::SWAPON:
@@ -293,4 +337,10 @@ namespace qudot {
         }
     }
     //################### PRIVATE METHODS ####################
+    void KratosVM::printQuReg(const QuReg& qr) {
+        auto qubits = qr.getQubits();
+        for (auto it=qubits.begin(); it != qubits.end(); ++it) {
+            std::cout << *it << ", ";
+        }
+    }
 }

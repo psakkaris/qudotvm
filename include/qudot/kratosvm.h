@@ -27,6 +27,7 @@ namespace qudot {
             int bytecode_length;
 
             void feynmanProcessor();
+            void printQuReg(const QuReg&);
 
         public:
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);
