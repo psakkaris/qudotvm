@@ -30,4 +30,4 @@ add_executable(kratosapp ${KRATOS_SRC})
 
 target_link_libraries(kratosapp mkl_intel_ilp64 mkl_sequential mkl_core tbb pthread m dl)
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
-target_link_libraries(qudot mkl_intel_ilp64 mkl_sequential mkl_core tbb pthread m dl)
+target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl)

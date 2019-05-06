@@ -17,4 +17,4 @@ file(GLOB SOURCES "*.cpp")
 add_executable(testmain ${SOURCES})
 
 # link the libraries to the executable
-target_link_libraries(testmain gtest qudot mkl_intel_ilp64 mkl_sequential mkl_core tbb pthread m dl)
+target_link_libraries(testmain gtest qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl)
