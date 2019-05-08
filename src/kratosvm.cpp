@@ -217,7 +217,11 @@ namespace qudot {
                     quregs[qureg_index].addQubit(value);
                     break;
                 case bytecodes::QLOAD_ARRAY:
-                    std::cout << "QLOAD_ARRAY" << std::endl;
+                    qureg_index = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    for (int i=0; i < r1; i++) {
+                        quregs[qureg_index].addQubit(getInt(code, ip));
+                    }
                     break;
                 case bytecodes::IADD:
                     std::cout << "IADD" << std::endl;
@@ -353,12 +357,13 @@ namespace qudot {
         for (unsigned int i=1; i <= num_qubits; i++) {
             qugate.applyGate(qu_world.get(), i);
         }    
-    }
+    }   
 
     void KratosVM::applyGateToQuMvN(QuGate& qugate, QuReg* quregs) {
         int index = getInt(code, ip);
         auto qubits = quregs[index].getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
+            //printf("applying %s to qubit: %d\n", qugate.getId().c_str(), *it);
             qugate.applyGate(qu_world.get(), *it);
         }
     }

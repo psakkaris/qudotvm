@@ -2,7 +2,7 @@
 
 
 namespace qudot {
-    FeynmanUnit::FeynmanUnit() : z(1), s(2), t(3), sdag(2, true), tdag(3, true) { }
+    FeynmanUnit::FeynmanUnit() : z(1), s(2), sdag(2, true), t(3), tdag(3, true) { }
 
     std::unique_ptr<R> FeynmanUnit::getRGate(int k) {
         return std::make_unique<R>(k);

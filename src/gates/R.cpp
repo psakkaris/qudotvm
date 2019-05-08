@@ -25,7 +25,7 @@ namespace qudot {
     void R::applyGate(QuWorld* qw, int q) {
        int parents = qw->getRow(q);
        qw->qudot_net[parents + 1] = qw->qudot_net[parents + 1] * _phase;
-       qw->qudot_net[parents + 1] = qw->qudot_net[parents + 3] * _phase;
+       qw->qudot_net[parents + 3] = qw->qudot_net[parents + 3] * _phase;
     }
 
     bool operator==(const R& lhs, const R& rhs) {
