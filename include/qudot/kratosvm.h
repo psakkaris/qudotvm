@@ -11,6 +11,8 @@
 #include "qudot/gatestackframe.h"
 #include "qudot/qudot.h"
 #include "qudot/qudotconfig.h"
+#include "qudot/quworld.h"
+#include "qudot/gates/X.h"
 
 namespace qudot {
     class KratosVM : public QuDot {
@@ -26,15 +28,21 @@ namespace qudot {
             int qudotc_fp;
             int bytecode_length;
 
+            std::unique_ptr<QuWorld> qu_world;
+            X xGate;
+
             void feynmanProcessor();
             void printQuReg(const QuReg&);
+            void applyGateToQuMvN(QuGate&);
+            void applyGateToQuMvN(QuGate&, QuReg*);
 
         public:
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);
             virtual ~KratosVM();
 
             void bohr();
-            void getResults();
+            void getResults(QuFrequency&);
+            unsigned int getEnsemble() const;
     };
 }
 

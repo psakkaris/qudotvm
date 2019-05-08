@@ -5,6 +5,7 @@
 
 #include "qudot/common.h"
 #include "qudot/kratosvm.h"
+#include "qudot/qufrequency.h"
 #include "qudot/qureg.h"
 #include "qudot/quworld.h"
 #include "qudot/qudotconfig.h"
@@ -29,6 +30,12 @@ void doSomeQuantum() {
       printf("%d\n", *i);
    }
 
+}
+
+void printQuFrequency(qudot::QuFrequency& freq) {
+   for (auto it = freq.begin(); it != freq.end(); ++it) {
+      printf("%s\t%11u\n", it->first.c_str(), it->second);
+   }
 }
 
 int main(int argc, char *argv[]) {
@@ -67,6 +74,9 @@ int main(int argc, char *argv[]) {
    try {
       qudot::KratosVM vm(filename, config);
       vm.bohr();
+      qudot::QuFrequency freq(vm.getEnsemble());
+      vm.getResults(freq);
+      printQuFrequency(freq);
    } catch(std::runtime_error &re) {
       std::cerr << re.what() << std::endl;
       return 1;   

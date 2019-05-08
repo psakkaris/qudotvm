@@ -23,6 +23,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/gatestackframe.cpp
   ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
   ${PROJECT_SOURCE_DIR}/src/qufrequency.cpp
+  ${PROJECT_SOURCE_DIR}/src/gates/X.cpp
 )
 
 add_library(qudot SHARED ${KRATOS_SRC})

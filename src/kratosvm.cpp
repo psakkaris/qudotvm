@@ -9,7 +9,10 @@
 #include <string.h>
 
 #include <qudot/bytecodes.h>
+#include <qudot/common.h>
 #include <qudot/qudotconfig.h>
+#include <qudot/quworld.h>
+#include <qudot/gates/X.h>
 
 namespace qudot {
     KratosVM::KratosVM(const std::string filename, const QuDotConfig& qc) : qudotc_fp(0) {
@@ -64,6 +67,8 @@ namespace qudot {
         code[bytecode_length-1] = 0;
         memcpy(code, &bytes[qudotc_fp], bytecode_length);
         std::cout << "bytecode length: " << bytecode_length << std::endl;
+
+        qu_world = std::make_unique<QuWorld>(num_qubits, 1, ONE_AMP64);
     }
 
     KratosVM::~KratosVM() { 
@@ -81,7 +86,15 @@ namespace qudot {
         feynmanProcessor();
     }
 
-    void KratosVM::getResults() { }
+    void KratosVM::getResults(QuFrequency& freq) { 
+        for (unsigned int i=0; i < ensemble; i++) {
+            freq.addValue(qu_world->measure());
+        }
+    }
+
+    unsigned int KratosVM::getEnsemble() const {
+        return ensemble;
+    }
 
     void KratosVM::feynmanProcessor() {
         char qu_code = code[ip];
@@ -100,7 +113,7 @@ namespace qudot {
                     std::cout << "PATHS" << std::endl;
                     break;
                 case bytecodes::X:
-                    std::cout << "X" << std::endl;
+                    applyGateToQuMvN(xGate);
                     break;
                 case bytecodes::Y:
                     std::cout << "Y" << std::endl;
@@ -166,10 +179,7 @@ namespace qudot {
                     std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
                     break;    
                 case bytecodes::XON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "XON ";
-                    printQuReg(qureg1);
-                    std::cout << std::endl;
+                    applyGateToQuMvN(xGate, quregs);
                     break;
                 case bytecodes::YON:
                     qureg1 = quregs[getInt(code, ip)];
@@ -341,6 +351,20 @@ namespace qudot {
         auto qubits = qr.getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
             std::cout << *it << ", ";
+        }
+    }
+
+    void KratosVM::applyGateToQuMvN(QuGate& qugate) {
+        for (unsigned int i=1; i <= num_qubits; i++) {
+            qugate.applyGate(qu_world.get(), i);
+        }    
+    }
+
+    void KratosVM::applyGateToQuMvN(QuGate& qugate, QuReg* quregs) {
+        int index = getInt(code, ip);
+        auto qubits = quregs[index].getQubits();
+        for (auto it=qubits.begin(); it != qubits.end(); ++it) {
+            qugate.applyGate(qu_world.get(), *it);
         }
     }
 }

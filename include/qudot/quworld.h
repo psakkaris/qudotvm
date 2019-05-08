@@ -3,6 +3,7 @@
 
 #include <mkl_vsl.h>
 #include "common.h"
+
 /**
  * QuWorlds represents a single source of probabilistic quantum states. You can view this a a Ergodic Discrete
  * Information Source or a World in Many Worlds Quantum Mechanics. It is able to represent any linear combination
@@ -15,6 +16,9 @@
  */
 
 namespace qudot { 
+    // need to forward declare QuGate so we can mark as friend
+    class X;
+
     class QuWorld {
         private:
             const short int num_qubits;
@@ -52,6 +56,8 @@ namespace qudot {
             std::string measure();
             bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
+
+        friend X;    
     };
 }
 
