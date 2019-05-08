@@ -17,6 +17,7 @@ namespace qudot {
     const QuAmp I_AMP = QuAmp(0,1);
     const QuAmp MI_AMP = QuAmp(0,-1);
     const QuAmp ROOT2 = QuAmp(1.0 / std::sqrt(2), 0);
+    const QuAmp MROOT2 = QuAmp(-1.0 / std::sqrt(2));
 
     const QuAmp64 ZERO_AMP64 = QuAmp64(0,0);
     const QuAmp64 ONE_AMP64 = QuAmp64(1,0);

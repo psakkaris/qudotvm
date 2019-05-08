@@ -8,6 +8,8 @@
 #include <string>
 #include <string.h>
 
+#include <tbb/parallel_for.h>
+
 #include <qudot/bytecodes.h>
 #include <qudot/common.h>
 #include <qudot/qudotconfig.h>
@@ -87,9 +89,7 @@ namespace qudot {
     }
 
     void KratosVM::getResults(QuFrequency& freq) { 
-        for (unsigned int i=0; i < ensemble; i++) {
-            freq.addValue(qu_world->measure());
-        }
+        tbb::parallel_for(size_t(0), size_t(ensemble), [&](size_t i) { freq.addValue(qu_world->measure()); });
     }
 
     unsigned int KratosVM::getEnsemble() const {
@@ -131,7 +131,7 @@ namespace qudot {
                     std::cout << "PHI" << std::endl;
                     break;                   
                 case bytecodes::H:
-                    std::cout << "H" << std::endl;
+                    applyGateToQuMvN(hGate);
                     break;
                 case bytecodes::SWAP:
                     std::cout << "SWAP" << std::endl;    
@@ -209,10 +209,7 @@ namespace qudot {
                     std::cout << "PHION" << std::endl;
                     break;                
                 case bytecodes::HON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "HON ";
-                    printQuReg(qureg1);
-                    std::cout << std::endl;                    
+                    applyGateToQuMvN(hGate, quregs);                   
                     break; 
                 case bytecodes::MON:
                     qureg1 = quregs[getInt(code, ip)];

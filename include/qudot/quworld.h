@@ -18,6 +18,7 @@
 namespace qudot { 
     // need to forward declare QuGate so we can mark as friend
     class X;
+    class H;
 
     class QuWorld {
         private:
@@ -57,7 +58,8 @@ namespace qudot {
             bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
 
-        friend X;    
+        friend X;
+        friend H;
     };
 }
 
