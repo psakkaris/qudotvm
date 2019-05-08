@@ -12,8 +12,7 @@
 #include "qudot/qudot.h"
 #include "qudot/qudotconfig.h"
 #include "qudot/quworld.h"
-#include "qudot/gates/X.h"
-#include "qudot/gates/H.h"
+#include "qudot/components/feynmanunit.h"
 
 namespace qudot {
     class KratosVM : public QuDot {
@@ -30,8 +29,7 @@ namespace qudot {
             int bytecode_length;
 
             std::unique_ptr<QuWorld> qu_world;
-            X xGate;
-            H hGate;
+            FeynmanUnit feynmanUnit;
 
             void feynmanProcessor();
             void printQuReg(const QuReg&);

@@ -14,7 +14,6 @@
 #include <qudot/common.h>
 #include <qudot/qudotconfig.h>
 #include <qudot/quworld.h>
-#include <qudot/gates/X.h>
 
 namespace qudot {
     KratosVM::KratosVM(const std::string filename, const QuDotConfig& qc) : qudotc_fp(0) {
@@ -113,7 +112,7 @@ namespace qudot {
                     std::cout << "PATHS" << std::endl;
                     break;
                 case bytecodes::X:
-                    applyGateToQuMvN(xGate);
+                    applyGateToQuMvN(feynmanUnit.x);
                     break;
                 case bytecodes::Y:
                     std::cout << "Y" << std::endl;
@@ -131,7 +130,7 @@ namespace qudot {
                     std::cout << "PHI" << std::endl;
                     break;                   
                 case bytecodes::H:
-                    applyGateToQuMvN(hGate);
+                    applyGateToQuMvN(feynmanUnit.h);
                     break;
                 case bytecodes::SWAP:
                     std::cout << "SWAP" << std::endl;    
@@ -179,7 +178,7 @@ namespace qudot {
                     std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
                     break;    
                 case bytecodes::XON:
-                    applyGateToQuMvN(xGate, quregs);
+                    applyGateToQuMvN(feynmanUnit.x, quregs);
                     break;
                 case bytecodes::YON:
                     qureg1 = quregs[getInt(code, ip)];
@@ -209,7 +208,7 @@ namespace qudot {
                     std::cout << "PHION" << std::endl;
                     break;                
                 case bytecodes::HON:
-                    applyGateToQuMvN(hGate, quregs);                   
+                    applyGateToQuMvN(feynmanUnit.h, quregs);                   
                     break; 
                 case bytecodes::MON:
                     qureg1 = quregs[getInt(code, ip)];
