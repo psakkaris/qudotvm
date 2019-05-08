@@ -19,6 +19,7 @@ namespace qudot {
     // need to forward declare QuGate so we can mark as friend
     class X;
     class H;
+    class R;
 
     class QuWorld {
         private:
@@ -60,6 +61,7 @@ namespace qudot {
 
         friend X;
         friend H;
+        friend R;
     };
 }
 

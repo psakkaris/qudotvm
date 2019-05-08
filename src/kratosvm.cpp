@@ -99,6 +99,7 @@ namespace qudot {
         char qu_code = code[ip];
         int qureg_index;
         int value;
+        int k;
         int r1, r2, r3, r4;
         QuReg qureg1, qureg2, qureg3;
 
@@ -118,16 +119,17 @@ namespace qudot {
                     std::cout << "Y" << std::endl;
                     break;    
                 case bytecodes::Z:
-                    std::cout << "Z" << std::endl; 
+                    applyGateToQuMvN(feynmanUnit.z);
                     break;
                 case bytecodes::S:
-                    std::cout << "S" << std::endl;
+                    applyGateToQuMvN(feynmanUnit.s);
                     break;
                 case bytecodes::T:
-                    std::cout << "T" << std::endl;
+                    applyGateToQuMvN(feynmanUnit.t);
                     break;
                 case bytecodes::PHI:
-                    std::cout << "PHI" << std::endl;
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRGate(k));
                     break;                   
                 case bytecodes::H:
                     applyGateToQuMvN(feynmanUnit.h);
@@ -187,25 +189,17 @@ namespace qudot {
                     std::cout << std::endl;                                        
                     break;
                 case bytecodes::ZON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "ZON ";
-                    printQuReg(qureg1);
-                    std::cout << std::endl;                    
+                    applyGateToQuMvN(feynmanUnit.z, quregs);                   
                     break;
                 case bytecodes::SON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "SON " << std::endl;
-                    printQuReg(qureg1);
-                    std::cout << std::endl;                    
+                    applyGateToQuMvN(feynmanUnit.s, quregs);   
                     break;
                 case bytecodes::TON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "TON ";
-                    printQuReg(qureg1);
-                    std::cout << std::endl;
+                    applyGateToQuMvN(feynmanUnit.t, quregs);
                     break;
                 case bytecodes::PHION:
-                    std::cout << "PHION" << std::endl;
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRGate(k), quregs);
                     break;                
                 case bytecodes::HON:
                     applyGateToQuMvN(feynmanUnit.h, quregs);                   
@@ -322,19 +316,24 @@ namespace qudot {
                     std::cout << "MODPOW" << std::endl;
                     break;
                 case bytecodes::PHIDAG:
-                    std::cout << "PHIDAG" << std::endl;
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRDaggerGate(k));
                     break;
+                case bytecodes::PHIDAGON:
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRDaggerGate(k), quregs);                
+                    break;    
                 case bytecodes::SDAG:
-                    std::cout << "SDAG" << std::endl;
+                    applyGateToQuMvN(feynmanUnit.sdag);
                     break;
                 case bytecodes::SDAGON:
-                    std::cout << "SDAGON" << std::endl; 
+                    applyGateToQuMvN(feynmanUnit.sdag, quregs);
                     break;
                 case bytecodes::TDAG:
-                    std::cout << "TDAG" << std::endl;
+                    applyGateToQuMvN(feynmanUnit.tdag);
                     break;
                 case bytecodes::TDAGON:
-                    std::cout << "TDAGON" << std::endl;     
+                    applyGateToQuMvN(feynmanUnit.tdag, quregs);     
                     break;                                                                              
                 default:
                     break;    
