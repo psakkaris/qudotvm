@@ -13,7 +13,8 @@ namespace qudot {
         public:
             QuFrequency(long long);
             void addValue(const std::string&);
-            long long getCount(const std::string&);
+            long long getCount(const std::string&) const;
+            double getPct(const std::string&) const;
             tbb::concurrent_hash_map<std::string, long long>::iterator begin();
             tbb::concurrent_hash_map<std::string, long long>::iterator end(); 
     };

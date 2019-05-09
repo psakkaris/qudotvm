@@ -47,7 +47,10 @@ TEST(QuFrequencyTest, testParallelFrequency){
     tbb::parallel_for(0, 3000, [&](size_t i) { freq.addValue(result3); });
 
     ASSERT_EQ(freq.getCount(result1), 6000);
+    ASSERT_EQ(freq.getPct(result1), .6);
     ASSERT_EQ(freq.getCount(result2), 1000);
+    ASSERT_EQ(freq.getPct(result2), .1);
     ASSERT_EQ(freq.getCount(result3), 3000);
+    ASSERT_EQ(freq.getPct(result3), .3);
     ASSERT_EQ(freq.getCount(no_result), 0);    
 }

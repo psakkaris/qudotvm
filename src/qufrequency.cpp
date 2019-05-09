@@ -12,13 +12,20 @@ namespace qudot {
         a->second += 1;
     }
 
-    long long QuFrequency::getCount(const std::string& value) {
+    long long QuFrequency::getCount(const std::string& value) const {
         tbb::concurrent_hash_map<std::string, long long>::const_accessor a;
         if (_freq_table.find(a, value)) {
             return a->second;
         } else {
             return 0;
         }
+    }
+
+    double QuFrequency::getPct(const std::string& value) const {
+        if (_sum_table > 0) {
+            return getCount(value) / static_cast<double>(_sum_table);
+        }
+        return 0.0;
     }
 
     tbb::concurrent_hash_map<std::string, long long>::iterator QuFrequency::begin() {
