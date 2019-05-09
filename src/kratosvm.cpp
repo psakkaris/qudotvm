@@ -116,7 +116,7 @@ namespace qudot {
                     applyGateToQuMvN(feynmanUnit.x);
                     break;
                 case bytecodes::Y:
-                    std::cout << "Y" << std::endl;
+                    applyGateToQuMvN(feynmanUnit.y);
                     break;    
                 case bytecodes::Z:
                     applyGateToQuMvN(feynmanUnit.z);
@@ -183,10 +183,7 @@ namespace qudot {
                     applyGateToQuMvN(feynmanUnit.x, quregs);
                     break;
                 case bytecodes::YON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "YON "; 
-                    printQuReg(qureg1);
-                    std::cout << std::endl;                                        
+                    applyGateToQuMvN(feynmanUnit.y, quregs);                                        
                     break;
                 case bytecodes::ZON:
                     applyGateToQuMvN(feynmanUnit.z, quregs);                   

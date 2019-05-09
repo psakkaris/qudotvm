@@ -18,6 +18,7 @@
 namespace qudot { 
     // need to forward declare QuGate so we can mark as friend
     class X;
+    class Y;
     class H;
     class R;
 
@@ -60,6 +61,7 @@ namespace qudot {
             std::string getWorldSigniture() const;
 
         friend X;
+        friend Y;
         friend H;
         friend R;
     };

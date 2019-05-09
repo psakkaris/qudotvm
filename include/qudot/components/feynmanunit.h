@@ -5,12 +5,14 @@
 
 #include "qudot/gates/qugate.h"
 #include "qudot/gates/X.h"
+#include "qudot/gates/Y.h"
 #include "qudot/gates/H.h"
 #include "qudot/gates/R.h"
 
 namespace qudot {
     struct FeynmanUnit {
         X x;
+        Y y;
         H h;
         R z;
         R s;

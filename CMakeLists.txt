@@ -24,6 +24,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
   ${PROJECT_SOURCE_DIR}/src/qufrequency.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/X.cpp
+  ${PROJECT_SOURCE_DIR}/src/gates/Y.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/H.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/R.cpp
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
