@@ -10,8 +10,8 @@
 namespace qudot {
     class Y : public QuGate {
         private:
-           const std::string ID = "Y";
-            void swapAmps(QuAmp*, const int, const int);
+           inline static const std::string ID = "Y";
+           void swapAmps(QuAmp*, const int, const int);
 
         public:
             void applyGate(QuWorld*, const int) override;        

@@ -10,7 +10,7 @@
 namespace qudot {
     class H : public QuGate {
         private:
-            const std::string ID = "H";
+            inline static const std::string ID = "H";
             void copyChildren(QuAmp*, const int, const int);
 
         public:

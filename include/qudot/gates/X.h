@@ -10,7 +10,7 @@
 namespace qudot {
     class X : public QuGate {
         private:
-            const std::string ID = "X";
+            inline static const std::string ID = "X";
             void swapAmps(QuAmp*, const int, const int);
 
         public:
