@@ -28,6 +28,10 @@ namespace qudot {
         return 0.0;
     }
 
+    double QuFrequency::getPct(const long long count) const {
+        return count / static_cast<double>(_sum_table);
+    }
+
     tbb::concurrent_hash_map<std::string, long long>::iterator QuFrequency::begin() {
         return _freq_table.begin();
     }

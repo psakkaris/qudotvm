@@ -9,6 +9,7 @@
 #include "qudot/qureg.h"
 #include "qudot/quworld.h"
 #include "qudot/qudotconfig.h"
+#include "qudot/components/heisenbergunit.h"
 
 
 void doSomeQuantum() {
@@ -32,9 +33,12 @@ void doSomeQuantum() {
 
 }
 
-void printQuFrequency(qudot::QuFrequency& freq) {
-   for (auto it = freq.begin(); it != freq.end(); ++it) {
-      printf("%s\t%11u\n", it->first.c_str(), it->second);
+std::string getOutFilename(std::string& in_filename) {
+   auto found = in_filename.find_first_of('.');
+   if (found != std::string::npos) {
+      return in_filename.substr(0, found) + ".out";
+   } else {
+      return in_filename + ".out";
    }
 }
 
@@ -76,7 +80,11 @@ int main(int argc, char *argv[]) {
       vm.bohr();
       qudot::QuFrequency freq(vm.getEnsemble());
       vm.getResults(freq);
-      printQuFrequency(freq);
+      if (config.getPrintResults()) {
+         qudot::HeisenbergUnit::printResults(std::cout, freq);
+      }
+      std::string out_filename = getOutFilename(filename);
+      qudot::HeisenbergUnit::saveResults(out_filename, freq);
    } catch(std::runtime_error &re) {
       std::cerr << re.what() << std::endl;
       return 1;   

@@ -28,6 +28,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/gates/H.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/R.cpp
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
+  ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
 )
 
 add_library(qudot SHARED ${KRATOS_SRC})

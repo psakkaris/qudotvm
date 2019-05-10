@@ -8,12 +8,11 @@
 #include <string>
 #include <string.h>
 
-#include <tbb/parallel_for.h>
-
-#include <qudot/bytecodes.h>
-#include <qudot/common.h>
-#include <qudot/qudotconfig.h>
-#include <qudot/quworld.h>
+#include "qudot/bytecodes.h"
+#include "qudot/common.h"
+#include "qudot/qudotconfig.h"
+#include "qudot/quworld.h"
+#include "qudot/components/heisenbergunit.h"
 
 namespace qudot {
     KratosVM::KratosVM(const std::string filename, const QuDotConfig& qc) : qudotc_fp(0) {
@@ -88,7 +87,7 @@ namespace qudot {
     }
 
     void KratosVM::getResults(QuFrequency& freq) { 
-        tbb::parallel_for(size_t(0), size_t(ensemble), [&](size_t i) { freq.addValue(qu_world->measure()); });
+        HeisenbergUnit::getResults(*qu_world, ensemble, freq);
     }
 
     unsigned int KratosVM::getEnsemble() const {

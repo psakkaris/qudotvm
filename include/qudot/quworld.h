@@ -3,6 +3,7 @@
 
 #include <mkl_vsl.h>
 #include "common.h"
+#include "measurable.h"
 
 /**
  * QuWorlds represents a single source of probabilistic quantum states. You can view this a a Ergodic Discrete
@@ -22,7 +23,7 @@ namespace qudot {
     class H;
     class R;
 
-    class QuWorld {
+    class QuWorld : public Measurable {
         private:
             const short int num_qubits;
             const unsigned int id;
@@ -56,7 +57,7 @@ namespace qudot {
             // will only activate if it does not have zero amplitudes
             void activate(int q, Qubit qval);
             void swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit=false);
-            std::string measure();
+            std::string measure() override;
             bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
 
