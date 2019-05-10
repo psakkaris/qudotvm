@@ -6,11 +6,8 @@
 using namespace qudot;
 
 TEST(QuWorldTest, testCreate) {
-    QuAmp oneAmp = QuAmp(1,0);
     QuAmp64 oneAmp64 = QuAmp64(1,0);
-    QuAmp zeroAmp = QuAmp(0,0);
     QuAmp64 zeroAmp64 = QuAmp64(0,0);
-    QuAmp iAmp = QuAmp(0,1);
     QuAmp64 iAmp64 = QuAmp64(0,1);
 
     QuWorld* quworld = new QuWorld(5, 0, oneAmp64);

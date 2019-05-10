@@ -31,7 +31,26 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
 )
 
-add_library(qudot SHARED ${KRATOS_SRC})
+# removes the kratosapp.cpp file which has a main function
+set(QUDOT_LIB_SRC 
+  ${PROJECT_SOURCE_DIR}/src/common.cpp
+  ${PROJECT_SOURCE_DIR}/src/quworld.cpp
+  ${PROJECT_SOURCE_DIR}/src/bytecodes.cpp
+  ${PROJECT_SOURCE_DIR}/src/qudotconfig.cpp
+  ${PROJECT_SOURCE_DIR}/src/qureg.cpp
+  ${PROJECT_SOURCE_DIR}/src/gatestackframe.cpp
+  ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
+  ${PROJECT_SOURCE_DIR}/src/qufrequency.cpp
+  ${PROJECT_SOURCE_DIR}/src/gates/X.cpp
+  ${PROJECT_SOURCE_DIR}/src/gates/Y.cpp
+  ${PROJECT_SOURCE_DIR}/src/gates/H.cpp
+  ${PROJECT_SOURCE_DIR}/src/gates/R.cpp
+  ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
+  ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
+)
+
+
+add_library(qudot SHARED ${QUDOT_LIB_SRC})
 add_executable(kratosapp ${KRATOS_SRC})
 
 target_link_libraries(kratosapp mkl_intel_ilp64 mkl_sequential mkl_core tbb pthread m dl)

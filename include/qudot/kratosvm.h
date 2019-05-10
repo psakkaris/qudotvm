@@ -40,9 +40,9 @@ namespace qudot {
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);
             virtual ~KratosVM();
 
-            void bohr();
-            void getResults(QuFrequency&);
-            unsigned int getEnsemble() const;
+            void bohr() override;
+            void getResults(QuFrequency&) override;
+            unsigned int getEnsemble() const override;
     };
 }
 

@@ -12,6 +12,7 @@ namespace qudot {
             virtual ~QuDot() {};
             virtual void bohr() = 0;
             virtual void getResults(QuFrequency&) = 0;
+            virtual unsigned int getEnsemble() const = 0;
     };
 }
 

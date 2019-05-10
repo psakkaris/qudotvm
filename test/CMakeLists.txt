@@ -5,16 +5,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(kratostest)
 
 #Bring the headers, into the project
-include_directories(${CMAKE_SOURCE_DIR}/../include $ENV{MKLROOT}/include $ENV{TBBROOT}/include)
+include_directories(${CMAKE_SOURCE_DIR}/../include ${CMAKE_SOURCE_DIR}/include $ENV{MKLROOT}/include $ENV{TBBROOT}/include)
 link_directories(${CMAKE_SOURCE_DIR}/../build $ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
  
-#Can manually add the sources using the set command as follows:
-#set(SOURCES src/mainapp.cpp src/Student.cpp)
+
+set(TEST_SOURCES 
+    ${PROJECT_SOURCE_DIR}/bytecodestest.cpp
+    ${PROJECT_SOURCE_DIR}/qufrequencytest.cpp
+    ${PROJECT_SOURCE_DIR}/quworldtest.cpp
+    ${PROJECT_SOURCE_DIR}/include/qudottest.hpp
+    ${PROJECT_SOURCE_DIR}/basicmeasurementtest.cpp
+    ${PROJECT_SOURCE_DIR}/testmain.cpp
+)
  
-#However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES "*.cpp")
- 
-add_executable(testmain ${SOURCES})
+add_executable(testmain ${TEST_SOURCES})
 
 # link the libraries to the executable
 target_link_libraries(testmain gtest qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl)
