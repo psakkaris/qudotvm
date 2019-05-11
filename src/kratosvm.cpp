@@ -45,7 +45,7 @@ namespace qudot {
             throw std::runtime_error("Invalid main gate");
         }
         int gate_length = getInt(bytes, qudotc_fp);
-        main_gate = std::make_shared<GateAsmSymbol>(bytes, qudotc_fp);
+        main_gate = new GateAsmSymbol(bytes, qudotc_fp);
         qudotc_fp += gate_length;
 
         // read in constants
@@ -68,11 +68,22 @@ namespace qudot {
         memcpy(code, &bytes[qudotc_fp], bytecode_length);
         std::cout << "bytecode length: " << bytecode_length << std::endl;
 
-        qu_world = std::make_unique<QuWorld>(num_qubits, 1, ONE_AMP64);
+        qu_world = new QuWorld(num_qubits, 1, ONE_AMP64);
+        delete[] bytes;
     }
 
     KratosVM::~KratosVM() { 
-        delete[] code;
+        if (code) delete[] code;
+        if (main_gate) delete main_gate;
+        if (qu_world) delete qu_world;
+    }
+
+    KratosVM::KratosVM(const KratosVM & other) {
+        std::cout << "I'm making a copy!\n";
+    }
+
+    KratosVM& KratosVM::operator=(KratosVM& other) {
+        std::cout << "I'm making an assignment!\n";
     }
 
     void KratosVM::bohr() { 
@@ -351,7 +362,7 @@ namespace qudot {
 
     void KratosVM::applyGateToQuMvN(QuGate& qugate) {
         for (unsigned int i=1; i <= num_qubits; i++) {
-            qugate.applyGate(qu_world.get(), i);
+            qugate.applyGate(qu_world, i);
         }    
     }   
 
@@ -360,7 +371,7 @@ namespace qudot {
         auto qubits = quregs[index].getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
             //printf("applying %s to qubit: %d\n", qugate.getId().c_str(), *it);
-            qugate.applyGate(qu_world.get(), *it);
+            qugate.applyGate(qu_world, *it);
         }
     }
 }

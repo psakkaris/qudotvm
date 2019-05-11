@@ -5,7 +5,7 @@
 #include "qudot/bytecodes.h"
 
 namespace qudot {
-    GateStackFrame::GateStackFrame(std::shared_ptr<GateAsmSymbol> asm_symbol, int _ra) : return_address(_ra) {
+    GateStackFrame::GateStackFrame(GateAsmSymbol* asm_symbol, int _ra) : return_address(_ra) {
         symbol = asm_symbol;
         int_regs = new int[symbol->getRegs() + symbol->getArgs() + 1];
         quregs = new QuReg[symbol->getQubitRegs() + 1];
@@ -16,7 +16,7 @@ namespace qudot {
         delete[] quregs;
     }
 
-    std::shared_ptr<GateAsmSymbol> GateStackFrame::getSymbol() const {
+    GateAsmSymbol* GateStackFrame::getSymbol() const {
         return symbol;
     }
 

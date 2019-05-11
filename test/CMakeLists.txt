@@ -13,7 +13,7 @@ set(TEST_SOURCES
     ${PROJECT_SOURCE_DIR}/bytecodestest.cpp
     ${PROJECT_SOURCE_DIR}/qufrequencytest.cpp
     ${PROJECT_SOURCE_DIR}/quworldtest.cpp
-    ${PROJECT_SOURCE_DIR}/include/qudottest.hpp
+    ${PROJECT_SOURCE_DIR}/qudottest.cpp
     ${PROJECT_SOURCE_DIR}/basicmeasurementtest.cpp
     ${PROJECT_SOURCE_DIR}/testmain.cpp
 )
@@ -21,4 +21,4 @@ set(TEST_SOURCES
 add_executable(testmain ${TEST_SOURCES})
 
 # link the libraries to the executable
-target_link_libraries(testmain gtest qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl)
+target_link_libraries(testmain gtest gtest_main qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ m dl)

@@ -22,13 +22,13 @@ namespace qudot {
             char* code;
             std::vector<GateAsmSymbol> const_pool_gates;
             std::stack<GateStackFrame> calls;
-            std::shared_ptr<GateAsmSymbol> main_gate;
+            GateAsmSymbol* main_gate;
             unsigned int num_qubits;
             unsigned int ensemble;
             int qudotc_fp;
             int bytecode_length;
 
-            std::unique_ptr<QuWorld> qu_world;
+            QuWorld* qu_world;
             FeynmanUnit feynmanUnit;
 
             void feynmanProcessor();
@@ -39,6 +39,8 @@ namespace qudot {
         public:
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);
             virtual ~KratosVM();
+            KratosVM(const KratosVM&);
+            KratosVM & operator=(KratosVM&);
 
             void bohr() override;
             void getResults(QuFrequency&) override;
