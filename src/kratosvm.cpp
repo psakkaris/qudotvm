@@ -73,9 +73,9 @@ namespace qudot {
     }
 
     KratosVM::~KratosVM() { 
-        if (code) delete[] code;
-        if (main_gate) delete main_gate;
-        if (qu_world) delete qu_world;
+        delete[] code;
+        delete main_gate;
+        delete qu_world;
     }
 
     KratosVM::KratosVM(const KratosVM & other) {

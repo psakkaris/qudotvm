@@ -4,3 +4,9 @@ cd build
 ./testmain --gtest_filter=QuWorldTest*
 ./testmain --gtest_filter=BasicMeasurementTest.state2test
 ./testmain --gtest_filter=BasicMeasurementTest.state3test
+./testmain --gtest_filter=BasicMeasurementTest.state4test
+./testmain --gtest_filter=BasicMeasurementTest.state5test
+./testmain --gtest_filter=BasicMeasurementTest.state7test
+./testmain --gtest_filter=BasicMeasurementTest.state8test
+./testmain --gtest_filter=BasicMeasurementTest.state9test
+./testmain --gtest_filter=BasicMeasurementTest.state10test
