@@ -74,6 +74,21 @@ TEST(BasicMeasurementTest, state5test) {
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
 }
 
+TEST(BasicMeasurementTest, state6test) {
+    std::string filename = "../resources/compiled/measurements/state6.qudotc";
+    std::map<std::string, double> theory;    
+    theory["01001"] = 0.125;
+    theory["10001"] = 0.125;
+    theory["11001"] = 0.125;
+    theory["00001"] = 0.125;
+    theory["01101"] = 0.125;
+    theory["00101"] = 0.125;
+    theory["10101"] = 0.125;
+    theory["11101"] = 0.125;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
+}
+
 
 TEST(BasicMeasurementTest, state7test) {
     std::string filename = "../resources/compiled/measurements/state7.qudotc";   
@@ -115,41 +130,3 @@ TEST(BasicMeasurementTest, state10test) {
 
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
 }
-
-/*
-TEST(BasicMeasurementTest, state3test) {
-    std::string filename = "../resources/compiled/measurements/state6.qudotc";   
-
-    qudot::test::testAgainstTheory(filename, theory); 
-}
-
-TEST(BasicMeasurementTest, state3test) {
-    std::string filename = "../resources/compiled/measurements/state3.qudotc";   
-
-    qudot::test::testAgainstTheory(filename, theory); 
-}
-
-TEST(BasicMeasurementTest, state3test) {
-    std::string filename = "../resources/compiled/measurements/state7.qudotc";   
-
-    qudot::test::testAgainstTheory(filename, theory); 
-}
-
-TEST(BasicMeasurementTest, state3test) {
-    std::string filename = "../resources/compiled/measurements/state8.qudotc";   
-
-    qudot::test::testAgainstTheory(filename, theory); 
-}
-
-TEST(BasicMeasurementTest, state3test) {
-    std::string filename = "../resources/compiled/measurements/state9.qudotc";   
-
-    qudot::test::testAgainstTheory(filename, theory); 
-}
-
-TEST(BasicMeasurementTest, state3test) {
-    std::string filename = "../resources/compiled/measurements/state10.qudotc";   
-
-    qudot::test::testAgainstTheory(filename, theory); 
-}
-*/

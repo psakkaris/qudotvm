@@ -1,12 +1,42 @@
 cd build 
-./testmain --gtest_filter=BytecodesTest*
-./testmain --gtest_filter=QuFrequencyTest*
-./testmain --gtest_filter=QuWorldTest*
-./testmain --gtest_filter=BasicMeasurementTest.state2test
-./testmain --gtest_filter=BasicMeasurementTest.state3test
-./testmain --gtest_filter=BasicMeasurementTest.state4test
-./testmain --gtest_filter=BasicMeasurementTest.state5test
-./testmain --gtest_filter=BasicMeasurementTest.state7test
-./testmain --gtest_filter=BasicMeasurementTest.state8test
-./testmain --gtest_filter=BasicMeasurementTest.state9test
-./testmain --gtest_filter=BasicMeasurementTest.state10test
+pass=0
+fail=0
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+function check_status() {
+    if [ $? -eq 0 ];then
+        ((pass++))
+    else    
+        ((fail++))
+    fi
+}
+
+function run_test() {
+    $1
+    check_status
+}
+
+run_test "./testmain --gtest_filter=BytecodesTest*"
+run_test "./testmain --gtest_filter=QuFrequencyTest*"
+run_test "./testmain --gtest_filter=QuWorldTest*"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state2test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state3test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state4test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state5test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state6test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state7test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state8test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state9test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state10test"
+
+printf "\n\n"
+echo -e "${GREEN}PASS: $pass    ${RED}FAIL: $fail"
+printf "\n"
+
+if [ $fail -eq 0 ];then 
+    echo -e "${GREEN} ALL TEST PASSED"
+else 
+    echo -e "${RED} THERE ARE $fail FAILURES"
+fi
+
+printf "\n"

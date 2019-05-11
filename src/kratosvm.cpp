@@ -110,7 +110,7 @@ namespace qudot {
         int qureg_index;
         int value;
         int k;
-        int r1, r2, r3, r4;
+        int r1, r2;
         QuReg qureg1, qureg2, qureg3;
 
         while (qu_code != bytecodes::HALT) {
@@ -276,7 +276,13 @@ namespace qudot {
                     std::cout << "PRINTR" << std::endl; 
                     break;
                 case bytecodes::QLOAD_SEQUENCE:
-                    std::cout << "QLOAD_SEQUENCE" << std::endl;
+                    qureg_index = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    for (int i=r1; i <= r2; i++) {
+                        quregs[qureg_index].addQubit(i);
+                    }
                     break;
                 case bytecodes::BREQ:
                     std::cout << "BREQ" << std::endl;
