@@ -35,8 +35,10 @@ printf "\n"
 
 if [ $fail -eq 0 ];then 
     echo -e "${GREEN} ALL TEST PASSED"
+    printf "\n"
+    exit 0
 else 
     echo -e "${RED} THERE ARE $fail FAILURES"
+    printf "\n"
+    exit 1
 fi
-
-printf "\n"
