@@ -303,7 +303,9 @@ namespace qudot {
                     std::cout << "BRNEQ" << std::endl;
                     break;
                 case bytecodes::QLOADR:
-                    std::cout << "QLOADR" << std::endl;
+                    qureg_index = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    quregs[qureg_index].addQubit(int_regs[r1]);
                     break;
                 case bytecodes::IDIV:
                     std::cout << "IDIV" << std::endl;
@@ -380,4 +382,9 @@ namespace qudot {
             qugate.applyGate(qu_world, *it);
         }
     }
+
+    // void KratosVM::call(const int gate_index, const int first_reg_index) {
+    //     auto gate_symbol = const_pool_gates[gate_index];
+    //     GateStackFrame gs();
+    // } 
 }
