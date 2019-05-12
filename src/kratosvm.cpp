@@ -260,7 +260,12 @@ namespace qudot {
                     int_regs[getInt(code, ip)] = getInt(code, ip); 
                     break;
                 case bytecodes::RET:
-                    std::cout << "RET" << std::endl;
+                    // pop stack frame
+                    ip = calls.top().getReturnAddress();
+                    // return value
+                    value = calls.top().getIntRegs()[0];
+                    calls.pop();
+                    calls.top().getIntRegs()[0] = value;
                     break;
                 case bytecodes::QNULL:
                     std::cout << "QNULL" << std::endl;
@@ -269,7 +274,7 @@ namespace qudot {
                     std::cout << "MOVE" << std::endl;
                     break;
                 case bytecodes::CALL:
-                    std::cout << "CALL" << std::endl;  
+                    call(getInt(code, ip), getInt(code, ip)); 
                     break;
                 case bytecodes::PRINTR:
                     std::cout << "PRINTR" << std::endl; 
@@ -382,8 +387,21 @@ namespace qudot {
         }
     }
 
-    // void KratosVM::call(const int gate_index, const int first_reg_index) {
-    //     auto gate_symbol = const_pool_gates[gate_index];
-    //     GateStackFrame gs();
-    // } 
+    void KratosVM::call(const int gate_index, const int first_reg_index) {
+        auto gate_symbol = const_pool_gates[gate_index];
+        GateStackFrame f(gate_symbol, ip);
+        f.getIntRegs()[0] = num_qubits;
+
+        auto calling_frame = calls.top();
+        // push new stack to frame
+        calls.push(f);
+
+        // move arguments from calling stack to new stack frame
+        for (unsigned int arg=0; arg < gate_symbol->getArgs(); arg++) {
+            // move args, leaving room for r0
+            f.getIntRegs()[arg+1] = calling_frame.getIntRegs()[first_reg_index+arg];
+        }
+        // branch to gate frame
+        ip = gate_symbol->getAddress();
+    } 
 }

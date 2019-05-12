@@ -35,6 +35,7 @@ namespace qudot {
             void printQuReg(const QuReg&);
             void applyGateToQuMvN(QuGate&);
             void applyGateToQuMvN(QuGate&, QuReg*);
+            void call(const int, const int);
 
         public:
             KratosVM(const std::string filename, const QuDotConfig& qudot_config);

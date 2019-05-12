@@ -26,4 +26,8 @@ namespace qudot {
     QuReg* GateStackFrame::getQuRegs() const {
         return quregs;
     }
+
+    int GateStackFrame::getReturnAddress() const {
+        return return_address;
+    }
 }
