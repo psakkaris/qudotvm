@@ -45,17 +45,17 @@ namespace qudot {
             throw std::runtime_error("Invalid main gate");
         }
         int gate_length = getInt(bytes, qudotc_fp);
-        main_gate = new GateAsmSymbol(bytes, qudotc_fp);
+        main_gate = std::make_shared<GateAsmSymbol>(bytes, qudotc_fp);
         qudotc_fp += gate_length;
 
         // read in constants
         int const_pool_size = getInt(bytes, qudotc_fp);
-        const_pool_gates.reserve(const_pool_size);
         for (int i=0; i < const_pool_size; i++) {
             int const_type = bytes[qudotc_fp++];
             if (const_type == 1) {
                 int length = getInt(bytes, qudotc_fp);
-                const_pool_gates[i] = GateAsmSymbol(bytes, qudotc_fp);
+                auto cg = std::make_shared<GateAsmSymbol>(bytes, qudotc_fp);
+                const_pool_gates.push_back(cg);
                 qudotc_fp += length;
             } else {
                 throw std::runtime_error("Invalid constant type");
@@ -74,7 +74,6 @@ namespace qudot {
 
     KratosVM::~KratosVM() { 
         delete[] code;
-        delete main_gate;
         delete qu_world;
     }
 

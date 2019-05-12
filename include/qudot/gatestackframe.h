@@ -17,16 +17,16 @@
 namespace qudot {
     class GateStackFrame {
         private:
-            GateAsmSymbol* symbol;
+            std::shared_ptr<GateAsmSymbol> symbol;
             int return_address;
             int* int_regs;
             QuReg* quregs;
 
         public:
-            GateStackFrame(GateAsmSymbol* asm_symbol, int);
+            GateStackFrame(std::shared_ptr<GateAsmSymbol> asm_symbol, int);
             ~GateStackFrame();
 
-            GateAsmSymbol* getSymbol() const;
+            std::shared_ptr<GateAsmSymbol> getSymbol() const;
             int getReturnAddress() const;
             int* getIntRegs() const;
             QuReg* getQuRegs() const;

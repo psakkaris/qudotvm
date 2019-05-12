@@ -20,9 +20,9 @@ namespace qudot {
             int ip;
             int fp;
             char* code;
-            std::vector<GateAsmSymbol> const_pool_gates;
+            std::vector<std::shared_ptr<GateAsmSymbol>> const_pool_gates;
             std::stack<GateStackFrame> calls;
-            GateAsmSymbol* main_gate;
+            std::shared_ptr<GateAsmSymbol> main_gate;
             unsigned int num_qubits;
             unsigned int ensemble;
             int qudotc_fp;
