@@ -75,6 +75,9 @@ namespace qudot {
     KratosVM::~KratosVM() { 
         delete[] code;
         delete qu_world;
+
+        code = nullptr;
+        qu_world = nullptr;
     }
 
     KratosVM::KratosVM(const KratosVM & other) {
