@@ -25,6 +25,8 @@ namespace qudot {
 
     QuWorld::~QuWorld() {
         delete[] qudot_net;
+        qudot_net = nullptr;
+        
         vslDeleteStream(&stream);
     }
 
