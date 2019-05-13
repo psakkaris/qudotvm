@@ -112,7 +112,7 @@ namespace qudot {
         int qureg_index;
         int value;
         int k;
-        int r1, r2;
+        int r1, r2, r3;
         QuReg qureg1, qureg2, qureg3;
 
         while (qu_code != bytecodes::HALT) {
@@ -125,28 +125,73 @@ namespace qudot {
                 case bytecodes::PATHS:
                     std::cout << "PATHS" << std::endl;
                     break;
+                case bytecodes::PRINTR:
+                    std::cout << "PRINTR" << std::endl; 
+                    break;
                 case bytecodes::X:
                     applyGateToQuMvN(feynmanUnit.x);
                     break;
+                case bytecodes::XON:
+                    applyGateToQuMvN(feynmanUnit.x, quregs);
+                    break;                    
                 case bytecodes::Y:
                     applyGateToQuMvN(feynmanUnit.y);
-                    break;    
+                    break; 
+                case bytecodes::YON:
+                    applyGateToQuMvN(feynmanUnit.y, quregs);                                        
+                    break;                       
                 case bytecodes::Z:
                     applyGateToQuMvN(feynmanUnit.z);
+                    break;
+                case bytecodes::ZON:
+                    applyGateToQuMvN(feynmanUnit.z, quregs);                   
                     break;
                 case bytecodes::S:
                     applyGateToQuMvN(feynmanUnit.s);
                     break;
+                case bytecodes::SON:
+                    applyGateToQuMvN(feynmanUnit.s, quregs);   
+                    break;                    
                 case bytecodes::T:
                     applyGateToQuMvN(feynmanUnit.t);
+                    break;
+                case bytecodes::TON:
+                    applyGateToQuMvN(feynmanUnit.t, quregs);
                     break;
                 case bytecodes::PHI:
                     k = getInt(code, ip);
                     applyGateToQuMvN(*feynmanUnit.getRGate(k));
-                    break;                   
+                    break;      
+                case bytecodes::PHION:
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRGate(k), quregs);
+                    break;     
+                case bytecodes::PHIDAG:
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRDaggerGate(k));
+                    break;
+                case bytecodes::PHIDAGON:
+                    k = getInt(code, ip);
+                    applyGateToQuMvN(*feynmanUnit.getRDaggerGate(k), quregs);                
+                    break;    
+                case bytecodes::SDAG:
+                    applyGateToQuMvN(feynmanUnit.sdag);
+                    break;
+                case bytecodes::SDAGON:
+                    applyGateToQuMvN(feynmanUnit.sdag, quregs);
+                    break;
+                case bytecodes::TDAG:
+                    applyGateToQuMvN(feynmanUnit.tdag);
+                    break;
+                case bytecodes::TDAGON:
+                    applyGateToQuMvN(feynmanUnit.tdag, quregs);     
+                    break;           
                 case bytecodes::H:
                     applyGateToQuMvN(feynmanUnit.h);
                     break;
+                case bytecodes::HON:
+                    applyGateToQuMvN(feynmanUnit.h, quregs);                   
+                    break;                     
                 case bytecodes::SWAP:
                     std::cout << "SWAP" << std::endl;    
                     break;
@@ -159,8 +204,15 @@ namespace qudot {
 
                     // std::cout << " on " << first << " " << second << std::endl;
                     break;
+                case bytecodes::SWAPON:
+                    std::cout << "SWAPON" << std::endl;
+                    break;
                 case bytecodes::MEASURE:
                     std::cout << "MEASURE" << std::endl;
+                    break;
+                case bytecodes::MON:
+                    qureg1 = quregs[getInt(code, ip)];
+                    std::cout << "MON" << std::endl;  
                     break;
                 case bytecodes::CNOT:
                     qureg1 = quregs[getInt(code, ip)];
@@ -192,35 +244,9 @@ namespace qudot {
 
                     std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
                     break;    
-                case bytecodes::XON:
-                    applyGateToQuMvN(feynmanUnit.x, quregs);
-                    break;
-                case bytecodes::YON:
-                    applyGateToQuMvN(feynmanUnit.y, quregs);                                        
-                    break;
-                case bytecodes::ZON:
-                    applyGateToQuMvN(feynmanUnit.z, quregs);                   
-                    break;
-                case bytecodes::SON:
-                    applyGateToQuMvN(feynmanUnit.s, quregs);   
-                    break;
-                case bytecodes::TON:
-                    applyGateToQuMvN(feynmanUnit.t, quregs);
-                    break;
-                case bytecodes::PHION:
-                    k = getInt(code, ip);
-                    applyGateToQuMvN(*feynmanUnit.getRGate(k), quregs);
-                    break;                
-                case bytecodes::HON:
-                    applyGateToQuMvN(feynmanUnit.h, quregs);                   
-                    break; 
-                case bytecodes::MON:
-                    qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "MON" << std::endl;  
-                    break;
-                case bytecodes::SWAPON:
-                    std::cout << "SWAPON" << std::endl;
-                    break;
+                case bytecodes::TOFF:
+                    std::cout << "TOFF" << std::endl;
+                    break;              
                 case bytecodes::QLOAD:
                     qureg_index = getInt(code, ip);
                     value = getInt(code, ip);
@@ -233,6 +259,25 @@ namespace qudot {
                         value = getInt(code, ip);
                         gsf->addQuReg(qureg_index, value);
                     }
+                    break;
+                case bytecodes::QLOAD_SEQUENCE:
+                    qureg_index = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    for (int i=r1; i <= r2; i++) {
+                        gsf->addQuReg(qureg_index, i);
+                    }
+                    break;
+                case bytecodes::QLOADR:
+                    qureg_index = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    gsf->addQuReg(qureg_index, int_regs[r1]);
+                    break;
+                case bytecodes::ILOAD:
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    gsf->setIntReg(r1, value);
                     break;
                 case bytecodes::IADD:
                     std::cout << "IADD" << std::endl;
@@ -261,11 +306,6 @@ namespace qudot {
                 case bytecodes::BRF:
                     std::cout << "BRF" << std::endl; 
                     break;                                                       
-                case bytecodes::ILOAD:
-                    r1 = getInt(code, ip);
-                    value = getInt(code, ip);
-                    gsf->setIntReg(r1, value);
-                    break;
                 case bytecodes::RET:
                     // pop stack frame
                     ip = gsf->getReturnAddress();
@@ -286,18 +326,6 @@ namespace qudot {
                     r2 = getInt(code, ip);
                     call(r1, r2); 
                     break;
-                case bytecodes::PRINTR:
-                    std::cout << "PRINTR" << std::endl; 
-                    break;
-                case bytecodes::QLOAD_SEQUENCE:
-                    qureg_index = getInt(code, ip);
-                    r1 = getInt(code, ip);
-                    r2 = getInt(code, ip);
-
-                    for (int i=r1; i <= r2; i++) {
-                        gsf->addQuReg(qureg_index, i);
-                    }
-                    break;
                 case bytecodes::BREQ:
                     std::cout << "BREQ" << std::endl;
                     break;
@@ -316,19 +344,11 @@ namespace qudot {
                 case bytecodes::BRNEQ:
                     std::cout << "BRNEQ" << std::endl;
                     break;
-                case bytecodes::QLOADR:
-                    qureg_index = getInt(code, ip);
-                    r1 = getInt(code, ip);
-                    gsf->addQuReg(qureg_index, int_regs[r1]);
-                    break;
                 case bytecodes::IDIV:
                     std::cout << "IDIV" << std::endl;
                     break;
                 case bytecodes::DECR:
                     std::cout << "DECR" << std::endl;  
-                    break;
-                case bytecodes::TOFF:
-                    std::cout << "TOFF" << std::endl;
                     break;
                 case bytecodes::IQUADD:
                     std::cout << "IQUADD" << std::endl;
@@ -347,27 +367,7 @@ namespace qudot {
                     break;
                 case bytecodes::MODPOW:
                     std::cout << "MODPOW" << std::endl;
-                    break;
-                case bytecodes::PHIDAG:
-                    k = getInt(code, ip);
-                    applyGateToQuMvN(*feynmanUnit.getRDaggerGate(k));
-                    break;
-                case bytecodes::PHIDAGON:
-                    k = getInt(code, ip);
-                    applyGateToQuMvN(*feynmanUnit.getRDaggerGate(k), quregs);                
-                    break;    
-                case bytecodes::SDAG:
-                    applyGateToQuMvN(feynmanUnit.sdag);
-                    break;
-                case bytecodes::SDAGON:
-                    applyGateToQuMvN(feynmanUnit.sdag, quregs);
-                    break;
-                case bytecodes::TDAG:
-                    applyGateToQuMvN(feynmanUnit.tdag);
-                    break;
-                case bytecodes::TDAGON:
-                    applyGateToQuMvN(feynmanUnit.tdag, quregs);     
-                    break;                                                                              
+                    break;                                                                             
                 default:
                     break;    
             }
