@@ -32,5 +32,6 @@
 *.app
 
 **/build
+**/debug
 *.code-workspace
 .vscode/**

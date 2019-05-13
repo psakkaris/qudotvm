@@ -19,17 +19,19 @@ namespace qudot {
         private:
             std::shared_ptr<GateAsmSymbol> symbol;
             int return_address;
-            int* int_regs;
-            QuReg* quregs;
+            std::vector<int> int_regs;
+            std::vector<QuReg> quregs;
 
         public:
             GateStackFrame(std::shared_ptr<GateAsmSymbol> asm_symbol, int);
-            ~GateStackFrame();
 
             std::shared_ptr<GateAsmSymbol> getSymbol() const;
             int getReturnAddress() const;
-            int* getIntRegs() const;
-            QuReg* getQuRegs() const;
+            const std::vector<int>& getIntRegs() const;
+            const std::vector<QuReg>& getQuRegs() const;
+
+            void setIntReg(const int, const int);
+            void addQuReg(const int, const int);
     };
 }
 

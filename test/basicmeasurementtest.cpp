@@ -130,3 +130,14 @@ TEST(BasicMeasurementTest, state10test) {
 
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
 }
+
+TEST(BasicMeasurementTest, state_calltest) {
+    std::string filename = "../resources/compiled/measurements/state_call.qudotc";    
+    std::map<std::string, double> theory;
+    theory["01000"] = .25;
+    theory["01010"] = .25;
+    theory["11000"] = .25;
+    theory["11010"] = .25;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
+}

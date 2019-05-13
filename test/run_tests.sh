@@ -28,6 +28,7 @@ run_test "./testmain --gtest_filter=BasicMeasurementTest.state7test"
 run_test "./testmain --gtest_filter=BasicMeasurementTest.state8test"
 run_test "./testmain --gtest_filter=BasicMeasurementTest.state9test"
 run_test "./testmain --gtest_filter=BasicMeasurementTest.state10test"
+run_test "./testmain --gtest_filter=BasicMeasurementTest.state_calltest"
 
 printf "\n\n"
 echo -e "${GREEN}PASS: $pass    ${RED}FAIL: $fail"

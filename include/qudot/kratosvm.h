@@ -21,7 +21,7 @@ namespace qudot {
             int fp;
             char* code;
             std::vector<std::shared_ptr<GateAsmSymbol>> const_pool_gates;
-            std::stack<GateStackFrame> calls;
+            std::stack<std::shared_ptr<GateStackFrame>> calls;
             std::shared_ptr<GateAsmSymbol> main_gate;
             unsigned int num_qubits;
             unsigned int ensemble;
@@ -34,7 +34,7 @@ namespace qudot {
             void feynmanProcessor();
             void printQuReg(const QuReg&);
             void applyGateToQuMvN(QuGate&);
-            void applyGateToQuMvN(QuGate&, QuReg*);
+            void applyGateToQuMvN(QuGate&, const std::vector<QuReg>&);
             void call(const int, const int);
 
         public:

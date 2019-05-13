@@ -73,8 +73,8 @@ namespace qudot {
     }
 
     KratosVM::~KratosVM() { 
-        delete[] code;
-        delete qu_world;
+        if (code) delete[] code;
+        if (qu_world) delete qu_world;
 
         code = nullptr;
         qu_world = nullptr;
@@ -92,8 +92,8 @@ namespace qudot {
         if (!main_gate) {
             throw std::runtime_error("no main gate found");
         }
-        GateStackFrame gsf = GateStackFrame(main_gate, ip);
-        gsf.getIntRegs()[0] = num_qubits;
+        auto gsf = std::make_shared<GateStackFrame>(main_gate, ip);
+        gsf->setIntReg(0, num_qubits);
         calls.push(gsf);
         ip = main_gate->getAddress();
         feynmanProcessor();
@@ -117,8 +117,9 @@ namespace qudot {
 
         while (qu_code != bytecodes::HALT) {
             ip++;
-            int* int_regs = calls.top().getIntRegs();
-            QuReg* quregs = calls.top().getQuRegs();
+            auto gsf = calls.top();
+            const std::vector<int> int_regs = gsf->getIntRegs();
+            const std::vector<QuReg> quregs = gsf->getQuRegs();
 
             switch (qu_code) {
                 case bytecodes::PATHS:
@@ -223,13 +224,14 @@ namespace qudot {
                 case bytecodes::QLOAD:
                     qureg_index = getInt(code, ip);
                     value = getInt(code, ip);
-                    quregs[qureg_index].addQubit(value);
+                    gsf->addQuReg(qureg_index, value);
                     break;
                 case bytecodes::QLOAD_ARRAY:
                     qureg_index = getInt(code, ip);
                     r1 = getInt(code, ip);
                     for (int i=0; i < r1; i++) {
-                        quregs[qureg_index].addQubit(getInt(code, ip));
+                        value = getInt(code, ip);
+                        gsf->addQuReg(qureg_index, value);
                     }
                     break;
                 case bytecodes::IADD:
@@ -260,15 +262,18 @@ namespace qudot {
                     std::cout << "BRF" << std::endl; 
                     break;                                                       
                 case bytecodes::ILOAD:
-                    int_regs[getInt(code, ip)] = getInt(code, ip); 
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    gsf->setIntReg(r1, value);
                     break;
                 case bytecodes::RET:
                     // pop stack frame
-                    ip = calls.top().getReturnAddress();
+                    ip = gsf->getReturnAddress();
                     // return value
-                    value = calls.top().getIntRegs()[0];
+                    value = int_regs[0];
                     calls.pop();
-                    calls.top().getIntRegs()[0] = value;
+                    calls.top()->setIntReg(0, value);
+
                     break;
                 case bytecodes::QNULL:
                     std::cout << "QNULL" << std::endl;
@@ -277,7 +282,9 @@ namespace qudot {
                     std::cout << "MOVE" << std::endl;
                     break;
                 case bytecodes::CALL:
-                    call(getInt(code, ip), getInt(code, ip)); 
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+                    call(r1, r2); 
                     break;
                 case bytecodes::PRINTR:
                     std::cout << "PRINTR" << std::endl; 
@@ -288,7 +295,7 @@ namespace qudot {
                     r2 = getInt(code, ip);
 
                     for (int i=r1; i <= r2; i++) {
-                        quregs[qureg_index].addQubit(i);
+                        gsf->addQuReg(qureg_index, i);
                     }
                     break;
                 case bytecodes::BREQ:
@@ -312,7 +319,7 @@ namespace qudot {
                 case bytecodes::QLOADR:
                     qureg_index = getInt(code, ip);
                     r1 = getInt(code, ip);
-                    quregs[qureg_index].addQubit(int_regs[r1]);
+                    gsf->addQuReg(qureg_index, int_regs[r1]);
                     break;
                 case bytecodes::IDIV:
                     std::cout << "IDIV" << std::endl;
@@ -381,7 +388,7 @@ namespace qudot {
         }    
     }   
 
-    void KratosVM::applyGateToQuMvN(QuGate& qugate, QuReg* quregs) {
+    void KratosVM::applyGateToQuMvN(QuGate& qugate, const std::vector<QuReg>& quregs) {
         int index = getInt(code, ip);
         auto qubits = quregs[index].getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
@@ -392,18 +399,18 @@ namespace qudot {
 
     void KratosVM::call(const int gate_index, const int first_reg_index) {
         auto gate_symbol = const_pool_gates[gate_index];
-        GateStackFrame f(gate_symbol, ip);
-        f.getIntRegs()[0] = num_qubits;
-
+        auto f = std::make_shared<GateStackFrame>(gate_symbol, ip);
+        f->setIntReg(0, num_qubits);
         auto calling_frame = calls.top();
-        // push new stack to frame
-        calls.push(f);
 
         // move arguments from calling stack to new stack frame
         for (unsigned int arg=0; arg < gate_symbol->getArgs(); arg++) {
             // move args, leaving room for r0
-            f.getIntRegs()[arg+1] = calling_frame.getIntRegs()[first_reg_index+arg];
+            f->setIntReg(arg+1, calling_frame->getIntRegs()[first_reg_index+arg]);
+            //std::cout << "r" << arg+1 << "=" << calling_frame->getIntRegs()[first_reg_index+arg] << "\n";
         }
+        // push new stack to frame
+        calls.push(f);
         // branch to gate frame
         ip = gate_symbol->getAddress();
     } 
