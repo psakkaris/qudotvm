@@ -11,6 +11,7 @@ namespace qudot {
     enum Qubit {ZERO, ONE};
     const unsigned char qu_stride=4;
     const float TOLERANCE = std::numeric_limits<float>::epsilon();
+    const double TOLERANCE64 = std::numeric_limits<double>::epsilon();
     const QuAmp ZERO_AMP = QuAmp(0,0);
     const QuAmp ONE_AMP = QuAmp(1,0);
     const QuAmp MONE_AMP = QuAmp(-1, 0);

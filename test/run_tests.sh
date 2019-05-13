@@ -17,6 +17,7 @@ function run_test() {
 }
 
 run_test "./testmain --gtest_filter=BytecodesTest*"
+run_test "./testmain --gtest_filter=FenwickTreeTest*"
 run_test "./testmain --gtest_filter=QuFrequencyTest*"
 run_test "./testmain --gtest_filter=QuWorldTest*"
 run_test "./testmain --gtest_filter=BasicMeasurementTest.state2test"

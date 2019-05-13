@@ -15,6 +15,7 @@ link_directories($ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
 #file(GLOB SOURCES "src/*.cpp")
 set(KRATOS_SRC 
   ${PROJECT_SOURCE_DIR}/src/common.cpp
+  ${PROJECT_SOURCE_DIR}/include/qudot/fenwicktree.hpp
   ${PROJECT_SOURCE_DIR}/src/quworld.cpp
   ${PROJECT_SOURCE_DIR}/src/kratosapp.cpp
   ${PROJECT_SOURCE_DIR}/src/bytecodes.cpp
@@ -34,6 +35,7 @@ set(KRATOS_SRC
 # removes the kratosapp.cpp file which has a main function
 set(QUDOT_LIB_SRC 
   ${PROJECT_SOURCE_DIR}/src/common.cpp
+  ${PROJECT_SOURCE_DIR}/include/qudot/fenwicktree.hpp
   ${PROJECT_SOURCE_DIR}/src/quworld.cpp
   ${PROJECT_SOURCE_DIR}/src/bytecodes.cpp
   ${PROJECT_SOURCE_DIR}/src/qudotconfig.cpp

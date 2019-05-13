@@ -13,6 +13,7 @@ link_directories(${CMAKE_SOURCE_DIR}/../build $ENV{MKLROOT}/lib/intel64 $ENV{TBB
 set(TEST_SOURCES 
     ${PROJECT_SOURCE_DIR}/bytecodestest.cpp
     ${PROJECT_SOURCE_DIR}/qufrequencytest.cpp
+    ${PROJECT_SOURCE_DIR}/fenwicktreetest.cpp
     ${PROJECT_SOURCE_DIR}/quworldtest.cpp
     ${PROJECT_SOURCE_DIR}/qudottest.cpp
     ${PROJECT_SOURCE_DIR}/basicmeasurementtest.cpp
