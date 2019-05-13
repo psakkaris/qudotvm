@@ -8,6 +8,8 @@
 #include <string>
 #include <string.h>
 
+#include <boost/multiprecision/cpp_int.hpp>
+
 #include "qudot/bytecodes.h"
 #include "qudot/common.h"
 #include "qudot/qudotconfig.h"
@@ -112,8 +114,9 @@ namespace qudot {
         int qureg_index;
         int value;
         int k;
-        int r1, r2, r3;
+        int r1, r2, r3, r4;
         QuReg qureg1, qureg2, qureg3;
+        boost::multiprecision::cpp_int big_result, base, mod, pow;
 
         while (qu_code != bytecodes::HALT) {
             ip++;
@@ -126,7 +129,8 @@ namespace qudot {
                     std::cout << "PATHS" << std::endl;
                     break;
                 case bytecodes::PRINTR:
-                    std::cout << "PRINTR" << std::endl; 
+                    r1 = getInt(code, ip);
+                    std::cout << int_regs[r1] << std::endl; 
                     break;
                 case bytecodes::X:
                     applyGateToQuMvN(feynmanUnit.x);
@@ -280,32 +284,117 @@ namespace qudot {
                     gsf->setIntReg(r1, value);
                     break;
                 case bytecodes::IADD:
-                    std::cout << "IADD" << std::endl;
+                    r3 = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    gsf->setIntReg(r3, int_regs[r1] + int_regs[r2]);
                     break;
                 case bytecodes::ISUB:
-                    std::cout << "ISUB" << std::endl; 
+                    r3 = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+                    
+                    gsf->setIntReg(r3, int_regs[r1] - int_regs[r2]);
                     break;
                 case bytecodes::IMUL:
-                    std::cout << "IMUL" << std::endl; 
+                    r3 = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    gsf->setIntReg(r3, int_regs[r1] * int_regs[r2]);
                     break;
-                case bytecodes::ILT:
-                    std::cout << "ILT" << std::endl;
-                    break;
-                case bytecodes::IEQ:
-                    std::cout << "IEQ" << std::endl;
+                case bytecodes::IDIV:
+                    r3 = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    gsf->setIntReg(r3, int_regs[r1] / int_regs[r2]);
                     break;
                 case bytecodes::INCR:
-                    std::cout << "INCR" << std::endl;
+                    value = getInt(code, ip);
+                    gsf->setIntReg(value, int_regs[value] + 1);
+                    break;   
+                case bytecodes::DECR:
+                    value = getInt(code, ip);
+                    gsf->setIntReg(value, int_regs[value] - 1);  
+                    break;                 
+                case bytecodes::ILT:
+                    r3 = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    gsf->setIntReg(r3, int_regs[r1] < int_regs[r2]);
                     break;
+                case bytecodes::IEQ:
+                    r3 = getInt(code, ip);
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    gsf->setIntReg(r3, int_regs[r1] == int_regs[r2]);                    
+                    break;
+
                 case bytecodes::BR:
-                    std::cout << "BR" << std::endl;
+                    ip = getInt(code, ip);
                     break;
                 case bytecodes::BRT:
-                    std::cout << "BRT" << std::endl;
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1]) {
+                        ip = value;
+                    }
                     break;
                 case bytecodes::BRF:
-                    std::cout << "BRF" << std::endl; 
-                    break;                                                       
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (!int_regs[r1]) {
+                        ip = value;
+                    }
+                    break; 
+                case bytecodes::BREQ:
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1] == int_regs[r2]) {
+                        ip = value;
+                    }
+                    break;
+                case bytecodes::BRGEZ:
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1] >= 0) {
+                        ip = value;
+                    }
+                    break;
+                case bytecodes::BRGTZ:
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1] > 0) {
+                        ip = value;
+                    }
+                    break;
+                case bytecodes::BRLEZ:
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1] <= 0) {
+                        ip = value;
+                    }
+                    break;
+                case bytecodes::BRLTZ:
+                    r1 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1] < 0) {
+                        ip = value;
+                    }
+                    break;
+                case bytecodes::BRNEQ:
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+                    value = getInt(code, ip);
+                    if (int_regs[r1] != int_regs[r2]) {
+                        ip = value;
+                    }
+                    break;                                                      
                 case bytecodes::RET:
                     // pop stack frame
                     ip = gsf->getReturnAddress();
@@ -316,39 +405,19 @@ namespace qudot {
 
                     break;
                 case bytecodes::QNULL:
-                    std::cout << "QNULL" << std::endl;
+                    r1 = getInt(code, ip);
+                    gsf->setIntReg(r1, -1);
                     break;        
                 case bytecodes::MOVE:
-                    std::cout << "MOVE" << std::endl;
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    gsf->setIntReg(r1, int_regs[r2]);
                     break;
                 case bytecodes::CALL:
                     r1 = getInt(code, ip);
                     r2 = getInt(code, ip);
                     call(r1, r2); 
-                    break;
-                case bytecodes::BREQ:
-                    std::cout << "BREQ" << std::endl;
-                    break;
-                case bytecodes::BRGEZ:
-                    std::cout << "BRGEZ" << std::endl;
-                    break;
-                case bytecodes::BRGTZ:
-                    std::cout << "BRGTZ" << std::endl;
-                    break;
-                case bytecodes::BRLEZ:
-                    std::cout << "BRLEZ" << std::endl;
-                    break;
-                case bytecodes::BRLTZ:
-                    std::cout << "BRLTZ" << std::endl;
-                    break;
-                case bytecodes::BRNEQ:
-                    std::cout << "BRNEQ" << std::endl;
-                    break;
-                case bytecodes::IDIV:
-                    std::cout << "IDIV" << std::endl;
-                    break;
-                case bytecodes::DECR:
-                    std::cout << "DECR" << std::endl;  
                     break;
                 case bytecodes::IQUADD:
                     std::cout << "IQUADD" << std::endl;
@@ -366,7 +435,17 @@ namespace qudot {
                     std::cout << "IQUMUL_MOD" << std::endl;
                     break;
                 case bytecodes::MODPOW:
-                    std::cout << "MODPOW" << std::endl;
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+                    r3 = getInt(code, ip);
+                    r4 = getInt(code, ip);
+
+                    base.assign(int_regs[r2]);
+                    mod.assign(int_regs[r4]);
+                    pow = boost::multiprecision::pow(static_cast<boost::multiprecision::cpp_int>(2), int_regs[r3]); 
+                    big_result = boost::multiprecision::powm(base, pow, mod);
+
+                    gsf->setIntReg(r1, big_result.convert_to<int>());
                     break;                                                                             
                 default:
                     break;    
