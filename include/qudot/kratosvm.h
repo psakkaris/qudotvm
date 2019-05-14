@@ -29,7 +29,7 @@ namespace qudot {
             int qudotc_fp;
             int bytecode_length;
 
-            QuWorld* qu_world;
+            //QuWorld* qu_world;
             std::shared_ptr<QuMvN> qumvn;
             FeynmanUnit feynmanUnit;
 

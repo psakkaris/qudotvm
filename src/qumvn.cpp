@@ -35,6 +35,20 @@ std::string QuMvN::measure() {
     return quworld->measure();
 }
 
+void QuMvN::swap(const int q1, const int q2, const bool check_enabling_qubit){
+    for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+        (*it)->swapQubits(q1, q2, check_enabling_qubit);
+    }
+}
+
+void QuMvN::swap() {
+    const int midPoint = _num_qubits / 2;
+
+    for (int i=0; i < midPoint; i++) {
+        swap(i+1, _num_qubits-i);
+    }    
+}
+
 
 //**************** PRIVATE METHODS ***********************
 double QuMvN::getWorldProbability(const std::shared_ptr<QuWorld> quworld) const {

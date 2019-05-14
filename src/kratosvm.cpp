@@ -70,17 +70,17 @@ namespace qudot {
         memcpy(code, &bytes[qudotc_fp], bytecode_length);
         std::cout << "bytecode length: " << bytecode_length << std::endl;
 
-        qu_world = new QuWorld(num_qubits, 1, ONE_AMP64);
+        //qu_world = new QuWorld(num_qubits, 1, ONE_AMP64);
         qumvn = std::make_shared<QuMvN>(num_qubits, 1);
         delete[] bytes;
     }
 
     KratosVM::~KratosVM() { 
         if (code) delete[] code;
-        if (qu_world) delete qu_world;
+        //if (qu_world) delete qu_world;
 
         code = nullptr;
-        qu_world = nullptr;
+        //qu_world = nullptr;
     }
 
     KratosVM::KratosVM(const KratosVM & other) {
@@ -198,16 +198,13 @@ namespace qudot {
                     applyGateToQuMvN(feynmanUnit.h, quregs);                   
                     break;                     
                 case bytecodes::SWAP:
-                    std::cout << "SWAP" << std::endl;    
+                    qumvn->swap();   
                     break;
                 case bytecodes::SWAP_AB:
-                    std::cout << "SWAP_AB" << std::endl;
-                    // qureg1 = quregs[getInt(code, ip)];
-                    // qureg2 = quregs[getInt(code, ip)];
-                    // int first = qureg1.getQubits()[0];
-                    // int second = qureg2.getQubits()[0];
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
 
-                    // std::cout << " on " << first << " " << second << std::endl;
+                    qumvn->swap(qureg1.getQubits()[0], qureg2.getQubits()[0]);
                     break;
                 case bytecodes::SWAPON:
                     std::cout << "SWAPON" << std::endl;

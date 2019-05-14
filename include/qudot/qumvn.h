@@ -36,10 +36,13 @@ class QuMvN : public Measurable {
     public:
         QuMvN(const size_t, const size_t);   
         size_t getNumQubits() const;
-        void setNumQubits(const size_t num_qubits); 
+        void setNumQubits(const size_t); 
         size_t size() const;
         QuWorld* getQuWorld(const size_t);
         std::string measure() override;
+        // swapping functions
+        void swap(const int, const int, const bool = false);
+        void swap();
 };
     
 }

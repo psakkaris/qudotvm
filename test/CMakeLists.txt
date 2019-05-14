@@ -17,6 +17,7 @@ set(TEST_SOURCES
     ${PROJECT_SOURCE_DIR}/quworldtest.cpp
     ${PROJECT_SOURCE_DIR}/qudottest.cpp
     ${PROJECT_SOURCE_DIR}/basicmeasurementtest.cpp
+    ${PROJECT_SOURCE_DIR}/swaptest.cpp
     ${PROJECT_SOURCE_DIR}/testmain.cpp
 )
  
