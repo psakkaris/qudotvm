@@ -9,8 +9,8 @@
 #include "qudot/common.h"
 
 namespace qudot {
-    QuWorld::QuWorld(short int _num_qubits, unsigned int id, QuAmp64 amp, bool bval) : 
-            num_qubits(_num_qubits), id(id), amplitude(amp), enablingQubit(bval)
+    QuWorld::QuWorld(short int _num_qubits, size_t _id, QuAmp64 amp, bool bval) : 
+            num_qubits(_num_qubits), id(_id), amplitude(amp), enablingQubit(bval)
     {
         qudot_net = new QuAmp[num_qubits*4];   
         for (int i=0; i < num_qubits; i++) {
@@ -23,8 +23,14 @@ namespace qudot {
         vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
-    QuWorld::QuWorld(const QuWorld& other) : num_qubits(0), id(0), amplitude(0), enablingQubit(0) {
+    QuWorld::QuWorld(const QuWorld& other) : num_qubits(other.num_qubits), id(other.id), amplitude(other.amplitude), enablingQubit(other.enablingQubit) {
         std::cout << "COPY CONSTRUCTOR\n";
+        size_t sz = num_qubits*4;
+        qudot_net = new QuAmp[sz];
+        for (size_t i=0; i < sz; i++) {
+            qudot_net[i] = other.qudot_net[i];
+        }
+        vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
     QuWorld::QuWorld(QuWorld&& other) noexcept : num_qubits(0), id(0), amplitude(0), enablingQubit(0) {
@@ -52,7 +58,7 @@ namespace qudot {
         return num_qubits;
     }
 
-    int QuWorld::getId() const {
+    size_t QuWorld::getId() const {
         return id;
     }
 

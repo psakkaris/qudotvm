@@ -184,3 +184,29 @@ TEST(QuWorldTest, testSwap) {
        ASSERT_TRUE(results[i] == "0000" || results[i] == "0010"); 
    }   
 }
+
+TEST(QuWorldTest, copyCtor) {
+    QuWorld myWorld(5, 1, ONE_AMP64);
+    myWorld.setDotAmplitude(2, ZERO, ROOT2);
+    myWorld.setDotAmplitude(2, ONE, ROOT2);
+    myWorld.setDotAmplitude(3, ZERO, ROOT2);
+    myWorld.setDotAmplitude(3, ONE, ROOT2);
+    myWorld.setDotAmplitude(4, ZERO, ROOT2);
+    myWorld.setDotAmplitude(4, ONE, ROOT2);    
+
+    QuWorld myWorld2(myWorld);
+    ASSERT_TRUE(myWorld2.isSplitWorlds(4));
+    myWorld2.deactivateChildren(3, ONE);
+    ASSERT_TRUE(myWorld2.isSplitWorlds(4));
+    ASSERT_FLOAT_EQ(myWorld2.getQubitProbability(4, ZERO), .5);
+    ASSERT_FLOAT_EQ(myWorld2.getQubitProbability(4, ONE), .5);
+
+    myWorld2.deactivate(2, ZERO);
+    ASSERT_FALSE(myWorld2.isSplitWorlds(2));
+    myWorld2.deactivate(3, ONE);
+    ASSERT_FALSE(myWorld2.isSplitWorlds(3));
+
+    // should only activate if not (0,0)
+    myWorld2.activate(2, ZERO);
+    ASSERT_FALSE(myWorld2.isSplitWorlds(2));    
+}

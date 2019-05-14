@@ -1,7 +1,9 @@
 #ifndef __QUDOT_QUWORLD_H
 #define __QUDOT_QUWORLD_H
 
-#include <mkl_vsl.h>
+#include <cstddef>
+
+#include "mkl_vsl.h"
 #include "common.h"
 #include "measurable.h"
 
@@ -26,7 +28,7 @@ namespace qudot {
     class QuWorld : public Measurable {
         private:
             const short int num_qubits;
-            const unsigned int id;
+            size_t id;
             QuAmp64 amplitude;
             QuAmp* qudot_net;
             bool enablingQubit;
@@ -36,7 +38,7 @@ namespace qudot {
             int getRow(int q) const;
 
         public:
-            QuWorld(short int num_qubits, unsigned int id, QuAmp64 amp, bool bval = true);
+            QuWorld(short int num_qubits, size_t id, QuAmp64 amp, bool bval = true);
             QuWorld(const QuWorld&);
             QuWorld(QuWorld &&) noexcept;
             ~QuWorld();
@@ -46,7 +48,8 @@ namespace qudot {
 
             bool getEnablingQubit() const;
             void setEnablingQubit(bool bval);
-            int getId() const;
+            size_t getId() const;
+            void setId(const size_t);
             void setDotAmplitude(int q, Qubit qval, const QuAmp& amp);
             QuAmp64 getWorldAmplitude() const;
             void setWorldAmplitude(QuAmp64& amp);
