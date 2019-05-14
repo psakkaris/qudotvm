@@ -12,6 +12,7 @@
 #include "qudot/qudot.h"
 #include "qudot/qudotconfig.h"
 #include "qudot/quworld.h"
+#include "qudot/qumvn.h"
 #include "qudot/components/feynmanunit.h"
 
 namespace qudot {
@@ -29,6 +30,7 @@ namespace qudot {
             int bytecode_length;
 
             QuWorld* qu_world;
+            std::shared_ptr<QuMvN> qumvn;
             FeynmanUnit feynmanUnit;
 
             void feynmanProcessor();

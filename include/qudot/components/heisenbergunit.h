@@ -16,7 +16,7 @@
 
 namespace qudot {
     namespace HeisenbergUnit {
-        void getResults(Measurable&, unsigned int ensemble, QuFrequency&);     
+        void getResults(Measurable*, unsigned int ensemble, QuFrequency&);     
         void printResults(std::ostream&, QuFrequency&);   
         void saveResults(const std::string&, QuFrequency&);
         double percentError(const double experiment, const double theory);

@@ -3,6 +3,7 @@
 
 #include "qudot/common.h"
 
+#include <cstddef>
 #include <vector>
 #include <utility>
 

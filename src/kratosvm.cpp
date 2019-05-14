@@ -71,6 +71,7 @@ namespace qudot {
         std::cout << "bytecode length: " << bytecode_length << std::endl;
 
         qu_world = new QuWorld(num_qubits, 1, ONE_AMP64);
+        qumvn = std::make_shared<QuMvN>(num_qubits, 1);
         delete[] bytes;
     }
 
@@ -102,7 +103,7 @@ namespace qudot {
     }
 
     void KratosVM::getResults(QuFrequency& freq) { 
-        HeisenbergUnit::getResults(*qu_world, ensemble, freq);
+        HeisenbergUnit::getResults(qumvn.get(), ensemble, freq);
     }
 
     unsigned int KratosVM::getEnsemble() const {
@@ -463,7 +464,8 @@ namespace qudot {
 
     void KratosVM::applyGateToQuMvN(QuGate& qugate) {
         for (unsigned int i=1; i <= num_qubits; i++) {
-            qugate.applyGate(qu_world, i);
+            qugate.applyGate(qumvn.get(), i);
+            //qugate.applyGate(qu_world, i);
         }    
     }   
 
@@ -472,7 +474,8 @@ namespace qudot {
         auto qubits = quregs[index].getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
             //printf("applying %s to qubit: %d\n", qugate.getId().c_str(), *it);
-            qugate.applyGate(qu_world, *it);
+            qugate.applyGate(qumvn.get(), *it);
+            //qugate.applyGate(qu_world, *it);
         }
     }
 

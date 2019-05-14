@@ -23,6 +23,24 @@ namespace qudot {
         vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
+    QuWorld::QuWorld(const QuWorld& other) : num_qubits(0), id(0), amplitude(0), enablingQubit(0) {
+        std::cout << "COPY CONSTRUCTOR\n";
+    }
+
+    QuWorld::QuWorld(QuWorld&& other) noexcept : num_qubits(0), id(0), amplitude(0), enablingQubit(0) {
+        std::cout << "MOVE CONSTRUCTOR\n";
+    }
+
+    QuWorld& QuWorld::operator=(const QuWorld& other) {
+        std::cout << "ASSIGNMENT OPERATOR\n";
+        return *this;
+    }
+
+    QuWorld& QuWorld::operator=(QuWorld&& other) noexcept {
+        std::cout << "MOVE ASSIGNMENT OPERATOR\n";
+        return *this;
+    }
+
     QuWorld::~QuWorld() {
         delete[] qudot_net;
         qudot_net = nullptr;

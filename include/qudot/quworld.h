@@ -37,7 +37,12 @@ namespace qudot {
 
         public:
             QuWorld(short int num_qubits, unsigned int id, QuAmp64 amp, bool bval = true);
+            QuWorld(const QuWorld&);
+            QuWorld(QuWorld &&) noexcept;
             ~QuWorld();
+
+            QuWorld& operator=(const QuWorld&);
+            QuWorld& operator=(QuWorld &&) noexcept;
 
             bool getEnablingQubit() const;
             void setEnablingQubit(bool bval);
