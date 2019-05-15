@@ -31,6 +31,7 @@ namespace qudot {
             const std::vector<QuReg>& getQuRegs() const;
 
             void setIntReg(const int, const int);
+            void setQuReg(const int, const int);
             void addQuReg(const int, const int);
     };
 }

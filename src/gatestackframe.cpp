@@ -32,6 +32,11 @@ namespace qudot {
         int_regs[i] = val;
     }
 
+    void GateStackFrame::setQuReg(const int i, const int val) {
+        quregs[i].reset();
+        quregs[i].addQubit(val);
+    }
+
     void GateStackFrame::addQuReg(const int i, const int val) {
         quregs[i].addQubit(val);
     }

@@ -70,3 +70,21 @@ TEST(CoherentMeasurementTest, semiCrotState1) {
 
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
 }
+
+TEST(CoherentMeasurementTest, cohQft24) {
+    std::string filename = "../resources/compiled/coherent/cohQft24.qudotc";
+    std::map<std::string, double> theory;
+    theory["0000"] = .25;
+    theory["1000"] = .120;
+    theory["1100"] = .086;
+    theory["0010"] = .125;
+    theory["1010"] = .0385;
+    theory["1110"] = .00475;
+    theory["1001"] = .00475;
+    theory["1101"] = .0385;
+    theory["0011"] = .125;
+    theory["1011"] =.086;
+    theory["1111"] =.120;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));
+}

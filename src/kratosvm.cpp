@@ -103,6 +103,7 @@ namespace qudot {
     }
 
     void KratosVM::getResults(QuFrequency& freq) { 
+        std::cout << "num worlds: " << qumvn->size() << "\n";
         HeisenbergUnit::getResults(qumvn.get(), ensemble, freq);
     }
 
@@ -270,7 +271,7 @@ namespace qudot {
                 case bytecodes::QLOADR:
                     qureg_index = getInt(code, ip);
                     r1 = getInt(code, ip);
-                    gsf->addQuReg(qureg_index, int_regs[r1]);
+                    gsf->setQuReg(qureg_index, int_regs[r1]);
                     break;
                 case bytecodes::ILOAD:
                     r1 = getInt(code, ip);

@@ -37,6 +37,7 @@ run_test "./testmain --gtest_filter=CoherentMeasurementTest.cnotState2"
 run_test "./testmain --gtest_filter=CoherentMeasurementTest.semiCnotState3"
 run_test "./testmain --gtest_filter=CoherentMeasurementTest.crotState1"
 run_test "./testmain --gtest_filter=CoherentMeasurementTest.semiCrotState1"
+run_test "./testmain --gtest_filter=CoherentMeasurementTest.cohQft24"
 
 printf "\n\n"
 echo -e "${GREEN}PASS: $pass    ${RED}FAIL: $fail"

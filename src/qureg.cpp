@@ -20,6 +20,10 @@ namespace qudot {
         qubits.push_back(qubit);
     } 
 
+    void QuReg::reset() {
+        qubits.clear();
+    }
+
     int QuReg::getStart() const {
         return start;
     }

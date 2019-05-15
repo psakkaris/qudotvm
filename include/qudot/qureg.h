@@ -21,6 +21,7 @@ namespace qudot {
 
             const std::vector<int>& getQubits() const;
             void addQubit(const int qubit);
+            void reset();
 
             int getStart() const;
             int getEnd() const;
