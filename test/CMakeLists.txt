@@ -21,6 +21,7 @@ set(TEST_SOURCES
     ${PROJECT_SOURCE_DIR}/qfttest.cpp
     ${PROJECT_SOURCE_DIR}/iqfttest.cpp
     ${PROJECT_SOURCE_DIR}/qftintrinsicstest.cpp
+    ${PROJECT_SOURCE_DIR}/toffolitest.cpp
     ${PROJECT_SOURCE_DIR}/swaptest.cpp
     ${PROJECT_SOURCE_DIR}/testmain.cpp
 )

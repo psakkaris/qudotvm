@@ -248,7 +248,10 @@ namespace qudot {
                     feynmanUnit.getRGate(r1)->applyControlGate(qumvn.get(), qureg2.getQubits()[0], qureg1.getQubits());
                     break;    
                 case bytecodes::TOFF:
-                    std::cout << "TOFF" << std::endl;
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+
+                    feynmanUnit.x.QuGate::applyControlGate(qumvn.get(), qureg2.getQubits()[0], qureg1.getQubits());
                     break;              
                 case bytecodes::QLOAD:
                     qureg_index = getInt(code, ip);
