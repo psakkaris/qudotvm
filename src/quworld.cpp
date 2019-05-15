@@ -62,6 +62,10 @@ namespace qudot {
         return id;
     }
 
+    void QuWorld::setId(const size_t _id) {
+        id = _id;
+    }
+
     QuAmp64 QuWorld::getWorldAmplitude() const {
         return amplitude;
     }
@@ -87,12 +91,13 @@ namespace qudot {
         }
     }
 
-    bool QuWorld::areActive(int qubits[], int size, Qubit qval) const {
-        for (int i=0; i < size; i++) {
-            if (!isActive(qubits[i], qval)) {
+    bool QuWorld::areActive(const std::vector<int>& qubits, const Qubit qval) const {
+        for (auto it=qubits.begin(); it != qubits.end(); ++it) {
+            if (!isActive((*it), qval)) {
                 return false;
             }
         }
+
         return true;
     }
 

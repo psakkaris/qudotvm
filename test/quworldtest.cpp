@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 #include "gtest/gtest.h"
 #include "qudot/quworld.h"
@@ -38,13 +39,13 @@ TEST(QuWorldTest, testQuDotNet) {
     ASSERT_FALSE(myWorld.isActive(4, ONE));
     ASSERT_FALSE(myWorld.isActive(5, ONE));
 
-    int qubits1[3] = {1, 3, 5};
-    ASSERT_TRUE(myWorld.areActive(qubits1, 3, ZERO));
-    ASSERT_FALSE(myWorld.areActive(qubits1, 3, ONE));
+    std::vector<int> qubits1 = {1,3,5};
+    ASSERT_TRUE(myWorld.areActive(qubits1, ZERO));
+    ASSERT_FALSE(myWorld.areActive(qubits1, ONE));
 
-    int qubits2[5] = {1,2,3,4};
-    ASSERT_TRUE(myWorld.areActive(qubits2, 4, ZERO));
-    ASSERT_FALSE(myWorld.areActive(qubits2, 4, ONE));
+    std::vector<int> qubits2 = {1,2,3,4};
+    ASSERT_TRUE(myWorld.areActive(qubits2, ZERO));
+    ASSERT_FALSE(myWorld.areActive(qubits2, ONE));
 }
 
 TEST(QuWorldTest, testAmplitudes) {

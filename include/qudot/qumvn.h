@@ -5,10 +5,10 @@
 #include <iterator>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "mkl_vsl.h"
-#include "tbb/concurrent_vector.h"
 #include "tbb/mutex.h"
 
 #include "qudot/fenwicktree.hpp"
@@ -24,14 +24,17 @@ class QuMvN : public Measurable {
         double _world_scale_factor;
         double _world_additive_factor;
         tbb::mutex _ftree_mutex;
+        tbb::mutex _next_world_mutex;
         VSLStreamStatePtr stream;
 
-        std::vector<std::shared_ptr<QuWorld>> _qu_worlds;
+        std::unordered_map<size_t, std::shared_ptr<QuWorld>> _qu_worlds;
         std::shared_ptr<FenwickTree<double>> _world_tree;
 
         double getWorldProbability(const std::shared_ptr<QuWorld>) const;
         QuWorld* measureWorld();
+        QuWorld* createWorld(QuWorld* old_world, const size_t control_qu);
         std::shared_ptr<FenwickTree<double>> getWorldFenwickTree();
+        size_t getNextWorldId();
 
     public:
         QuMvN(const size_t, const size_t);   
@@ -43,6 +46,7 @@ class QuMvN : public Measurable {
         // swapping functions
         void swap(const int, const int, const bool = false);
         void swap();
+        void splitWorlds(const std::vector<int>&);
 };
     
 }

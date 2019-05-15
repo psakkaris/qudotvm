@@ -220,31 +220,27 @@ namespace qudot {
                     qureg1 = quregs[getInt(code, ip)];
                     qureg2 = quregs[getInt(code, ip)];
 
-
-                    std::cout << "CNOT: , control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    feynmanUnit.x.applyControlGate(qumvn.get(), qureg2.getQubits()[0], qureg1.getQubits());
                     break; 
                 case bytecodes::SEMI_CNOT:
                     qureg1 = quregs[getInt(code, ip)];
                     qureg2 = quregs[getInt(code, ip)];
 
-
-                    std::cout << "CNOT: , control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    feynmanUnit.x.applyControlGate(qumvn.get(), qureg2.getQubits()[0], qureg1.getQubits());
                     break;      
                 case bytecodes::CROT:
                     r1 = int_regs[getInt(code, ip)];
                     qureg1 = quregs[getInt(code, ip)];
                     qureg2 = quregs[getInt(code, ip)];
 
-
-                    std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    feynmanUnit.getRGate(r1)->applyControlGate(qumvn.get(), qureg2.getQubits()[0], qureg1.getQubits());
                     break; 
                 case bytecodes::SEMI_CROT:
                     r1 = int_regs[getInt(code, ip)];
                     qureg1 = quregs[getInt(code, ip)];
                     qureg2 = quregs[getInt(code, ip)];
 
-
-                    std::cout << "CROT: k=" << r1 << ", control=" << qureg1.getQubits()[0] << ", target=" << qureg2.getQubits()[0] << std::endl;
+                    feynmanUnit.getRGate(r1)->applyControlGate(qumvn.get(), qureg2.getQubits()[0], qureg1.getQubits());
                     break;    
                 case bytecodes::TOFF:
                     std::cout << "TOFF" << std::endl;

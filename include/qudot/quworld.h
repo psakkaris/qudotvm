@@ -2,6 +2,7 @@
 #define __QUDOT_QUWORLD_H
 
 #include <cstddef>
+#include <vector>
 
 #include "mkl_vsl.h"
 #include "common.h"
@@ -58,8 +59,8 @@ namespace qudot {
             float getQubitProbability(int q, Qubit qval) const;
             int getNumQubits() const;
             bool isSplitWorlds(int q) const;
-            bool isActive(int q, Qubit qval) const;
-            bool areActive(int qubits[], int size, Qubit qval) const;
+            bool isActive(const int q, const Qubit qval) const;
+            bool areActive(const std::vector<int>&, const Qubit qval) const;
             void deactivate(int q, Qubit qval);
             void deactivateChildren(int q, Qubit qval);
             // will only activate if it does not have zero amplitudes
