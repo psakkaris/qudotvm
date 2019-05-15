@@ -31,6 +31,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/gates/H.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/R.cpp
   ${PROJECT_SOURCE_DIR}/src/intrinsics/qft.cpp
+  ${PROJECT_SOURCE_DIR}/src/intrinsics/qftinv.cpp
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
 )
@@ -53,6 +54,7 @@ set(QUDOT_LIB_SRC
   ${PROJECT_SOURCE_DIR}/src/gates/H.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/R.cpp
   ${PROJECT_SOURCE_DIR}/src/intrinsics/qft.cpp
+  ${PROJECT_SOURCE_DIR}/src/intrinsics/qftinv.cpp
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
 )
