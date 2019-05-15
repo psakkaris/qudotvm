@@ -64,6 +64,8 @@ int main(int argc, char *argv[]) {
        } else if (arg.compare("-multiverse") == 0) {
           arg_ptr++;
           config.setMultiverseSize(std::stoi(std::string(argv[arg_ptr])));
+       } else if (arg.compare("-qupw") == 0) {
+          config.setPrintWorlds(true);
        } else {
           filename = std::string(argv[arg_ptr]);
        }
@@ -85,8 +87,12 @@ int main(int argc, char *argv[]) {
       }
       std::string out_filename = getOutFilename(filename);
       qudot::HeisenbergUnit::saveResults(out_filename, freq);
+
+      if (config.getPrintWorlds()) {
+         vm.printWorlds(out_filename + "worlds");
+      }
    } catch(std::runtime_error &re) {
-      std::cerr << re.what() << std::endl;
+      std::cerr << "error: " << re.what() << std::endl;
       return 1;   
    }
 

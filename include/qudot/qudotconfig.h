@@ -17,7 +17,10 @@ namespace qudot {
             unsigned int num_qubits;
             unsigned int ensemble_size;
             unsigned int stack_size;
+            // prints probability distribution to console
             bool print_results;
+            // print worlds and qudot_nets to file
+            bool print_worlds;
             unsigned int multiverse_size;
 
         public:
@@ -30,6 +33,8 @@ namespace qudot {
             void setStackSize(const unsigned int);
             bool getPrintResults() const;
             void setPrintResults(const bool);
+            bool getPrintWorlds() const;
+            void setPrintWorlds(const bool);
             unsigned int getMultiverseSize() const;
             void setMultiverseSize(const unsigned int);
     };

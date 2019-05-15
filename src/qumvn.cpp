@@ -68,6 +68,17 @@ void QuMvN::splitWorlds(const std::vector<int>& ctrls) {
 }
 
 
+std::ostream& operator<<(std::ostream& out, const QuMvN& qumvn) {
+    out << qumvn._qu_worlds.size() << "," << qumvn._num_qubits << "\n";
+    for (auto it=qumvn._qu_worlds.begin(); it != qumvn._qu_worlds.end(); ++it) {
+        out << *((*it).second.get());
+        if (std::distance(it, qumvn._qu_worlds.end()) != 1) {
+            out << "\n";
+        }
+    }
+    return out;
+}
+
 //**************** PRIVATE METHODS ***********************
 double QuMvN::getWorldProbability(const std::shared_ptr<QuWorld> quworld) const {
     QuAmp64 amp = quworld->getWorldAmplitude();

@@ -291,4 +291,19 @@ namespace qudot {
             }
         } 
     }
+
+    std::ostream& operator<<(std::ostream& out, const QuWorld& quworld) {
+        int end = (quworld.getNumQubits() * qu_stride) - 1;
+        out << quworld.amplitude << "\n";
+        for (int i=0; i < quworld.getNumQubits(); i++) {
+            for (int k=0; k < qu_stride; k++) {
+                int index = (i * qu_stride) + k;
+                out << quworld.qudot_net[index];
+                if (index != end) {
+                    out << ",";
+                }
+            }
+        }
+        return out;
+    }
 } // namespace qudot

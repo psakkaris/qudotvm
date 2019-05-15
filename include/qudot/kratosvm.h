@@ -48,6 +48,7 @@ namespace qudot {
             void bohr() override;
             void getResults(QuFrequency&) override;
             unsigned int getEnsemble() const override;
+            void printWorlds(const std::string&);
     };
 }
 

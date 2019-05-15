@@ -461,6 +461,12 @@ namespace qudot {
             qu_code = code[ip];
         }
     }
+
+    void KratosVM::printWorlds(const std::string& filename) {
+        std::ofstream myfile;
+        myfile.open(filename);
+        myfile << *(qumvn.get()) << "\n";        
+    }
     //################### PRIVATE METHODS ####################
     void KratosVM::printQuReg(const QuReg& qr) {
         auto qubits = qr.getQubits();

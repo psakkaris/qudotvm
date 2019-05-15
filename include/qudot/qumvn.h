@@ -2,7 +2,7 @@
 #define __QUDOT_QUMVN_H
 
 #include <cstddef>
-#include <iterator>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -47,6 +47,8 @@ class QuMvN : public Measurable {
         void swap(const int, const int, const bool = false);
         void swap();
         void splitWorlds(const std::vector<int>&);
+
+    friend std::ostream& operator<<(std::ostream&, const QuMvN&);
 };
     
 }

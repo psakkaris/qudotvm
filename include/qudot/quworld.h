@@ -2,6 +2,7 @@
 #define __QUDOT_QUWORLD_H
 
 #include <cstddef>
+#include <iostream>
 #include <vector>
 
 #include "mkl_vsl.h"
@@ -69,6 +70,8 @@ namespace qudot {
             std::string measure() override;
             bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
+
+        friend std::ostream& operator<<(std::ostream&, const QuWorld&);    
 
         friend X;
         friend Y;
