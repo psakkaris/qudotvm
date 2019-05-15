@@ -50,6 +50,7 @@ run_test "./testmain --gtest_filter=IQFTTEST.iqft14"
 run_test "./testmain --gtest_filter=IQFTTEST.iqft23"
 run_test "./testmain --gtest_filter=IQFTTEST.iqft24"
 run_test "./testmain --gtest_filter=IQFTTEST.iqft34"
+run_test "./testmain --gtest_filter=QFTIntrinsicsTest.qft34Intrinsic"
 
 printf "\n\n"
 echo -e "${GREEN}PASS: $pass    ${RED}FAIL: $fail"

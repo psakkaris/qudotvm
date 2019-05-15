@@ -15,6 +15,7 @@
 #include "qudot/qudotconfig.h"
 #include "qudot/quworld.h"
 #include "qudot/components/heisenbergunit.h"
+#include "qudot/intrinsics/qft.h"
 
 namespace qudot {
     KratosVM::KratosVM(const std::string filename, const QuDotConfig& qc) : qudotc_fp(0) {
@@ -117,6 +118,7 @@ namespace qudot {
         int value;
         int k;
         int r1, r2, r3, r4;
+        Qft qft;
         QuReg qureg1, qureg2, qureg3;
         boost::multiprecision::cpp_int big_result, base, mod, pow;
 
@@ -418,7 +420,10 @@ namespace qudot {
                     std::cout << "IQUADD" << std::endl;
                     break;
                 case bytecodes::QFT:
-                    std::cout << "QFT" << std::endl;
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+
+                    qft(qumvn.get(), feynmanUnit, qureg1.getQubits()[0], qureg2.getQubits()[0]);
                     break;
                 case bytecodes::QFT_INV:
                     std::cout << "QFT_INV" << std::endl;
