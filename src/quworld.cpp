@@ -216,7 +216,6 @@ namespace qudot {
 
     void QuWorld::swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit) {
         if (!check_enabling_qubit || enablingQubit) {
-            std::cout << "world: " << id << " swapping: " << qubit_a << ", " << qubit_b << "\n";
             QuAmp qa_zero_amp = getZeroAmplitude(qubit_a);
             QuAmp qa_one_amp = getOneAmplitude(qubit_a);
             QuAmp qb_zero_amp = getZeroAmplitude(qubit_b);
