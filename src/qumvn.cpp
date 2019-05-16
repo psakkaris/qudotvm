@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <ctime>
+#include <tbb/parallel_for.h>
 #include "qudot/common.h"
 
 namespace qudot {
@@ -36,9 +37,9 @@ std::string QuMvN::measure() {
 }
 
 void QuMvN::swap(const int q1, const int q2, const bool check_enabling_qubit){
-    for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
-        (*it).second->swapQubits(q1, q2, check_enabling_qubit);
-    }
+    tbb::parallel_for(size_t(0), size_t(_qu_worlds.size()), [&](size_t i) {
+        _qu_worlds[i]->swapQubits(q1, q2, check_enabling_qubit);
+    });
 }
 
 void QuMvN::swap() {
