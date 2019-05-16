@@ -132,7 +132,7 @@ namespace qudot {
 
             switch (qu_code) {
                 case bytecodes::PATHS:
-                    std::cout << "PATHS" << std::endl;
+                    printWorlds(std::cout);
                     break;
                 case bytecodes::PRINTR:
                     r1 = getInt(code, ip);
@@ -464,8 +464,12 @@ namespace qudot {
 
     void KratosVM::printWorlds(const std::string& filename) {
         std::ofstream myfile;
-        myfile.open(filename);
-        myfile << *(qumvn.get()) << "\n";        
+        myfile.open(filename);  
+        printWorlds(myfile);      
+    }
+
+    void KratosVM::printWorlds(std::ostream& out) {
+        out << *(qumvn.get()) << "\n";
     }
     //################### PRIVATE METHODS ####################
     void KratosVM::printQuReg(const QuReg& qr) {

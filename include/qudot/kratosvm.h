@@ -49,6 +49,7 @@ namespace qudot {
             void getResults(QuFrequency&) override;
             unsigned int getEnsemble() const override;
             void printWorlds(const std::string&);
+            void printWorlds(std::ostream&);
     };
 }
 
