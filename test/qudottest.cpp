@@ -19,6 +19,7 @@ namespace qudot {
         //     std::cout << myit->first << ":" << myit->second << std::endl;    
         // }
         printf("checking freq\n");
+        bool result = true;
         for (auto it=freq.begin(); it != freq.end(); ++it) {
 
             auto theory_it = theory.find(it->first);
@@ -29,17 +30,17 @@ namespace qudot {
                     double error = HeisenbergUnit::percentError(freq.getPct(it->second), theory_it->second);
                     printf("Percent Error: %f\n", error);
                     if(error > PERCENT_DELTA) {
-                        return false;
+                        result = false;
                     }
                 } else {
                     printf("%s -> Expirement: %f\n", it->first.c_str(), freq.getPct(it->second));
                 }
             } else {
                 printf("%s invalid theoretical state\n", it->first.c_str());
-                return false;
+                result = false;
             }
         }
-        return true;
+        return result;
     }
 
     bool testAgainstTheory(std::string filename, std::map<std::string, double>& theory, VMVersion vm_version, 
