@@ -152,10 +152,9 @@ namespace qudot {
 
     void QuWorld::activate(int q, Qubit qval) {
         int row = getRow(q);
-        if (isActive(q, qval)) {
-            qudot_net[row+qval] = ONE_AMP;
-            qudot_net[row+qval+2] = ONE_AMP;
-        }
+        
+        if (isNotZero(qudot_net[row+qval])) qudot_net[row+qval] = ONE_AMP;
+        if (isNotZero(qudot_net[row+qval+2])) qudot_net[row+qval+2] = ONE_AMP;
     }
 
     void QuWorld::deactivateChildren(int q, Qubit qval) {
@@ -217,10 +216,11 @@ namespace qudot {
 
     void QuWorld::swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit) {
         if (!check_enabling_qubit || enablingQubit) {
-            QuAmp qa_zero_amp = QuAmp(getZeroAmplitude(qubit_a));
-            QuAmp qa_one_amp = QuAmp(getOneAmplitude(qubit_a));
-            QuAmp qb_zero_amp = QuAmp(getZeroAmplitude(qubit_b));
-            QuAmp qb_one_amp = QuAmp(getOneAmplitude(qubit_b));
+            std::cout << "world: " << id << " swapping: " << qubit_a << ", " << qubit_b << "\n";
+            QuAmp qa_zero_amp = getZeroAmplitude(qubit_a);
+            QuAmp qa_one_amp = getOneAmplitude(qubit_a);
+            QuAmp qb_zero_amp = getZeroAmplitude(qubit_b);
+            QuAmp qb_one_amp = getOneAmplitude(qubit_b);
 
             swapDots(qubit_a, qb_zero_amp, qb_one_amp);
             swapDots(qubit_b, qa_zero_amp, qa_one_amp);
