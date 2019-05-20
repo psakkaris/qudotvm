@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <iostream>
 #include <vector>
+#include <utility>
 
 #include "mkl_vsl.h"
 #include "common.h"
@@ -38,6 +39,8 @@ namespace qudot {
 
             void swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp);
             int getRow(int q) const;
+            void copyRegisterQubits(QuAmp dest[], const std::pair<int, int>& qureg, int& index);
+            void linkRegisters(const int parent, const int qubit);
 
         public:
             QuWorld(int num_qubits, size_t id, QuAmp64 amp, bool bval = true);
@@ -72,6 +75,7 @@ namespace qudot {
             std::string getWorldSigniture() const;
             // expand / contract number of qubits
             void expandQubits(const int nq);
+            void contractQubits(const int nq, const std::pair<int, int>& qubits_above, const std::pair<int, int>& qubits_result, const std::pair<int, int>& qubits_below);
 
         friend std::ostream& operator<<(std::ostream&, const QuWorld&);    
 

@@ -257,6 +257,39 @@ namespace qudot {
         num_qubits = total_qubits;
     }
 
+    void QuWorld::contractQubits(const int nq, const std::pair<int, int>& qubits_above, const std::pair<int, int>& qubits_result, const std::pair<int, int>& qubits_below){
+        QuAmp* contracted_qudotnet = new QuAmp[nq*qu_stride];
+        int index = 0;
+        copyRegisterQubits(contracted_qudotnet, qubits_above, index);
+        copyRegisterQubits(contracted_qudotnet, qubits_result, index);
+        copyRegisterQubits(contracted_qudotnet, qubits_below, index);
+        delete[] qudot_net;
+        qudot_net = contracted_qudotnet;
+        // handle root
+        if (isActive(1, ZERO)) {
+            qudot_net[0] = getZeroAmplitude(1);
+            qudot_net[2] = ZERO_AMP;
+        }
+        if (isActive(1, ONE)) {
+            qudot_net[1] = getOneAmplitude(1);
+            qudot_net[3] = ZERO_AMP;
+        }
+
+        int num_qubits_above = qubits_above.second - qubits_above.first + 1;
+        int num_qubits_below = qubits_below.second - qubits_below.first + 1;
+        int num_qubits_result = qubits_result.second - qubits_result.first + 1;
+
+        if (num_qubits_above > 0) {
+            linkRegisters(num_qubits_above, num_qubits_above+1);
+        }
+
+        if (num_qubits_below > 0) {
+            linkRegisters(num_qubits_above + num_qubits_result, num_qubits_above + num_qubits_result + 1);
+        }
+
+        num_qubits = nq;
+    }
+
     //#################### PRIVATE #####################/
 
     void QuWorld::swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp) {
@@ -311,6 +344,34 @@ namespace qudot {
                 }
             }
         } 
+    }
+
+    void QuWorld::copyRegisterQubits(QuAmp dest[], const std::pair<int, int>& qureg, int& index) {
+        for (int q=qureg.first; q <= qureg.second; q++) {
+            int row = getRow(q);
+            for (int i=0; i < qu_stride; i++, index++) {
+                dest[index] = qudot_net[row+i];
+            }
+        }
+    }
+
+    void QuWorld::linkRegisters(const int parent, const int qubit) {
+        auto zeroAmp = getZeroAmplitude(qubit);
+        auto oneAmp = getOneAmplitude(qubit);
+
+        // wipe out any existing values of the qubit register then set parent amplitudes to parentQubit values
+        deactivate(qubit, ZERO);
+        deactivate(qubit, ONE);
+
+        int row = getRow(qubit);
+        if (isActive(parent, ZERO)) {
+            qudot_net[row + 0] = zeroAmp;
+            qudot_net[row + 1] = oneAmp;
+        }
+        if (isActive(parent, ONE)) {
+            qudot_net[row + 2] = zeroAmp;
+            qudot_net[row + 3] = oneAmp;
+        }
     }
 
     std::ostream& operator<<(std::ostream& out, const QuWorld& quworld) {
