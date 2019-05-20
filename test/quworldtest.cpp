@@ -211,3 +211,24 @@ TEST(QuWorldTest, copyCtor) {
     myWorld2.activate(2, ZERO);
     ASSERT_FALSE(myWorld2.isSplitWorlds(2));    
 }
+
+TEST(QuWorldTest, expandQubits) {
+    QuWorld myWorld(5, 1, ONE_AMP64);
+    myWorld.setDotAmplitude(2, ZERO, ROOT2);
+    myWorld.setDotAmplitude(2, ONE, ROOT2);
+    myWorld.setDotAmplitude(3, ZERO, ROOT2);
+    myWorld.setDotAmplitude(3, ONE, ROOT2);
+    myWorld.setDotAmplitude(4, ZERO, ROOT2);
+    myWorld.setDotAmplitude(4, ONE, ROOT2);
+
+    myWorld.expandQubits(3);
+    EXPECT_EQ(myWorld.getNumQubits(), 8);
+    EXPECT_FALSE(myWorld.isSplitWorlds(1));
+    EXPECT_FALSE(myWorld.isSplitWorlds(2));
+    EXPECT_FALSE(myWorld.isSplitWorlds(3));
+    EXPECT_FALSE(myWorld.isSplitWorlds(4));
+    EXPECT_TRUE(myWorld.isSplitWorlds(5));
+    EXPECT_TRUE(myWorld.isSplitWorlds(6));
+    EXPECT_TRUE(myWorld.isSplitWorlds(7));
+    EXPECT_FALSE(myWorld.isSplitWorlds(8));
+}

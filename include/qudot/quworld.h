@@ -29,7 +29,7 @@ namespace qudot {
 
     class QuWorld : public Measurable {
         private:
-            const short int num_qubits;
+            int num_qubits;
             size_t id;
             QuAmp64 amplitude;
             QuAmp* qudot_net;
@@ -40,7 +40,7 @@ namespace qudot {
             int getRow(int q) const;
 
         public:
-            QuWorld(short int num_qubits, size_t id, QuAmp64 amp, bool bval = true);
+            QuWorld(int num_qubits, size_t id, QuAmp64 amp, bool bval = true);
             QuWorld(const QuWorld&);
             QuWorld(QuWorld &&) noexcept;
             ~QuWorld();
@@ -70,6 +70,8 @@ namespace qudot {
             std::string measure() override;
             bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
+            // expand / contract number of qubits
+            void expandQubits(const int nq);
 
         friend std::ostream& operator<<(std::ostream&, const QuWorld&);    
 

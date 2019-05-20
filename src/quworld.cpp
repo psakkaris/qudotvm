@@ -9,7 +9,7 @@
 #include "qudot/common.h"
 
 namespace qudot {
-    QuWorld::QuWorld(short int _num_qubits, size_t _id, QuAmp64 amp, bool bval) : 
+    QuWorld::QuWorld(int _num_qubits, size_t _id, QuAmp64 amp, bool bval) : 
             num_qubits(_num_qubits), id(_id), amplitude(amp), enablingQubit(bval)
     {
         qudot_net = new QuAmp[num_qubits*4];   
@@ -233,6 +233,28 @@ namespace qudot {
             sig += (isActive(q, ONE)  ? "1a" : "1d");
         }
         return sig;
+    }
+
+    void QuWorld::expandQubits(const int nq) {
+        int total_qubits = num_qubits + nq;
+        QuAmp* expanded_net = new QuAmp[total_qubits*qu_stride];
+
+        for (int q=0; q < nq; q++) {
+            int row = q*qu_stride;
+            expanded_net[row] = ONE_AMP;
+            for (int i=1; i < qu_stride; i++) {
+                expanded_net[row + i] = ZERO_AMP;
+            }
+        }
+
+        int i = 0;
+        for (int q=nq*qu_stride; q < total_qubits*qu_stride; q++,i++) {
+            expanded_net[q] = qudot_net[i];
+        }
+
+        delete[] qudot_net;
+        qudot_net = expanded_net;
+        num_qubits = total_qubits;
     }
 
     //#################### PRIVATE #####################/
