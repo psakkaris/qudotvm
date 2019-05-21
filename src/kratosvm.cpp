@@ -422,7 +422,8 @@ namespace qudot {
                     call(r1, r2); 
                     break;
                 case bytecodes::IQUADD:
-                    std::cout << "IQUADD" << std::endl;
+                    r1 = getInt(code, ip);
+                    full_adder.addClassicalInt(qumvn.get(), int_regs[r1], 1, num_qubits);
                     break;
                 case bytecodes::QFT:
                     qureg1 = quregs[getInt(code, ip)];

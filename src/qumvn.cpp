@@ -52,7 +52,6 @@ void QuMvN::swap() {
 
 void QuMvN::splitWorlds(const std::vector<int>& ctrls) {
     if (ctrls.empty()) return;
-
     std::vector<QuWorld*> new_worlds;
     for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
         for (int ctrl : ctrls) {

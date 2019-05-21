@@ -14,6 +14,7 @@
 #include "qudot/quworld.h"
 #include "qudot/qumvn.h"
 #include "qudot/components/feynmanunit.h"
+#include "qudot/intrinsics/fulladder.h"
 
 namespace qudot {
     class KratosVM : public QuDot {
@@ -32,6 +33,7 @@ namespace qudot {
             //QuWorld* qu_world;
             std::shared_ptr<QuMvN> qumvn;
             FeynmanUnit feynmanUnit;
+            FullAdder full_adder;
 
             void feynmanProcessor();
             void printQuReg(const QuReg&);
