@@ -90,3 +90,66 @@ TEST(MwluTest, ctrlAddModN3) {
 
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
 }
+
+TEST(MwluTest, mulModN1) {
+    std::string filename = "../resources/compiled/mwlu/mulModN1.qudotc";
+    std::map<std::string, double> theory;
+
+    theory["0000"] = .25;
+    theory["1011"] = .25;
+    theory["1001"] = .25;
+    theory["1101"] = .25;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
+}
+
+TEST(MwluTest, mulModN2) {
+    std::string filename = "../resources/compiled/mwlu/mulModN2.qudotc";
+    std::map<std::string, double> theory;
+
+    theory["0000"] = .25 + .120;
+    theory["0100"] = .120;
+    theory["1100"] = .086;
+    theory["0001"] = .125;
+    theory["0101"] = .0385;
+    theory["1101"] = .00475;
+    theory["0110"] = .00475;
+    theory["1110"] = .0385;
+    theory["0011"] = .125;
+    theory["0111"] = .086;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
+}
+
+TEST(MwluTest, mulModN3) {
+    std::string filename = "../resources/compiled/mwlu/mulModN3.qudotc";
+    std::map<std::string, double> theory;
+
+    theory["0000"] = .25;
+    theory["1000"] = .213;
+    theory["0001"] = .125;
+    theory["1001"] = .0366;
+    theory["1010"] = .0366;
+    theory["0011"] = .125;
+    theory["1011"] = .213;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
+}
+
+TEST(MwluTest, mulModN5) {
+    std::string filename = "../resources/compiled/mwlu/mulModN5.qudotc";
+    std::map<std::string, double> theory;
+
+    theory["0000"] = .25 + .1066;
+    theory["0001"] = .1066;
+    theory["0011"] = .0183;
+    theory["0101"] = .0183;
+    theory["0111"] = .1066;
+    theory["1000"] = .25;
+    theory["1001"] = .1066;
+    theory["1011"] = .0183;
+    theory["1101"] = .0183;
+    // iqft14Mul5.put("1111", .1066);
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
+}
