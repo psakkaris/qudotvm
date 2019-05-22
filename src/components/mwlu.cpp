@@ -17,11 +17,7 @@ void ManyWorldsLogicUnit::addModN(QuMvN* qumvn, const int val, const int N, cons
     int Na = N - val;
     int mod_val = std::pow(2, end_q - start_q + 1) + val - N;
 
-    std::vector<int> ctrls;
-    for (size_t i=1; i <= qumvn->getNumQubits(); i++) {
-        ctrls.push_back(i);
-    }
-    qumvn->splitWorlds(ctrls);
+    qumvn->splitAllWorlds();
     
     tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&] (size_t i) {
         QuWorld* quworld = qumvn->getQuWorld(i);

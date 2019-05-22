@@ -47,6 +47,7 @@ class QuMvN : public Measurable {
         void swap(const int, const int, const bool = false);
         void swap();
         void splitWorlds(const std::vector<int>&);
+        void splitAllWorlds();
 
     friend std::ostream& operator<<(std::ostream&, const QuMvN&);
 };
