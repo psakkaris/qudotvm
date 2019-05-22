@@ -444,7 +444,14 @@ namespace qudot {
                     mwlu.addModN(qumvn.get(), int_regs[r1], int_regs[r2]);
                     break;
                 case bytecodes::CIQUADD_MOD:
-                    std::cout << "CIQUADD_MOD\n";
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+                    qureg3 = quregs[getInt(code, ip)];
+
+                    mwlu.ctrlAddModN(qumvn.get(), int_regs[r1], int_regs[r2], qureg1.getQubits()[0], qureg2.getQubits()[0], {qureg3.getQubits()[0]});
                     break;    
                 case bytecodes::IQUMUL_MOD:
                     std::cout << "IQUMUL_MOD" << std::endl;

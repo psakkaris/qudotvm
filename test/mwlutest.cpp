@@ -72,3 +72,21 @@ TEST(MwluTest, addModN6) {
 
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
 }
+
+TEST(MwluTest, ctrlAddModN2) {
+    std::string filename = "../resources/compiled/mwlu/ctrlAddModN2.qudotc";
+    std::map<std::string, double> theory;
+
+    theory["00010001"] = 1.0;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
+}
+
+TEST(MwluTest, ctrlAddModN3) {
+    std::string filename = "../resources/compiled/mwlu/ctrlAddModN3.qudotc";
+    std::map<std::string, double> theory;
+
+    theory["00010000"] = 1.0;
+
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
+}
