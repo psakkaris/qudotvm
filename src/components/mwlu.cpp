@@ -58,7 +58,15 @@ void ManyWorldsLogicUnit::mulModN(QuMvN* qumvn, const int val, const int N, cons
     qumvn->setNumQubits(num_input_q);
 }
 
-//**************** PRIVATE METHODS **********************8
+void ManyWorldsLogicUnit::ctrlMulModN(QuMvN* qumvn, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls) {
+    qumvn->splitWorlds(ctrls);
+    tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&] (size_t i) {
+        QuWorld* quworld = qumvn->getQuWorld(i);
+        ctrlMulModN(quworld, val, N, start_q, end_q, ctrls);
+    });
+}
+
+//**************** PRIVATE METHODS **********************
 void ManyWorldsLogicUnit::addModN(QuWorld* quworld, const int val, const int N, const int start_q, const int end_q) {
     int Na = N - val;
     int mod_val = std::pow(2, end_q - start_q + 1) + val - N;
@@ -100,6 +108,12 @@ void ManyWorldsLogicUnit::mulModN(QuWorld* quworld, const int val, const int N, 
     std::pair<int, int> qureg_result(1, n);
     std::pair<int, int> qureg_below(quworld->getNumQubits() - other_below + 1, quworld->getNumQubits());
     quworld->contractQubits(num_input_q, qureg_above, qureg_result, qureg_below);
+}
+
+void ManyWorldsLogicUnit::ctrlMulModN(QuWorld* quworld, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls) {
+    if (quworld->areActive(ctrls, ONE)) {
+        mulModN(quworld, val, N, start_q, end_q);
+    }
 }
 
 }

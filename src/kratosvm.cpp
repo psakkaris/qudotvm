@@ -460,7 +460,13 @@ namespace qudot {
                     mwlu.mulModN(qumvn.get(), int_regs[r1], int_regs[r2]);
                     break;
                 case bytecodes::CIQUMUL_MOD:
-                    std::cout << "CIQUMUL_MOD\n";
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+                    qureg1 = quregs[getInt(code, ip)];
+                    qureg2 = quregs[getInt(code, ip)];
+                    qureg3 = quregs[getInt(code, ip)];
+
+                    mwlu.ctrlMulModN(qumvn.get(), int_regs[r1], int_regs[r2], qureg1.getQubits()[0], qureg2.getQubits()[0], {qureg3.getQubits()[0]});
                     break;
                 case bytecodes::MODPOW:
                     r1 = getInt(code, ip);

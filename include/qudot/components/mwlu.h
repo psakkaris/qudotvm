@@ -17,8 +17,8 @@ class ManyWorldsLogicUnit {
 
         void addModN(QuWorld* quworld, const int val, const int N, const int start_q, const int end_q);
         void ctrlAddModN(QuWorld* quworld, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls);
-
         void mulModN(QuWorld* quworld, const int val, const int N, const int start_q, const int end_q);
+        void ctrlMulModN(QuWorld* quworld, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls);
 
     public:
         // addition methods
@@ -28,6 +28,7 @@ class ManyWorldsLogicUnit {
         // multiplication methods
         void mulModN(QuMvN* qumvn, const int val, const int N);
         void mulModN(QuMvN* qumvn, const int val, const int N, const int start_q, const int end_q);
+        void ctrlMulModN(QuMvN* qumvn, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls);
 };
 
 }
