@@ -14,6 +14,7 @@
 #include "qudot/quworld.h"
 #include "qudot/qumvn.h"
 #include "qudot/components/feynmanunit.h"
+#include "qudot/components/mwlu.h"
 #include "qudot/intrinsics/fulladder.h"
 
 namespace qudot {
@@ -34,6 +35,7 @@ namespace qudot {
             std::shared_ptr<QuMvN> qumvn;
             FeynmanUnit feynmanUnit;
             FullAdder full_adder;
+            ManyWorldsLogicUnit mwlu;
 
             void feynmanProcessor();
             void printQuReg(const QuReg&);

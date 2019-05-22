@@ -34,7 +34,7 @@ namespace qudot {
             size_t id;
             QuAmp64 amplitude;
             QuAmp* qudot_net;
-            bool enablingQubit;
+            bool enabling_q[2];
             VSLStreamStatePtr stream;
 
             void swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp);
@@ -43,7 +43,7 @@ namespace qudot {
             void linkRegisters(const int parent, const int qubit);
 
         public:
-            QuWorld(int num_qubits, size_t id, QuAmp64 amp, bool bval = true);
+            QuWorld(int num_qubits, size_t id, QuAmp64 amp);
             QuWorld(const QuWorld&);
             QuWorld(QuWorld &&) noexcept;
             ~QuWorld();
@@ -51,8 +51,8 @@ namespace qudot {
             QuWorld& operator=(const QuWorld&);
             QuWorld& operator=(QuWorld &&) noexcept;
 
-            bool getEnablingQubit() const;
-            void setEnablingQubit(bool bval);
+            bool getEnablingQubit(const Qubit) const;
+            void setEnablingQubit(const int q);
             size_t getId() const;
             void setId(const size_t);
             void setDotAmplitude(int q, Qubit qval, const QuAmp& amp);

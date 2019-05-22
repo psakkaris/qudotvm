@@ -24,6 +24,7 @@ set(TEST_SOURCES
     ${PROJECT_SOURCE_DIR}/toffolitest.cpp
     ${PROJECT_SOURCE_DIR}/swaptest.cpp
     ${PROJECT_SOURCE_DIR}/addertest.cpp
+    ${PROJECT_SOURCE_DIR}/mwlutest.cpp
     ${PROJECT_SOURCE_DIR}/testmain.cpp
 )
  

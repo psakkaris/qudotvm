@@ -25,6 +25,12 @@ void FullAdder::addClassicalInt(QuMvN* qumvn, const int value, const int start_q
 
 }
 
+void FullAdder::addClassicalInt(QuWorld* quworld, const int value, const int start_q, const int end_q, const Qubit enabling_q) {
+    if (quworld->getEnablingQubit(enabling_q)) {
+        addClassicalInt(quworld, value, start_q, end_q);
+    }
+}
+
 void FullAdder::addClassicalInt(QuWorld* quworld, const int value, const int start_q, const int end_q) {
     int num_input_q = quworld->getNumQubits();
     int n = end_q - start_q + 1;

@@ -19,9 +19,11 @@ TEST(QuWorldTest, testCreate) {
     quworld->setWorldAmplitude(iAmp64);
 
     ASSERT_EQ(quworld->getWorldAmplitude(), iAmp64);
-    ASSERT_EQ(quworld->getEnablingQubit(), true);
-    quworld->setEnablingQubit(false);
-    ASSERT_FALSE(quworld->getEnablingQubit());
+    ASSERT_EQ(quworld->getEnablingQubit(ZERO), true);
+    ASSERT_EQ(quworld->getEnablingQubit(ONE), true);
+    quworld->setEnablingQubit(2);
+    ASSERT_TRUE(quworld->getEnablingQubit(ZERO));
+    ASSERT_FALSE(quworld->getEnablingQubit(ONE));
     delete quworld;
 }
 

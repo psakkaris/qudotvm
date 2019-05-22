@@ -9,8 +9,8 @@
 #include "qudot/common.h"
 
 namespace qudot {
-    QuWorld::QuWorld(int _num_qubits, size_t _id, QuAmp64 amp, bool bval) : 
-            num_qubits(_num_qubits), id(_id), amplitude(amp), enablingQubit(bval)
+    QuWorld::QuWorld(int _num_qubits, size_t _id, QuAmp64 amp) : 
+            num_qubits(_num_qubits), id(_id), amplitude(amp), enabling_q{true, true}
     {
         qudot_net = new QuAmp[num_qubits*4];   
         for (int i=0; i < num_qubits; i++) {
@@ -23,7 +23,7 @@ namespace qudot {
         vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
-    QuWorld::QuWorld(const QuWorld& other) : num_qubits(other.num_qubits), id(other.id), amplitude(other.amplitude), enablingQubit(other.enablingQubit) {
+    QuWorld::QuWorld(const QuWorld& other) : num_qubits(other.num_qubits), id(other.id), amplitude(other.amplitude), enabling_q{other.enabling_q[0], other.enabling_q[1]} {
         std::cout << "COPY CONSTRUCTOR\n";
         size_t sz = num_qubits*4;
         qudot_net = new QuAmp[sz];
@@ -33,7 +33,7 @@ namespace qudot {
         vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
-    QuWorld::QuWorld(QuWorld&& other) noexcept : num_qubits(0), id(0), amplitude(0), enablingQubit(0) {
+    QuWorld::QuWorld(QuWorld&& other) noexcept : num_qubits(0), id(0), amplitude(0), enabling_q{true, true} {
         std::cout << "MOVE CONSTRUCTOR\n";
     }
 
@@ -74,12 +74,15 @@ namespace qudot {
         amplitude = amp;
     }
 
-    bool QuWorld::getEnablingQubit() const {
-        return enablingQubit;
+    bool QuWorld::getEnablingQubit(const Qubit qval) const {
+        if (qval == ZERO) return enabling_q[0];
+
+        return enabling_q[1];
     }
 
-    void QuWorld::setEnablingQubit(bool bval) {
-        enablingQubit = bval;
+    void QuWorld::setEnablingQubit(const int q) {
+        enabling_q[0] = isActive(q, ZERO);
+        enabling_q[1] = isActive(q, ONE);
     }
 
     bool QuWorld::isActive(int q, Qubit qval) const {
@@ -215,7 +218,7 @@ namespace qudot {
     }
 
     void QuWorld::swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit) {
-        if (!check_enabling_qubit || enablingQubit) {
+        if (!check_enabling_qubit) {
             QuAmp qa_zero_amp = getZeroAmplitude(qubit_a);
             QuAmp qa_one_amp = getOneAmplitude(qubit_a);
             QuAmp qb_zero_amp = getZeroAmplitude(qubit_b);

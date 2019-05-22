@@ -33,8 +33,10 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/intrinsics/qft.cpp
   ${PROJECT_SOURCE_DIR}/src/intrinsics/qftinv.cpp
   ${PROJECT_SOURCE_DIR}/src/intrinsics/fulladder.cpp
+  ${PROJECT_SOURCE_DIR}/src/intrinsics/comparator.cpp
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
+  ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
 )
 
 # removes the kratosapp.cpp file which has a main function
@@ -57,8 +59,10 @@ set(QUDOT_LIB_SRC
   ${PROJECT_SOURCE_DIR}/src/intrinsics/qft.cpp
   ${PROJECT_SOURCE_DIR}/src/intrinsics/qftinv.cpp
   ${PROJECT_SOURCE_DIR}/src/intrinsics/fulladder.cpp
+  ${PROJECT_SOURCE_DIR}/src/intrinsics/comparator.cpp  
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
+  ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
 )
 
 

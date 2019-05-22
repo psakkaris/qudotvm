@@ -438,10 +438,19 @@ namespace qudot {
                     qft_inv(qumvn.get(), feynmanUnit, qureg1.getQubits()[0], qureg2.getQubits()[0]);
                     break;
                 case bytecodes::IQUADD_MOD:
-                    std::cout << "IQUADD_MOD" << std::endl; 
+                    r1 = getInt(code, ip);
+                    r2 = getInt(code, ip);
+
+                    mwlu.addModN(qumvn.get(), int_regs[r1], int_regs[r2]);
                     break;
+                case bytecodes::CIQUADD_MOD:
+                    std::cout << "CIQUADD_MOD\n";
+                    break;    
                 case bytecodes::IQUMUL_MOD:
                     std::cout << "IQUMUL_MOD" << std::endl;
+                    break;
+                case bytecodes::CIQUMUL_MOD:
+                    std::cout << "CIQUMUL_MOD\n";
                     break;
                 case bytecodes::MODPOW:
                     r1 = getInt(code, ip);
