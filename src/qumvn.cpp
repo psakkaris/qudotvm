@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <ctime>
+#include <unordered_set>
+
 #include <tbb/parallel_for.h>
 #include "qudot/common.h"
 
@@ -34,6 +36,42 @@ QuWorld* QuMvN::getQuWorld(const size_t index) {
 std::string QuMvN::measure() {
     QuWorld* quworld = measureWorld();
     return quworld->measure();
+}
+
+Qubit QuMvN::measureQubit(const size_t q) {
+    Qubit activeq;
+    Qubit deactiveq;
+    float zero_prob = 0.0;
+    for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+        zero_prob += getWorldProbability((*it).second) * (*it).second->getQubitProbability(q, ZERO);
+    }
+    double rand = getRand();
+    if ((rand + TOLERANCE <= zero_prob) || (rand - TOLERANCE) <= zero_prob) {
+        activeq = ZERO;
+        deactiveq = ONE;
+    } else {
+        activeq = ONE;
+        deactiveq = ZERO;
+    }    
+
+    std::unordered_set<size_t> deadworlds;
+    for (auto it = _qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+        (*it).second->activate(q, activeq);
+        if ((*it).second->getQubitProbability(q, deactiveq) >= 1.0 - TOLERANCE) {
+            deadworlds.insert((*it).second->getId());
+        } else {
+            (*it).second->deactivate(q, deactiveq);
+        }        
+    }
+    for (auto it=deadworlds.begin(); it != deadworlds.end(); ++it) {
+        QuWorld* quworld = getQuWorld(*it);
+        if (quworld) {
+            std::cout << "removing world: " << quworld->getId() << "\n";
+            removeWorld(quworld);
+        }
+    }
+    std::cout << "num worlds: " << size() << "\n";
+    return activeq;
 }
 
 void QuMvN::swap(const int q1, const int q2, const bool check_enabling_qubit){
@@ -88,20 +126,25 @@ std::ostream& operator<<(std::ostream& out, const QuMvN& qumvn) {
 }
 
 //**************** PRIVATE METHODS ***********************
+double QuMvN::getWorldProbability(const QuAmp64& amp) const {
+    return ((_world_scale_factor * std::norm(amp) ) + _world_additive_factor);
+}
+
 double QuMvN::getWorldProbability(const std::shared_ptr<QuWorld> quworld) const {
     QuAmp64 amp = quworld->getWorldAmplitude();
-    return ((_world_scale_factor * std::norm(amp) ) + _world_additive_factor);
+    return getWorldProbability(amp);
+}
+
+double QuMvN::getRand() {
+    double r[1];
+    vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, 1, r, ka, kb);
+    return r[0];
 }
 
 QuWorld* QuMvN::measureWorld() {
     auto ftree = getWorldFenwickTree();
-
-    double r[1];
-    const double a=0.0;
-    const double b=1.0;
-
-    vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, 1, r, a, b);
-    auto world = ftree->findWorld(r[0]);
+    auto rand = getRand();
+    auto world = ftree->findWorld(rand);
     return _qu_worlds[world.first].get();
 }
 
@@ -157,6 +200,12 @@ QuWorld* QuMvN::createWorld(QuWorld* old_world, const size_t control_qu) {
 size_t QuMvN::getNextWorldId() {
     tbb::mutex::scoped_lock lock(_next_world_mutex);
     return _next_world++;
+}
+
+void QuMvN::removeWorld(QuWorld* quworld) {
+    double scale_factor = 1.0 / (1 - getWorldProbability(quworld->getWorldAmplitude()));
+    _world_scale_factor = _world_scale_factor * scale_factor;
+    _qu_worlds.erase(quworld->getId());  
 }
 
 }

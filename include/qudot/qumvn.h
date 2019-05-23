@@ -11,6 +11,7 @@
 #include "mkl_vsl.h"
 #include "tbb/mutex.h"
 
+#include "qudot/common.h"
 #include "qudot/fenwicktree.hpp"
 #include "qudot/measurable.h"
 #include "qudot/quworld.h"
@@ -19,6 +20,9 @@ namespace qudot {
 
 class QuMvN : public Measurable {
     private:
+        static double constexpr ka = 0.0;
+        static double constexpr kb = 1.0;
+
         size_t _num_qubits;
         size_t _next_world;
         double _world_scale_factor;
@@ -30,7 +34,10 @@ class QuMvN : public Measurable {
         std::unordered_map<size_t, std::shared_ptr<QuWorld>> _qu_worlds;
         std::shared_ptr<FenwickTree<double>> _world_tree;
 
+        double getRand();
         double getWorldProbability(const std::shared_ptr<QuWorld>) const;
+        double getWorldProbability(const QuAmp64& amp) const;
+        void removeWorld(QuWorld* quworld);
         QuWorld* measureWorld();
         QuWorld* createWorld(QuWorld* old_world, const size_t control_qu);
         std::shared_ptr<FenwickTree<double>> getWorldFenwickTree();
@@ -43,6 +50,7 @@ class QuMvN : public Measurable {
         size_t size() const;
         QuWorld* getQuWorld(const size_t);
         std::string measure() override;
+        Qubit measureQubit(const size_t);
         // swapping functions
         void swap(const int, const int, const bool = false);
         void swap();

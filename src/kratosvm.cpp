@@ -215,11 +215,13 @@ namespace qudot {
                     std::cout << "SWAPON" << std::endl;
                     break;
                 case bytecodes::MEASURE:
-                    std::cout << "MEASURE" << std::endl;
+                    qumvn->measure();
                     break;
                 case bytecodes::MON:
                     qureg1 = quregs[getInt(code, ip)];
-                    std::cout << "MON" << std::endl;  
+                    for (auto it=qureg1.getQubits().begin(); it != qureg1.getQubits().end(); ++it) {
+                        qumvn->measureQubit(*it);
+                    }
                     break;
                 case bytecodes::CNOT:
                     qureg1 = quregs[getInt(code, ip)];
