@@ -18,6 +18,7 @@
 
 namespace qudot {
 
+typedef std::unordered_map<size_t, std::shared_ptr<QuWorld>> WorldMap;
 class QuMvN : public Measurable {
     private:
         static double constexpr ka = 0.0;
@@ -31,7 +32,7 @@ class QuMvN : public Measurable {
         tbb::mutex _next_world_mutex;
         VSLStreamStatePtr stream;
 
-        std::unordered_map<size_t, std::shared_ptr<QuWorld>> _qu_worlds;
+        WorldMap _qu_worlds;
         std::shared_ptr<FenwickTree<double>> _world_tree;
 
         double getRand();
@@ -56,6 +57,8 @@ class QuMvN : public Measurable {
         void swap();
         void splitWorlds(const std::vector<int>&);
         void splitAllWorlds();
+        WorldMap::iterator begin();
+        WorldMap::iterator end();
 
     friend std::ostream& operator<<(std::ostream&, const QuMvN&);
 };

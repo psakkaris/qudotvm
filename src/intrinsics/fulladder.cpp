@@ -1,7 +1,7 @@
 #include "qudot/intrinsics/fulladder.h"
 
 #include <vector>
-#include "tbb/parallel_for.h"
+//#include "tbb/parallel_for.h"
 
 namespace qudot {
 
@@ -18,9 +18,12 @@ void FullAdder::addClassicalInt(QuMvN* qumvn, const int value, const int start_q
     }
     qumvn->splitWorlds(all_qubits); 
     qumvn->setNumQubits(q+other_qubits);
-    tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&] (size_t i) {
-        addClassicalInt(qumvn->getQuWorld(i), value, start_q, end_q);
-    });
+    // tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&] (size_t i) {
+    //     addClassicalInt(qumvn->getQuWorld(i), value, start_q, end_q);
+    // });
+    for (auto it=qumvn->begin(); it != qumvn->end(); ++it) {
+        addClassicalInt(it->second.get(), value, start_q, end_q);    
+    }
     qumvn->setNumQubits(num_input_q);
 
 }

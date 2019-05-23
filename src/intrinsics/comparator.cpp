@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "tbb/parallel_for.h"
+//#include "tbb/parallel_for.h"
 
 namespace qudot {
 
@@ -19,9 +19,13 @@ void Comparator::compare(QuMvN* qumvn, const int val, const int start_q, const i
     qumvn->splitWorlds(ctrls);
     qumvn->setNumQubits((q+other_q) - num_input_q);
 
-    tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&](size_t i) {
-        compare(qumvn->getQuWorld(i), val, start_q, end_q);
-    });
+    // tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&](size_t i) {
+    //     compare(qumvn->getQuWorld(i), val, start_q, end_q);
+    // });
+    for (auto it=qumvn->begin(); it != qumvn->end(); ++it) {
+        QuWorld* quworld = it->second.get();
+        compare(quworld, val, start_q, end_q);
+    }
 
     qumvn->setNumQubits(num_input_q);
 }
@@ -40,12 +44,18 @@ void Comparator::compare(QuMvN* qumvn, const int val, const int start_q, const i
 
     qumvn->setNumQubits((q+other_q) - num_input_q);
 
-    tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&](size_t i) {
-        QuWorld* quworld = qumvn->getQuWorld(i);
+    // tbb::parallel_for(size_t(0), size_t(qumvn->size()), [&](size_t i) {
+    //     QuWorld* quworld = qumvn->getQuWorld(i);
+    //     if (quworld->areActive(ctrls, ONE)) {
+    //         compare(quworld, val, start_q, end_q);
+    //     }
+    // });
+    for (auto it=qumvn->begin(); it != qumvn->end(); ++it) {
+         QuWorld* quworld = it->second.get();
         if (quworld->areActive(ctrls, ONE)) {
             compare(quworld, val, start_q, end_q);
-        }
-    });
+        }       
+    }
 
     qumvn->setNumQubits(num_input_q);
 }
