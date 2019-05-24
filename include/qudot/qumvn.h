@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "mkl_vsl.h"
@@ -37,7 +38,6 @@ class QuMvN : public Measurable {
 
         double getRand();
         double getWorldProbability(const std::shared_ptr<QuWorld>) const;
-        double getWorldProbability(const QuAmp64& amp) const;
         void removeWorld(QuWorld* quworld);
         QuWorld* measureWorld();
         QuWorld* createWorld(QuWorld* old_world, const size_t control_qu);
@@ -47,6 +47,7 @@ class QuMvN : public Measurable {
     public:
         QuMvN(const size_t, const size_t);   
         size_t getNumQubits() const;
+        double getWorldProbability(const QuAmp64& amp) const;
         void setNumQubits(const size_t); 
         size_t size() const;
         QuWorld* getQuWorld(const size_t);
@@ -57,6 +58,8 @@ class QuMvN : public Measurable {
         void swap();
         void splitWorlds(const std::vector<int>&);
         void splitAllWorlds();
+        void removeWorld(const size_t id);
+        void mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon = TOLERANCE64);
         WorldMap::iterator begin();
         WorldMap::iterator end();
 

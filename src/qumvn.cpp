@@ -66,11 +66,9 @@ Qubit QuMvN::measureQubit(const size_t q) {
     for (auto it=deadworlds.begin(); it != deadworlds.end(); ++it) {
         QuWorld* quworld = getQuWorld(*it);
         if (quworld) {
-            std::cout << "removing world: " << quworld->getId() << "\n";
             removeWorld(quworld);
         }
     }
-    std::cout << "num worlds: " << size() << "\n";
     return activeq;
 }
 
@@ -136,11 +134,45 @@ std::ostream& operator<<(std::ostream& out, const QuMvN& qumvn) {
     return out;
 }
 
-//**************** PRIVATE METHODS ***********************
 double QuMvN::getWorldProbability(const QuAmp64& amp) const {
     return ((_world_scale_factor * std::norm(amp) ) + _world_additive_factor);
 }
 
+void QuMvN::removeWorld(const size_t world_id) {
+    removeWorld(_qu_worlds[world_id].get());
+}
+
+void QuMvN::mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon) {
+    QuAmp64 new_amp = ZERO_AMP64;
+    double new_prob = 0.0;
+    for (auto it=worlds.begin(); it != worlds.end(); ++it) {
+        QuWorld* quworld = getQuWorld(*it);
+        new_amp += quworld->getWorldAmplitude();
+        new_prob += getWorldProbability(quworld->getWorldAmplitude());
+    }
+    // note below assumes that qudotnets are identical
+    // is zero
+    if (!isNotZero(new_amp, epsilon)) {
+        // worlds cancel
+        for (auto it=worlds.begin(); it != worlds.end(); ++it) {
+            _qu_worlds.erase(*it);
+            //removeWorld(*it);
+        }
+        _world_additive_factor = new_prob / _qu_worlds.size();
+    } else {
+        // worlds add up
+        auto it = worlds.begin();
+        QuWorld* model_world = getQuWorld(*it);
+        model_world->setWorldAmplitude(new_amp);
+        ++it;
+        for (; it != worlds.end(); ++it) {
+            removeWorld(*it);
+        }
+    }    
+    
+}
+
+//**************** PRIVATE METHODS ***********************
 double QuMvN::getWorldProbability(const std::shared_ptr<QuWorld> quworld) const {
     QuAmp64 amp = quworld->getWorldAmplitude();
     return getWorldProbability(amp);
@@ -156,6 +188,9 @@ QuWorld* QuMvN::measureWorld() {
     auto ftree = getWorldFenwickTree();
     auto rand = getRand();
     auto world = ftree->findWorld(rand);
+    if (_qu_worlds.count(world.first) <= 0) {
+        std::cout << "NULL WORLD\n";
+    }
     return _qu_worlds[world.first].get();
 }
 

@@ -25,6 +25,7 @@ namespace qudot {
     const char QUBIT_LABEL[2] = {'0', '1'}; 
 
     bool isNotZero(const QuAmp& amp);
+    bool isNotZero(const QuAmp64& amp, double epsilon);
 }
 
 #endif

@@ -14,6 +14,7 @@
 #include "qudot/common.h"
 #include "qudot/qudotconfig.h"
 #include "qudot/quworld.h"
+#include "qudot/components/eprunit.h"
 #include "qudot/components/heisenbergunit.h"
 #include "qudot/intrinsics/qft.h"
 #include "qudot/intrinsics/qftinv.h"
@@ -105,8 +106,10 @@ namespace qudot {
     }
 
     void KratosVM::getResults(QuFrequency& freq) { 
-        std::cout << "num worlds: " << qumvn->size() << "\n";
-        HeisenbergUnit::getResults(qumvn.get(), ensemble, freq);
+        QuMvN* qumvn_ptr = qumvn.get();
+        EPRUnit::mergeWorlds(qumvn_ptr);
+        std::cout << qumvn->size() << " worlds left\n";
+        HeisenbergUnit::getResults(qumvn_ptr, ensemble, freq);
     }
 
     unsigned int KratosVM::getEnsemble() const {

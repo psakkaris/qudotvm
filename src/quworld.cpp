@@ -24,7 +24,7 @@ namespace qudot {
     }
 
     QuWorld::QuWorld(const QuWorld& other) : num_qubits(other.num_qubits), id(other.id), amplitude(other.amplitude), enabling_q{other.enabling_q[0], other.enabling_q[1]} {
-        std::cout << "COPY CONSTRUCTOR\n";
+        //std::cout << "COPY CONSTRUCTOR\n";
         size_t sz = num_qubits*4;
         qudot_net = new QuAmp[sz];
         for (size_t i=0; i < sz; i++) {

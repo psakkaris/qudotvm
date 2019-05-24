@@ -37,6 +37,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
   ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
+  ${PROJECT_SOURCE_DIR}/src/components/eprunit.cpp
 )
 
 # removes the kratosapp.cpp file which has a main function
@@ -63,6 +64,7 @@ set(QUDOT_LIB_SRC
   ${PROJECT_SOURCE_DIR}/src/components/feynmanunit.cpp 
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
   ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
+  ${PROJECT_SOURCE_DIR}/src/components/eprunit.cpp
 )
 
 
