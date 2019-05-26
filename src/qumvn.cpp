@@ -202,13 +202,16 @@ std::shared_ptr<FenwickTree<double>> QuMvN::getWorldFenwickTree() {
 
         _world_tree = std::make_shared<FenwickTree<double>>(_qu_worlds.size(), TOLERANCE64);
         size_t index = 0;
+        double tot_prob = 0.0;
         for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
             double probability = getWorldProbability((*it).second);
             if (probability > 0) {
+                tot_prob += probability;
                 _world_tree->update(index, std::make_pair((*it).second->getId(), probability));
                 ++index;
             }
         }
+        std::cout << "total probability: " << tot_prob << "\n";
     }
     return _world_tree;     
 }

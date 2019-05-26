@@ -1,4 +1,5 @@
 #include "qudot/intrinsics/qftinv.h"
+#include "qudot/components/eprunit.h"
 
 namespace qudot {
 
@@ -23,6 +24,7 @@ namespace qudot {
                 }
                 // CoherenceUnit.mergeSameWorlds(quState, 1e-8f);
                 //EPRUnit.mergeWorlds(quMvN, Amplitudes.MERGE_EPSILON64);
+                EPRUnit::mergeWorlds(qumvn);
             }
     }    
 
