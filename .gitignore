@@ -33,5 +33,6 @@
 
 **/build
 **/debug
+**/profile
 *.code-workspace
 .vscode/**
