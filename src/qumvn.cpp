@@ -1,5 +1,6 @@
 #include "qudot/qumvn.h"
 
+#include <cmath>
 #include <iostream>
 #include <ctime>
 #include <unordered_set>
@@ -163,13 +164,13 @@ void QuMvN::mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon
         // worlds add up
         auto it = worlds.begin();
         QuWorld* model_world = getQuWorld(*it);
+        //QuAmp64 myamp(std::sqrt(new_prob), 0.0);
         model_world->setWorldAmplitude(new_amp);
         ++it;
         for (; it != worlds.end(); ++it) {
-            removeWorld(*it);
+            _qu_worlds.erase(*it);
         }
     }    
-    
 }
 
 //**************** PRIVATE METHODS ***********************

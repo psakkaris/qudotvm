@@ -12,6 +12,7 @@ using std::unordered_set;
 namespace qudot {
     void EPRUnit::mergeWorlds(QuMvN* qumvn, double epsilon) {
         std::cout << "num worlds: " << qumvn->size() << "\n";
+        std::cout << "epsilon: " << epsilon << "\n";
         unordered_map<string, unordered_set<size_t>> world_sigs;  
 
         for (auto it=qumvn->begin(); it != qumvn->end(); ++it) {

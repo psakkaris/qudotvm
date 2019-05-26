@@ -107,6 +107,7 @@ namespace qudot {
 
     void KratosVM::getResults(QuFrequency& freq) { 
         QuMvN* qumvn_ptr = qumvn.get();
+        //std::cout << *qumvn << "\n";
         EPRUnit::mergeWorlds(qumvn_ptr);
         std::cout << qumvn->size() << " worlds left\n";
         HeisenbergUnit::getResults(qumvn_ptr, ensemble, freq);
