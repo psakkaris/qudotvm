@@ -166,7 +166,7 @@ TEST(QuWorldTest, testGetWorldSigniture) {
     myWorld2.setDotAmplitude(4, ZERO, ROOT2);
     myWorld2.setDotAmplitude(4, ONE, ROOT2);      
 
-    ASSERT_EQ(myWorld2.getWorldSigniture(), "0a1d0a1a0a1a0a1a0a1d");
+    ASSERT_EQ(myWorld2.getWorldSigniture(), "adaaaaaaad");
 }
 
 TEST(QuWorldTest, testSwap) {

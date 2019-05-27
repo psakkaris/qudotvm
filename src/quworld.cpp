@@ -230,12 +230,15 @@ namespace qudot {
     }
 
     std::string QuWorld::getWorldSigniture() const {
-        std::string sig = "";
+        const int sig_length = 2 * num_qubits;
+        char sig[sig_length + 1];
         for (int q=1; q <= num_qubits; q++) {
-            sig += (isActive(q, ZERO) ? "0a" : "0d");
-            sig += (isActive(q, ONE)  ? "1a" : "1d");
+            const int index = (q-1) * 2;
+            sig[index] = (isActive(q, ZERO) ? 'a' : 'd');
+            sig[index + 1] = (isActive(q, ONE)  ? 'a' : 'd');
         }
-        return sig;
+        sig[sig_length] = '\0';
+        return std::string(sig);
     }
 
     void QuWorld::expandQubits(const int nq) {
