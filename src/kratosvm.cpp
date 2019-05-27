@@ -117,6 +117,10 @@ namespace qudot {
         return ensemble;
     }
 
+    std::string KratosVM::measure() {
+        return qumvn->measure();
+    }
+
     void KratosVM::feynmanProcessor() {
         char qu_code = code[ip];
         int qureg_index;

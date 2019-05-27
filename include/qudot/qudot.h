@@ -3,6 +3,8 @@
 
 #include "qudot/qufrequency.h"
 
+#include <string>
+
 /**
  * Interface for any Virtual Machine that implements the QuDot Instruction Set
  **/
@@ -13,6 +15,7 @@ namespace qudot {
             virtual void bohr() = 0;
             virtual void getResults(QuFrequency&) = 0;
             virtual unsigned int getEnsemble() const = 0;
+            virtual std::string measure() = 0;
     };
 }
 
