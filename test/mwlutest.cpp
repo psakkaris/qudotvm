@@ -103,7 +103,7 @@ TEST(MwluTest, mulModN1) {
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
 }
 
-TEST(MwluTest, mulModN2) {
+TEST(MwluTest, DISABLED_mulModN2) {
     std::string filename = "../resources/compiled/mwlu/mulModN2.qudotc";
     std::map<std::string, double> theory;
 
@@ -136,7 +136,7 @@ TEST(MwluTest, mulModN3) {
     EXPECT_TRUE(qudot::testAgainstTheory(filename, theory));    
 }
 
-TEST(MwluTest, mulModN5) {
+TEST(MwluTest, DISABLED_mulModN5) {
     std::string filename = "../resources/compiled/mwlu/mulModN5.qudotc";
     std::map<std::string, double> theory;
 
