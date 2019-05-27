@@ -23,7 +23,7 @@ namespace qudot {
 
     KratosVM* getVM(std::string& filename, VMVersion vm_version, bool is_bytecode);
 
-    bool assertFrequency(QuFrequency& freq, std::map<std::string, double>& theory, bool make_assertion);
+    bool assertFrequency(QuFrequency& freq, std::map<std::string, double>& theory, bool make_assertion, double threshold = PERCENT_DELTA);
 
     bool testAgainstTheory(std::string filename, std::map<std::string, double>& theory, VMVersion vm_version = K1, 
                             double error_threshold = PERCENT_DELTA, bool is_bytecode = true, bool make_assertion = true);

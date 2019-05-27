@@ -12,7 +12,7 @@ namespace qudot {
         }                   
     }
 
-    bool assertFrequency(QuFrequency& freq, std::map<std::string, double>& theory, bool make_assertion) {
+    bool assertFrequency(QuFrequency& freq, std::map<std::string, double>& theory, bool make_assertion, double threshold) {
         
         // std::cout << "size: " << theory.size() << std::endl;
         // for (auto myit = theory.begin(); myit != theory.end(); ++myit) {
@@ -29,7 +29,7 @@ namespace qudot {
                     
                     double error = HeisenbergUnit::percentError(freq.getPct(it->second), theory_it->second);
                     printf("Percent Error: %f\n", error);
-                    if(error > PERCENT_DELTA) {
+                    if(error > threshold) {
                         result = false;
                     }
                 } else {
@@ -52,6 +52,6 @@ namespace qudot {
         QuFrequency freq(vm.getEnsemble());
         vm.getResults(freq);
 
-        return assertFrequency(freq, theory, make_assertion);
+        return assertFrequency(freq, theory, make_assertion, error_threshold);
     }
 }

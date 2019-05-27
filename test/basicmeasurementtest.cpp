@@ -50,7 +50,7 @@ TEST(BasicMeasurementTest, state3test) {
     theory2["11110"] = 0.031249999999999993;
     theory2["11111"] = 0.031249999999999993;   
 
-    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory2));
+    EXPECT_TRUE(qudot::testAgainstTheory(filename, theory2, qudot::K1, 10.0, true, true));
 }
 
 
