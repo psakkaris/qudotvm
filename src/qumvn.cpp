@@ -5,16 +5,17 @@
 #include <ctime>
 #include <unordered_set>
 
-//#include <tbb/parallel_for.h>
+#include <tbb/parallel_for.h>
+#include <tbb/concurrent_vector.h>
 #include "qudot/common.h"
 
 namespace qudot {
 
 QuMvN::QuMvN(const size_t num_qubits, const size_t multiverse_size) : 
         _num_qubits(num_qubits), _next_world(1), _world_scale_factor(1.0), 
-        _world_additive_factor(0.0), _qu_worlds(multiverse_size) 
+        _world_additive_factor(0.0), _quworlds(multiverse_size) 
 {
-    _qu_worlds[0] = std::make_shared<QuWorld>(_num_qubits, 0, ONE_AMP64);
+    _quworlds[0] = std::make_shared<QuWorld>(_num_qubits, 0, ONE_AMP64);
     vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
 }
 
@@ -27,11 +28,11 @@ void QuMvN::setNumQubits(const size_t num_qubits) {
 }
 
 size_t QuMvN::size() const {
-    return _qu_worlds.size();
+    return _quworlds.size();
 }
 
 QuWorld* QuMvN::getQuWorld(const size_t index) {
-    return _qu_worlds[index].get();
+    return _quworlds[index].get();
 }
 
 std::string QuMvN::measure() {
@@ -43,7 +44,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
     Qubit activeq;
     Qubit deactiveq;
     float zero_prob = 0.0;
-    for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+    for (auto it=_quworlds.begin(); it != _quworlds.end(); ++it) {
         zero_prob += getWorldProbability((*it).second) * (*it).second->getQubitProbability(q, ZERO);
     }
     double rand = getRand();
@@ -56,7 +57,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
     }    
 
     std::unordered_set<size_t> deadworlds;
-    for (auto it = _qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+    for (auto it = _quworlds.begin(); it != _quworlds.end(); ++it) {
         (*it).second->activate(q, activeq);
         if ((*it).second->getQubitProbability(q, deactiveq) >= 1.0 - TOLERANCE) {
             deadworlds.insert((*it).second->getId());
@@ -77,7 +78,7 @@ void QuMvN::swap(const int q1, const int q2, const bool check_enabling_qubit){
     // tbb::parallel_for(size_t(0), size_t(_qu_worlds.size()), [&](size_t i) {
     //     _qu_worlds[i]->swapQubits(q1, q2, check_enabling_qubit);
     // });
-    for (auto it = _qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+    for (auto it = _quworlds.begin(); it != _quworlds.end(); ++it) {
         (*it).second->swapQubits(q1, q2, check_enabling_qubit);
     }
 }
@@ -100,35 +101,66 @@ void QuMvN::splitAllWorlds() {
 
 void QuMvN::splitWorlds(const std::vector<int>& ctrls) {
     if (ctrls.empty()) return;
-    std::vector<QuWorld*> new_worlds;
-    for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
-        for (int ctrl : ctrls) {
-            if ( (*it).second->isSplitWorlds(ctrl) ) {
-                new_worlds.push_back(createWorld((*it).second.get(), ctrl));
+
+    // tbb::parallel_for(range(), [&](const WorldMap::range_type &r) {
+    //     for (auto it = r.begin(); it != r.end(); it++) {
+    //         for (int ctrl : ctrls) {
+    //             if ( (*it).second->isSplitWorlds(ctrl) ) {
+    //                 std::shared_ptr<QuWorld> s_ptr(createWorld((*it).second.get(), ctrl));
+    //                 _quworlds[s_ptr->getId()] = s_ptr;
+    //             }
+    //         }            
+    //     }
+    // });  
+
+    tbb::concurrent_vector<QuWorld*> new_worlds;
+    tbb::parallel_for(range(), [&](const WorldMap::range_type &r) {
+        for (auto it = r.begin(); it != r.end(); it++) {
+            for (int ctrl : ctrls) {
+                if ( (*it).second->isSplitWorlds(ctrl) ) {
+                    new_worlds.push_back(createWorld((*it).second.get(), ctrl));
+                }
             }
         }
-    }
+    });
 
-    for (auto it = new_worlds.begin(); it != new_worlds.end(); ++it) {
-        std::shared_ptr<QuWorld> s_ptr((*it));
-        _qu_worlds[(*it)->getId()] = s_ptr;
-    }
+    tbb::parallel_for(size_t(0), size_t(new_worlds.size()), [&] (size_t i) {
+        std::shared_ptr<QuWorld> s_ptr(new_worlds[i]);
+        _quworlds[new_worlds[i]->getId()] = s_ptr;
+    });
+    // std::vector<QuWorld*> new_worlds;
+    // for (auto it=_quworlds.begin(); it != _quworlds.end(); ++it) {
+    //     for (int ctrl : ctrls) {
+    //         if ( (*it).second->isSplitWorlds(ctrl) ) {
+    //             new_worlds.push_back(createWorld((*it).second.get(), ctrl));
+    //         }
+    //     }
+    // }
+
+    // for (auto it = new_worlds.begin(); it != new_worlds.end(); ++it) {
+    //     std::shared_ptr<QuWorld> s_ptr((*it));
+    //     _quworlds[(*it)->getId()] = s_ptr;
+    // }
 }
 
 WorldMap::iterator QuMvN::begin() {
-    return _qu_worlds.begin();
+    return _quworlds.begin();
 }
 
 WorldMap::iterator QuMvN::end() {
-    return _qu_worlds.end();
+    return _quworlds.end();
+}
+
+WorldMap::range_type QuMvN::range() {
+    return _quworlds.range();
 }
 
 
 std::ostream& operator<<(std::ostream& out, const QuMvN& qumvn) {
-    out << qumvn._qu_worlds.size() << "," << qumvn._num_qubits << "\n";
-    for (auto it=qumvn._qu_worlds.begin(); it != qumvn._qu_worlds.end(); ++it) {
+    out << qumvn._quworlds.size() << "," << qumvn._num_qubits << "\n";
+    for (auto it=qumvn._quworlds.begin(); it != qumvn._quworlds.end(); ++it) {
         out << *((*it).second.get());
-        if (std::distance(it, qumvn._qu_worlds.end()) != 1) {
+        if (std::distance(it, qumvn._quworlds.end()) != 1) {
             out << "\n";
         }
     }
@@ -140,7 +172,7 @@ double QuMvN::getWorldProbability(const QuAmp64& amp) const {
 }
 
 void QuMvN::removeWorld(const size_t world_id) {
-    removeWorld(_qu_worlds[world_id].get());
+    removeWorld(_quworlds[world_id].get());
 }
 
 void QuMvN::mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon) {
@@ -156,10 +188,10 @@ void QuMvN::mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon
     if (!isNotZero(new_amp, epsilon)) {
         // worlds cancel
         for (auto it=worlds.begin(); it != worlds.end(); ++it) {
-            _qu_worlds.erase(*it);
+            _quworlds.unsafe_erase(*it);
             //removeWorld(*it);
         }
-        _world_additive_factor = new_prob / _qu_worlds.size();
+        _world_additive_factor = new_prob / _quworlds.size();
     } else {
         // worlds add up
         auto it = worlds.begin();
@@ -168,7 +200,7 @@ void QuMvN::mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon
         model_world->setWorldAmplitude(new_amp);
         ++it;
         for (; it != worlds.end(); ++it) {
-            _qu_worlds.erase(*it);
+            _quworlds.unsafe_erase(*it);
         }
     }    
 }
@@ -189,10 +221,10 @@ QuWorld* QuMvN::measureWorld() {
     auto ftree = getWorldFenwickTree();
     auto rand = getRand();
     auto world = ftree->findWorld(rand);
-    if (_qu_worlds.count(world.first) <= 0) {
+    if (_quworlds.count(world.first) <= 0) {
         std::cout << "NULL WORLD\n";
     }
-    return _qu_worlds[world.first].get();
+    return _quworlds[world.first].get();
 }
 
 std::shared_ptr<FenwickTree<double>> QuMvN::getWorldFenwickTree() {
@@ -200,10 +232,10 @@ std::shared_ptr<FenwickTree<double>> QuMvN::getWorldFenwickTree() {
         tbb::mutex::scoped_lock lock(_ftree_mutex);
         if (_world_tree) return _world_tree;
 
-        _world_tree = std::make_shared<FenwickTree<double>>(_qu_worlds.size(), TOLERANCE64);
+        _world_tree = std::make_shared<FenwickTree<double>>(_quworlds.size(), TOLERANCE64);
         size_t index = 0;
         double tot_prob = 0.0;
-        for (auto it=_qu_worlds.begin(); it != _qu_worlds.end(); ++it) {
+        for (auto it=_quworlds.begin(); it != _quworlds.end(); ++it) {
             double probability = getWorldProbability((*it).second);
             if (probability > 0) {
                 tot_prob += probability;
@@ -255,7 +287,7 @@ size_t QuMvN::getNextWorldId() {
 void QuMvN::removeWorld(QuWorld* quworld) {
     double scale_factor = 1.0 / (1 - getWorldProbability(quworld->getWorldAmplitude()));
     _world_scale_factor = _world_scale_factor * scale_factor;
-    _qu_worlds.erase(quworld->getId());  
+    _quworlds.unsafe_erase(quworld->getId());  
 }
 
 }

@@ -11,6 +11,7 @@
 
 #include "mkl_vsl.h"
 #include "tbb/mutex.h"
+#include "tbb/concurrent_unordered_map.h"
 
 #include "qudot/common.h"
 #include "qudot/fenwicktree.hpp"
@@ -19,7 +20,8 @@
 
 namespace qudot {
 
-typedef std::unordered_map<size_t, std::shared_ptr<QuWorld>> WorldMap;
+typedef tbb::concurrent_unordered_map<size_t, std::shared_ptr<QuWorld>> WorldMap;
+
 class QuMvN : public Measurable {
     private:
         static double constexpr ka = 0.0;
@@ -33,7 +35,7 @@ class QuMvN : public Measurable {
         tbb::mutex _next_world_mutex;
         VSLStreamStatePtr stream;
 
-        WorldMap _qu_worlds;
+        WorldMap _quworlds;
         std::shared_ptr<FenwickTree<double>> _world_tree;
 
         double getRand();
@@ -62,6 +64,7 @@ class QuMvN : public Measurable {
         void mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon = TOLERANCE64);
         WorldMap::iterator begin();
         WorldMap::iterator end();
+        WorldMap::range_type range();
 
     friend std::ostream& operator<<(std::ostream&, const QuMvN&);
 };
