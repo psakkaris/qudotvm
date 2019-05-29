@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include <mkl_vsl.h>
+#include "mkl_vsl.h"
 
 #include "qudot/common.h"
 
