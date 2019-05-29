@@ -7,6 +7,7 @@
 
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_vector.h>
+#include <tbb/concurrent_unordered_set.h>
 #include "qudot/common.h"
 
 namespace qudot {
@@ -175,7 +176,7 @@ void QuMvN::removeWorld(const size_t world_id) {
     removeWorld(_quworlds[world_id].get());
 }
 
-void QuMvN::mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon) {
+void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, double epsilon) {
     QuAmp64 new_amp = ZERO_AMP64;
     double new_prob = 0.0;
     for (auto it=worlds.begin(); it != worlds.end(); ++it) {

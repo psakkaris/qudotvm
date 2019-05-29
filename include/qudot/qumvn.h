@@ -12,6 +12,7 @@
 #include "mkl_vsl.h"
 #include "tbb/mutex.h"
 #include "tbb/concurrent_unordered_map.h"
+#include "tbb/concurrent_unordered_set.h"
 
 #include "qudot/common.h"
 #include "qudot/fenwicktree.hpp"
@@ -61,7 +62,7 @@ class QuMvN : public Measurable {
         void splitWorlds(const std::vector<int>&);
         void splitAllWorlds();
         void removeWorld(const size_t id);
-        void mergeWorlds(const std::unordered_set<size_t>& worlds, double epsilon = TOLERANCE64);
+        void mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, double epsilon = TOLERANCE64);
         WorldMap::iterator begin();
         WorldMap::iterator end();
         WorldMap::range_type range();
