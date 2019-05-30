@@ -40,6 +40,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
   ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
   ${PROJECT_SOURCE_DIR}/src/components/eprunit.cpp
+  ${PROJECT_SOURCE_DIR}/src/scalemem.cpp
 )
 
 # removes the kratosapp.cpp file which has a main function
@@ -67,12 +68,13 @@ set(QUDOT_LIB_SRC
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
   ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
   ${PROJECT_SOURCE_DIR}/src/components/eprunit.cpp
+  ${PROJECT_SOURCE_DIR}/src/scalemem.cpp
 )
 
 
 add_library(qudot SHARED ${QUDOT_LIB_SRC})
 add_executable(kratosapp ${KRATOS_SRC})
 
-target_link_libraries(kratosapp mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
+target_link_libraries(kratosapp mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
-target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
+target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
