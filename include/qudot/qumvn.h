@@ -34,6 +34,7 @@ class QuMvN : public Measurable {
         double _world_additive_factor;
         tbb::mutex _ftree_mutex;
         tbb::mutex _next_world_mutex;
+        tbb::mutex _remove_world_mutex;
         VSLStreamStatePtr stream;
 
         WorldMap _quworlds;

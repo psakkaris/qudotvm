@@ -5,6 +5,7 @@
 #include <string>
 
 #include "mkl_vsl.h"
+#include "tbb/parallel_for.h"
 
 #include "qudot/common.h"
 
@@ -88,9 +89,9 @@ namespace qudot {
     bool QuWorld::isActive(int q, Qubit qval) const {
         int row = getRow(q);
         if (qval == ZERO) {
-            return isNotZero(qudot_net[row]) || isNotZero(qudot_net[row+2]);
+            return isNotZero(qudot_net[row] + qudot_net[row+2]);
         } else {
-            return isNotZero(qudot_net[row+1]) || isNotZero(qudot_net[row+3]);
+            return isNotZero(qudot_net[row+1] + qudot_net[row+3]);
         }
     }
 

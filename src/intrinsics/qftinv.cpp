@@ -1,6 +1,7 @@
 #include "qudot/intrinsics/qftinv.h"
 #include "qudot/components/eprunit.h"
 
+#include <iostream>
 namespace qudot {
 
     void QftInv::operator() (QuMvN* qumvn, FeynmanUnit& feynmanUnit, const int start_qu, const int end_qu) {
@@ -12,7 +13,7 @@ namespace qudot {
             }
 
             for (int q = end_qu; q >= start_qu ; q--) {
-                //opStack.push(new Op(gateMap.get("H"), q));
+                std::cout << "IQFT: " << q << "\n";
                 feynmanUnit.h.QuGate::applyGate(qumvn, q);
 
                 int i = q - 1;
@@ -22,8 +23,6 @@ namespace qudot {
                     i -= 1;
                     r += 1;
                 }
-                // CoherenceUnit.mergeSameWorlds(quState, 1e-8f);
-                //EPRUnit.mergeWorlds(quMvN, Amplitudes.MERGE_EPSILON64);
                 EPRUnit::mergeWorlds(qumvn);
             }
     }    

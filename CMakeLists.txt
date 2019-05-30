@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -O3 -march=native")
 project(kratos)
 
+find_package(OpenMP REQUIRED) # Find the package
+
 #Bring the headers, into the project
 include_directories(include $ENV{MKLROOT}/include $ENV{TBBROOT}/include)
 link_directories($ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
@@ -71,6 +73,6 @@ set(QUDOT_LIB_SRC
 add_library(qudot SHARED ${QUDOT_LIB_SRC})
 add_executable(kratosapp ${KRATOS_SRC})
 
-target_link_libraries(kratosapp mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl)
+target_link_libraries(kratosapp mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
-target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl)
+target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
