@@ -67,6 +67,7 @@ class QuMvN : public Measurable {
         WorldMap::iterator begin();
         WorldMap::iterator end();
         WorldMap::range_type range();
+        WorldMap::const_range_type constRange() const;
 
     friend std::ostream& operator<<(std::ostream&, const QuMvN&);
 };

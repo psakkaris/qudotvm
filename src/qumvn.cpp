@@ -159,6 +159,10 @@ WorldMap::range_type QuMvN::range() {
     return _quworlds.range();
 }
 
+WorldMap::const_range_type QuMvN::constRange() const {
+    return _quworlds.range();
+}
+
 
 std::ostream& operator<<(std::ostream& out, const QuMvN& qumvn) {
     out << qumvn._quworlds.size() << "," << qumvn._num_qubits << "\n";
@@ -184,8 +188,9 @@ void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, dou
     double new_prob = 0.0;
     for (auto it=worlds.begin(); it != worlds.end(); ++it) {
         QuWorld* quworld = getQuWorld(*it);
-        new_amp += quworld->getWorldAmplitude();
-        new_prob += getWorldProbability(quworld->getWorldAmplitude());
+        QuAmp64 amp = quworld->getWorldAmplitude();
+        new_amp += amp;
+        new_prob += getWorldProbability(amp);
     }
     // note below assumes that qudotnets are identical
     // is zero
