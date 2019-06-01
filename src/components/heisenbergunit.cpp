@@ -2,11 +2,15 @@
 
 #include <cmath>
 #include <fstream>
-#include <tbb/parallel_for.h>
+#include "tbb/parallel_for.h"
+
+#include "mkl_vsl.h"
 
 namespace qudot {
-    void HeisenbergUnit::getResults(Measurable* measurable, unsigned int ensemble, QuFrequency& freq) {
-        tbb::parallel_for(size_t(0), size_t(ensemble), [&](size_t i) { freq.addValue(measurable->measure()); });
+    void HeisenbergUnit::getResults(QuMvN* qumvn, unsigned int ensemble, QuFrequency& freq) {
+        tbb::parallel_for(size_t(0), size_t(ensemble), [&](size_t i) { 
+            freq.addValue(qumvn->measure()); 
+        });
     }
 
     void HeisenbergUnit::printResults(std::ostream& out, QuFrequency& freq) {

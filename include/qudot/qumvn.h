@@ -56,6 +56,7 @@ class QuMvN : public Measurable {
         size_t size() const;
         QuWorld* getQuWorld(const size_t);
         std::string measure() override;
+        std::string measure(const double[]);
         Qubit measureQubit(const size_t);
         // swapping functions
         void swap(const int, const int, const bool = false);

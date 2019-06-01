@@ -21,7 +21,6 @@ namespace qudot {
             qudot_net[row + 2] = 0;
             qudot_net[row + 3] = 0;
         } 
-        vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
     QuWorld::QuWorld(const QuWorld& other) : num_qubits(other.num_qubits), id(other.id), amplitude(other.amplitude), enabling_q{other.enabling_q[0], other.enabling_q[1]} {
@@ -31,7 +30,6 @@ namespace qudot {
         for (size_t i=0; i < sz; i++) {
             qudot_net[i] = other.qudot_net[i];
         }
-        vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
     }
 
     QuWorld::QuWorld(QuWorld&& other) noexcept : num_qubits(0), id(0), amplitude(0), enabling_q{true, true} {
@@ -50,9 +48,7 @@ namespace qudot {
 
     QuWorld::~QuWorld() {
         delete[] qudot_net;
-        qudot_net = nullptr;
-        
-        vslDeleteStream(&stream);
+        qudot_net = nullptr;        
     }
 
     int QuWorld::getNumQubits() const {
@@ -186,12 +182,8 @@ namespace qudot {
         return !isNotZero(delta);
     }
 
-    std::string QuWorld::measure() {
-        double r[1];   
-        const double a=0.0;
-        const double b=1.0;
-
-        std::string result = "";
+    std::string QuWorld::measure(const double rands[]) {   
+        char resultc[num_qubits+1];
         int m=0;
         for (int q=0; q < num_qubits; q++) {
                 bool zeroActive = isActive(q+1, ZERO);
@@ -200,8 +192,7 @@ namespace qudot {
                 // The isActive test above takes into account our tolerence level for machine epsilon
                 // also doing a test for 0/1 active first let's us skip random number generation for very many cases
                 if (zeroActive && oneActive) {
-                    vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, 1, r, a, b);
-                    double randNum = r[0];
+                    double randNum = rands[q];
                     double zeroProb = getQubitProbability(q+1, ZERO);
                     if ((randNum + TOLERANCE <= zeroProb) || (randNum - TOLERANCE) <= zeroProb) {
                         m = 0;
@@ -213,10 +204,21 @@ namespace qudot {
                 } else if (oneActive) {
                     m = 1;
                 }
-                result += QUBIT_LABEL[m];
+                resultc[q] = QUBIT_LABEL[m];
         }
-        return result;
-    }
+        resultc[num_qubits] = '\0';
+        return std::string(resultc);
+    }    
+
+    // std::string QuWorld::measure() {   
+    //     const double a=0.0;
+    //     const double b=1.0;
+
+    //     double r[num_qubits];
+    //     vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, num_qubits, r, a, b);
+        
+    //     return measure(r);
+    // }
 
     void QuWorld::swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit) {
         if (!check_enabling_qubit) {

@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "qudot/quworld.h"
+#include "qudottest.h"
 
 using namespace qudot;
 
@@ -147,13 +148,18 @@ TEST(QuWorldTest, testMeasure) {
    myWorld.setDotAmplitude(2, ZERO, ROOT2);
    myWorld.setDotAmplitude(2, ONE, ROOT2);
 
+   double rand1[3];
+   double rand2[3];
+
+   getRand(rand1, 3);
+   getRand(rand2, 3);
    std::string results[10];
    for (int i = 0; i < 10; i++) {
-       results[i] = myWorld.measure();
+       results[i] = myWorld.measure(rand1);
        ASSERT_TRUE(results[i] == "000" || results[i] == "010"); 
    }    
-
-   ASSERT_NE(myWorld.measure(), "111");
+ 
+   ASSERT_NE(myWorld.measure(rand2), "111");
 }
 
 TEST(QuWorldTest, testGetWorldSigniture) {
@@ -177,13 +183,17 @@ TEST(QuWorldTest, testSwap) {
    myWorld.swapQubits(2, 1, false);
    std::string results[10];
    for (int i = 0; i < 10; i++) {
-       results[i] = myWorld.measure();
+       double rand[4];
+       getRand(rand, 4);
+       results[i] = myWorld.measure(rand);
        ASSERT_TRUE(results[i] == "0000" || results[i] == "1000"); 
    }   
 
    myWorld.swapQubits(1, 3, false); 
    for (int i = 0; i < 10; i++) {
-       results[i] = myWorld.measure();
+       double rand[4];
+       getRand(rand, 4);
+       results[i] = myWorld.measure(rand);
        ASSERT_TRUE(results[i] == "0000" || results[i] == "0010"); 
    }   
 }

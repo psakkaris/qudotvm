@@ -41,8 +41,18 @@ QuWorld* QuMvN::getQuWorld(const size_t index) {
 }
 
 std::string QuMvN::measure() {
+    double r[_num_qubits];
+    const double a=0.0;
+    const double b=1.0;
+
+    vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, _num_qubits, r, a, b);
     QuWorld* quworld = measureWorld();
-    return quworld->measure();
+    return quworld->measure(r);
+}
+
+std::string QuMvN::measure(const double rands[]) {
+    QuWorld* quworld = measureWorld();
+    return quworld->measure(rands);
 }
 
 Qubit QuMvN::measureQubit(const size_t q) {

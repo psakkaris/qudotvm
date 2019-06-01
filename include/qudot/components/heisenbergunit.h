@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 
-#include "qudot/measurable.h"
+#include "qudot/qumvn.h"
+// #include "qudot/measurable.h"
 #include "qudot/qufrequency.h"
 
 /**
@@ -16,7 +17,7 @@
 
 namespace qudot {
     namespace HeisenbergUnit {
-        void getResults(Measurable*, unsigned int ensemble, QuFrequency&);     
+        void getResults(QuMvN*, unsigned int ensemble, QuFrequency&);     
         void printResults(std::ostream&, QuFrequency&);   
         void saveResults(const std::string&, QuFrequency&);
         double percentError(const double experiment, const double theory);

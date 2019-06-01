@@ -9,6 +9,7 @@
 #include <utility>
 
 #include "gtest/gtest.h"
+#include "mkl_vsl.h"
 
 #include "qudot/qudot.h"
 #include "qudot/qudotconfig.h"
@@ -34,7 +35,9 @@ namespace qudot {
 
     int getEvenPeriod(const int result, const int tm, const int N);                        
 
-    bool shorTest(std::string filename, const int N, const int x, const int k, const int l);                        
+    bool shorTest(std::string filename, const int N, const int x, const int k, const int l);    
+
+    void getRand(double dest[], int num_rand);                    
 
     class Cf {
         private:

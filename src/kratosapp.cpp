@@ -12,27 +12,6 @@
 #include "qudot/components/heisenbergunit.h"
 
 
-void doSomeQuantum() {
-   qudot::QuWorld myWorld(5, 1, qudot::ONE_AMP64);
-   myWorld.setDotAmplitude(2, qudot::ZERO, qudot::ROOT2);
-   myWorld.setDotAmplitude(2, qudot::ONE, qudot::ROOT2);
-   myWorld.setDotAmplitude(5, qudot::ZERO, qudot::ROOT2);
-   myWorld.setDotAmplitude(5, qudot::ONE, qudot::ROOT2);   
-   
-   myWorld.swapQubits(2,4);
-   myWorld.swapQubits(5,1);
-   for (int i=0; i < 10; i++) {
-      std::cout << myWorld.measure() << std::endl;
-   }
-
-   qudot::QuReg reg(5, 8);
-   printf("qureg: %d\n", reg.getSize());
-   for (auto i=reg.getQubits().begin(); i != reg.getQubits().end(); i++) {
-      printf("%d\n", *i);
-   }
-
-}
-
 std::string getOutFilename(std::string& in_filename) {
    auto found = in_filename.find_first_of('.');
    if (found != std::string::npos) {

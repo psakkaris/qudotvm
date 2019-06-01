@@ -32,5 +32,6 @@ namespace qudot {
                 }    
             }
         });
+        std::cout << "worlds merged\n";
     }
 }

@@ -28,14 +28,13 @@ namespace qudot {
     class H;
     class R;
 
-    class QuWorld : public Measurable {
+    class QuWorld {
         private:
             int num_qubits;
             size_t id;
             QuAmp64 amplitude;
             QuAmp* qudot_net;
             bool enabling_q[2];
-            VSLStreamStatePtr stream;
 
             void swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp);
             int getRow(int q) const;
@@ -51,6 +50,7 @@ namespace qudot {
             QuWorld& operator=(const QuWorld&);
             QuWorld& operator=(QuWorld &&) noexcept;
 
+            std::string measure(const double rands[]);
             bool getEnablingQubit(const Qubit) const;
             void setEnablingQubit(const int q);
             size_t getId() const;
@@ -70,7 +70,6 @@ namespace qudot {
             // will only activate if it does not have zero amplitudes
             void activate(int q, Qubit qval);
             void swapQubits(const int qubit_a, const int qubit_b, bool check_enabling_qubit=false);
-            std::string measure() override;
             bool areNetsEqual(const QuWorld& other);
             std::string getWorldSigniture() const;
             // expand / contract number of qubits

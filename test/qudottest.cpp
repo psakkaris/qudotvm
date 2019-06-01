@@ -145,6 +145,16 @@ namespace qudot {
         return false;
     }
 
+    void getRand(double dest[], int num_rand) {
+        VSLStreamStatePtr stream;
+        vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
+
+        const double a=0.0;
+        const double b=1.0;
+
+        vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, num_rand, dest, a, b);
+    }
+
 
 
  // Cf class
