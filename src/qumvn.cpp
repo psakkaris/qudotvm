@@ -207,9 +207,11 @@ void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, dou
     if (!isNotZero(new_amp, epsilon)) {
         // worlds cancel
         for (auto it=worlds.begin(); it != worlds.end(); ++it) {
+            tbb::mutex::scoped_lock lock(_remove_world_mutex);
             _quworlds.unsafe_erase(*it);
             //removeWorld(*it);
         }
+        tbb::mutex::scoped_lock lock(_remove_world_mutex);
         _world_additive_factor = new_prob / _quworlds.size();
     } else {
         // worlds add up
@@ -219,6 +221,7 @@ void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, dou
         model_world->setWorldAmplitude(new_amp);
         ++it;
         for (; it != worlds.end(); ++it) {
+            tbb::mutex::scoped_lock lock(_remove_world_mutex);
             _quworlds.unsafe_erase(*it);
         }
     }    
