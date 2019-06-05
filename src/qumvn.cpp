@@ -58,7 +58,7 @@ std::string QuMvN::measure(const double rands[]) {
 Qubit QuMvN::measureQubit(const size_t q) {
     Qubit activeq;
     Qubit deactiveq;
-    float zero_prob = tbb::parallel_reduce(range(), 0.f, [&] (const WorldMap::range_type &r, float value) -> float {
+    float zero_prob = tbb::parallel_reduce(range(), 0.f, [&] (const WorldMap::const_range_type &r, float value) -> float {
         for (auto it=r.begin(); it != r.end(); ++it) {
             value += getWorldProbability((*it).second) * (*it).second->getQubitProbability(q, ZERO);
         }        
@@ -77,7 +77,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
     }    
 
     tbb::concurrent_unordered_set<size_t> deadworlds;
-    tbb::parallel_for(range(), [&] (const WorldMap::range_type &r) {
+    tbb::parallel_for(range(), [&] (const WorldMap::const_range_type &r) {
         for (auto it = r.begin(); it != r.end(); ++it) {
             (*it).second->activate(q, activeq);
             if ((*it).second->getQubitProbability(q, deactiveq) >= 1.0 - TOLERANCE) {
@@ -88,7 +88,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
         }        
     });
 
-    tbb::parallel_for(deadworlds.range(), [&] (const tbb::concurrent_unordered_set<size_t>::range_type &r) {
+    tbb::parallel_for(deadworlds.range(), [&] (const tbb::concurrent_unordered_set<size_t>::const_range_type &r) {
         for (auto it=r.begin(); it != r.end(); ++it) {
             QuWorld* quworld = getQuWorld(*it);
             if (quworld) {
@@ -114,7 +114,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
 }
 
 void QuMvN::swap(const int q1, const int q2, const bool check_enabling_qubit){
-    tbb::parallel_for(range(), [&] (const WorldMap::range_type &r) {
+    tbb::parallel_for(range(), [&] (const WorldMap::const_range_type &r) {
         for (auto it=r.begin(); it != r.end(); ++it) {
             (*it).second->swapQubits(q1, q2, check_enabling_qubit);    
         }
@@ -141,7 +141,7 @@ void QuMvN::splitWorlds(const std::vector<int>& ctrls) {
     if (ctrls.empty()) return; 
 
     tbb::concurrent_vector<QuWorld*> new_worlds;
-    tbb::parallel_for(range(), [&](const WorldMap::range_type &r) {
+    tbb::parallel_for(range(), [&](const WorldMap::const_range_type &r) {
         for (auto it = r.begin(); it != r.end(); it++) {
             for (int ctrl : ctrls) {
                 if ( (*it).second->isSplitWorlds(ctrl) ) {

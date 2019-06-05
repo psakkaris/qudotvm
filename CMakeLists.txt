@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.9)
+project(kratos)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-Wall -O3 -march=native")
-project(kratos)
+list(APPEND CMAKE_CXX_FLAGS "-Wall -O3 -march=native")
 
 find_package(OpenMP REQUIRED) # Find the package
 
@@ -15,6 +15,7 @@ link_directories($ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
  
 #However, the file(GLOB...) allows for wildcard additions:
 #file(GLOB SOURCES "src/*.cpp")
+message("C++ compiler flags: ${CMAKE_CXX_FLAGS_RELEASE}")
 set(KRATOS_SRC 
   ${PROJECT_SOURCE_DIR}/src/common.cpp
   ${PROJECT_SOURCE_DIR}/include/qudot/fenwicktree.hpp
