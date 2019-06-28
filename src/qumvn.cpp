@@ -96,20 +96,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
             }
         }
     });
-    // for (auto it = _quworlds.begin(); it != _quworlds.end(); ++it) {
-    //     (*it).second->activate(q, activeq);
-    //     if ((*it).second->getQubitProbability(q, deactiveq) >= 1.0 - TOLERANCE) {
-    //         deadworlds.insert((*it).second->getId());
-    //     } else {
-    //         (*it).second->deactivate(q, deactiveq);
-    //     }        
-    // }
-    // for (auto it=deadworlds.begin(); it != deadworlds.end(); ++it) {
-    //     QuWorld* quworld = getQuWorld(*it);
-    //     if (quworld) {
-    //         removeWorld(quworld);
-    //     }
-    // }
+
     return activeq;
 }
 
@@ -307,10 +294,11 @@ size_t QuMvN::getNextWorldId() {
 }
 
 void QuMvN::removeWorld(QuWorld* quworld) {
-    tbb::mutex::scoped_lock lock(_remove_world_mutex);
     double scale_factor = 1.0 / (1 - getWorldProbability(quworld->getWorldAmplitude()));
+    tbb::mutex::scoped_lock lock(_remove_world_mutex);
     _world_scale_factor = _world_scale_factor * scale_factor;
     _quworlds.unsafe_erase(quworld->getId());  
+    lock.release();
 }
 
 }

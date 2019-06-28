@@ -64,6 +64,7 @@ int main(int argc, char *argv[]) {
       if (config.getPrintResults()) {
          qudot::HeisenbergUnit::printResults(std::cout, freq);
       }
+      std::cout << "saving results to file\n";
       std::string out_filename = getOutFilename(filename);
       qudot::HeisenbergUnit::saveResults(out_filename, freq);
 
