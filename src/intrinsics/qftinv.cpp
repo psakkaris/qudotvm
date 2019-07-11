@@ -24,6 +24,7 @@ namespace qudot {
                     r += 1;
                 }
                 EPRUnit::mergeWorlds(qumvn);
+                std::cout << "cleanup complete\n";
             }
     }    
 
