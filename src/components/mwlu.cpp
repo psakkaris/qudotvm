@@ -21,7 +21,7 @@ void ManyWorldsLogicUnit::addModN(QuMvN* qumvn, const int val, const int N, cons
 
     qumvn->splitAllWorlds();
 
-    tbb::parallel_for(qumvn->range(), [&] (const WorldMap::range_type &r) {
+    tbb::parallel_for(qumvn->constRange(), [&] (const WorldMap::const_range_type &r) {
         for (auto it=r.begin(); it != r.end(); ++it) {
             QuWorld* quworld = it->second.get();
             comparator.compare(quworld, Na, start_q, end_q);
@@ -33,7 +33,7 @@ void ManyWorldsLogicUnit::addModN(QuMvN* qumvn, const int val, const int N, cons
 
 void ManyWorldsLogicUnit::ctrlAddModN(QuMvN* qumvn, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls) {
     qumvn->splitWorlds(ctrls);
-    tbb::parallel_for(qumvn->range(), [&] (const WorldMap::range_type &r) {
+    tbb::parallel_for(qumvn->constRange(), [&] (const WorldMap::const_range_type &r) {
         for (auto it=r.begin(); it != r.end(); ++it) {
             QuWorld* quworld = it->second.get();
             ctrlAddModN(quworld, val, N, start_q, end_q, ctrls);              
@@ -53,7 +53,7 @@ void ManyWorldsLogicUnit::mulModN(QuMvN* qumvn, const int val, const int N, cons
 
     qumvn->splitAllWorlds();
     qumvn->setNumQubits((q+other_q) - num_input_q);
-    tbb::parallel_for(qumvn->range(), [&] (const WorldMap::range_type &r) {
+    tbb::parallel_for(qumvn->constRange(), [&] (const WorldMap::const_range_type &r) {
         for (auto it=r.begin(); it != r.end(); ++it) {
             QuWorld* quworld = it->second.get();
             mulModN(quworld, val, N, start_q, end_q);
@@ -65,10 +65,10 @@ void ManyWorldsLogicUnit::mulModN(QuMvN* qumvn, const int val, const int N, cons
 
 void ManyWorldsLogicUnit::ctrlMulModN(QuMvN* qumvn, const int val, const int N, const int start_q, const int end_q, const std::vector<int>& ctrls) {
     qumvn->splitWorlds(ctrls);
-    tbb::parallel_for(qumvn->range(), [&] (const WorldMap::range_type &r) {
-        for (auto it=r.begin(); it != r.end(); ++it) {
-            QuWorld* quworld = it->second.get();
-            ctrlMulModN(quworld, val, N, start_q, end_q, ctrls);
+    tbb::parallel_for(size_t(0), qumvn->getNextWorld(), [&] (size_t index) {
+        QuWorld* quworld = qumvn->getQuWorld(index);
+        if (quworld != nullptr) {
+            ctrlMulModN(quworld, val, N, start_q, end_q, ctrls);    
         }
     });
 }

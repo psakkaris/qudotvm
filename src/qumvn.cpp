@@ -18,14 +18,22 @@ namespace qudot {
 
 QuMvN::QuMvN(const size_t num_qubits, const size_t multiverse_size) : 
         _num_qubits(num_qubits), _next_world(1), _world_scale_factor(1.0), 
-        _world_additive_factor(0.0), _quworlds(multiverse_size) 
+        _world_additive_factor(0.0)
 {
-    _quworlds[0] = std::make_shared<QuWorld>(_num_qubits, 0, ONE_AMP64);
+    _quworlds.rehash(multiverse_size);
+    WorldMap::accessor a;
+    _quworlds.insert(a, 0);
+    a->second = std::make_shared<QuWorld>(_num_qubits, 0, ONE_AMP64);
+    a.release();
     vslNewStream(&stream, VSL_BRNG_MT19937, std::clock());
 }
 
 size_t QuMvN::getNumQubits() const {
     return _num_qubits;
+}
+
+size_t QuMvN::getNextWorld() const {
+    return _next_world;
 }
 
 void QuMvN::setNumQubits(const size_t num_qubits) {
@@ -37,7 +45,13 @@ size_t QuMvN::size() const {
 }
 
 QuWorld* QuMvN::getQuWorld(const size_t index) {
-    return _quworlds[index].get();
+    WorldMap::const_accessor ca;
+    _quworlds.find(ca, index);
+    if (ca.empty()) {
+        return nullptr;
+    } else {
+        return ca->second.get();
+    }
 }
 
 std::string QuMvN::measure() {
@@ -145,7 +159,7 @@ void QuMvN::splitWorlds(const std::vector<int>& ctrls) {
     if (ctrls.empty()) return; 
 
     tbb::concurrent_vector<QuWorld*> new_worlds;
-    tbb::parallel_for(range(), [&](const WorldMap::const_range_type &r) {
+    tbb::parallel_for(constRange(), [&](const WorldMap::const_range_type &r) {
         for (auto it = r.begin(); it != r.end(); it++) {
             for (int ctrl : ctrls) {
                 if ( (*it).second->isSplitWorlds(ctrl) ) {
@@ -157,7 +171,10 @@ void QuMvN::splitWorlds(const std::vector<int>& ctrls) {
 
     tbb::parallel_for(size_t(0), size_t(new_worlds.size()), [&] (size_t i) {
         std::shared_ptr<QuWorld> s_ptr(new_worlds[i]);
-        _quworlds[new_worlds[i]->getId()] = s_ptr;
+        WorldMap::accessor a;
+        _quworlds.insert(a, new_worlds[i]->getId());
+        a->second = s_ptr;
+        //_quworlds[new_worlds[i]->getId()] = s_ptr;
     });
 }
 
@@ -170,11 +187,11 @@ WorldMap::iterator QuMvN::end() {
 }
 
 WorldMap::range_type QuMvN::range() {
-    return _quworlds.range();
+    return _quworlds.range(5000);
 }
 
 WorldMap::const_range_type QuMvN::constRange() const {
-    return _quworlds.range();
+    return _quworlds.range(10000);
 }
 
 
@@ -194,7 +211,9 @@ double QuMvN::getWorldProbability(const QuAmp64& amp) const {
 }
 
 void QuMvN::removeWorld(const size_t world_id) {
-    removeWorld(_quworlds[world_id].get());
+    WorldMap::const_accessor a;
+    _quworlds.find(a, world_id);
+    removeWorld(a->second.get());
 }
 
 void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, double epsilon) {
@@ -211,9 +230,7 @@ void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, dou
     if (!isNotZero(new_amp, epsilon)) {
         // worlds cancel
         for (auto it=worlds.begin(); it != worlds.end(); ++it) {
-            tbb::mutex::scoped_lock lock(_remove_world_mutex);
-            _quworlds.unsafe_erase(*it);
-            //removeWorld(*it);
+            _quworlds.erase(*it);
         }
         tbb::mutex::scoped_lock lock(_remove_world_mutex);
         _world_additive_factor = new_prob / _quworlds.size();
@@ -225,8 +242,7 @@ void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, dou
         model_world->setWorldAmplitude(new_amp);
         ++it;
         for (; it != worlds.end(); ++it) {
-            tbb::mutex::scoped_lock lock(_remove_world_mutex);
-            _quworlds.unsafe_erase(*it);
+            _quworlds.erase(*it);
         }
     }    
 }
@@ -250,7 +266,9 @@ QuWorld* QuMvN::measureWorld() {
     if (_quworlds.count(world.first) <= 0) {
         std::cout << "NULL WORLD\n";
     }
-    return _quworlds[world.first].get();
+    WorldMap::const_accessor ca;
+    _quworlds.find(ca, world.first);
+    return ca->second.get();
 }
 
 std::shared_ptr<FenwickTree<double>> QuMvN::getWorldFenwickTree() {
@@ -314,8 +332,8 @@ void QuMvN::removeWorld(QuWorld* quworld) {
     double scale_factor = 1.0 / (1 - getWorldProbability(quworld->getWorldAmplitude()));
     tbb::mutex::scoped_lock lock(_remove_world_mutex);
     _world_scale_factor = _world_scale_factor * scale_factor;
-    _quworlds.unsafe_erase(quworld->getId());  
     lock.release();
+    _quworlds.erase(quworld->getId());  
 }
 
 }
