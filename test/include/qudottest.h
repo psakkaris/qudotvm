@@ -37,7 +37,9 @@ namespace qudot {
 
     bool shorTest(std::string filename, const int N, const int x, const int k, const int l);    
 
-    void getRand(double dest[], int num_rand);                    
+    void getRand(double dest[], int num_rand);    
+
+    void sample(QuWorld* quworld, size_t num_samples, std::string samples[]);                
 
     class Cf {
         private:

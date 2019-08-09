@@ -27,6 +27,7 @@ set(TEST_SOURCES
     ${PROJECT_SOURCE_DIR}/mwlutest.cpp
     ${PROJECT_SOURCE_DIR}/shortest.cpp
     ${PROJECT_SOURCE_DIR}/testmain.cpp
+    ${PROJECT_SOURCE_DIR}/thanostest.cpp
 )
  
 add_executable(testmain ${TEST_SOURCES})

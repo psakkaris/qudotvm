@@ -40,6 +40,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/components/heisenbergunit.cpp
   ${PROJECT_SOURCE_DIR}/src/components/mwlu.cpp
   ${PROJECT_SOURCE_DIR}/src/components/eprunit.cpp
+  ${PROJECT_SOURCE_DIR}/src/components/thanosunit.cpp
   ${PROJECT_SOURCE_DIR}/src/scalemem.cpp
 )
 

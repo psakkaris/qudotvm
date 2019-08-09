@@ -155,6 +155,15 @@ namespace qudot {
         vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, num_rand, dest, a, b);
     }
 
+    void sample(QuWorld* quworld, size_t num_samples, std::string samples[]) {
+        int num_qubits = quworld->getNumQubits(); 
+        double rands[num_qubits];
+        for (int i=0; i < num_samples; i++) {
+            getRand(rands, num_qubits);
+            samples[i] = quworld->measure(rands);
+        }
+    }
+
 
 
  // Cf class
