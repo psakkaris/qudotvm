@@ -16,7 +16,7 @@ QuWorld* ThanosUnit::createWorld(const size_t num_qubits, const size_t world_id,
     return quworld;
 }    
 
-std::string ThanosUnit::getQuDna(QuWorld* quworld) const {
+std::string ThanosUnit::getQuDna(const QuWorld* quworld) const {
     char sig[quworld->getNumQubits()+1];
     for (int q=1; q <= quworld->getNumQubits(); q++) {
         bool zero_active = quworld->isActive(q, ZERO);

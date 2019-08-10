@@ -14,7 +14,7 @@ namespace qudot {
 
         public:
             QuWorld* createWorld(const size_t num_qubits, const size_t world_id, const size_t val);  
-            std::string getQuDna(QuWorld* quworld) const;          
+            std::string getQuDna(const QuWorld* quworld) const;          
     };
 
 }
