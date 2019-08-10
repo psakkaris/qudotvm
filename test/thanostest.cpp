@@ -61,3 +61,37 @@ TEST(ThanosTest, quDnaTest) {
     ASSERT_EQ(thanos.getQuDna(mixedworld), "ZXXZXY");
     delete mixedworld;
 }
+
+TEST(ThanosTest, mergeabilityTest) {
+    ThanosUnit thanos;
+
+    QuWorld* quworld5 = thanos.createWorld(6,1,5);
+    QuWorld* quworld1 = thanos.createWorld(6, 1, 1);
+    QuWorld* quworld27 = thanos.createWorld(6, 1, 27);
+    QuWorld* quworld33 = thanos.createWorld(6, 1, 33);   
+    QuWorld* quworld37 = thanos.createWorld(6, 1, 37);
+    QuWorld* quworld56 = thanos.createWorld(6, 1, 56);
+    QuWorld* quworld40 = thanos.createWorld(6, 1, 40);
+
+    ASSERT_TRUE(thanos.canSnap(quworld1, quworld5).first);
+    ASSERT_EQ(thanos.canSnap(quworld1, quworld5).second, 4);
+
+    ASSERT_TRUE(thanos.canSnap(quworld33, quworld37).first);
+    ASSERT_EQ(thanos.canSnap(quworld33, quworld37).second, 4);
+
+    ASSERT_TRUE(thanos.canSnap(quworld40, quworld56).first);
+    ASSERT_EQ(thanos.canSnap(quworld40, quworld56).second, 2);
+
+    ASSERT_FALSE(thanos.canSnap(quworld5, quworld27).first);
+    ASSERT_FALSE(thanos.canSnap(quworld33, quworld56).first);
+    ASSERT_FALSE(thanos.canSnap(quworld5, quworld33).first);
+    ASSERT_FALSE(thanos.canSnap(quworld5, quworld56).first);
+
+    delete quworld5;
+    delete quworld1;
+    delete quworld27;
+    delete quworld33;
+    delete quworld37;
+    delete quworld56;
+    delete quworld40;     
+}

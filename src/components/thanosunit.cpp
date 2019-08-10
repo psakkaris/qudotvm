@@ -34,4 +34,24 @@ std::string ThanosUnit::getQuDna(const QuWorld* quworld) const {
     return std::string(sig);
 }
 
+std::pair<bool, size_t> ThanosUnit::canSnap(QuWorld* quworld1, QuWorld* quworld2) {
+    std::string qudna1 = getQuDna(quworld1);
+    std::string qudna2 = getQuDna(quworld2);
+
+    auto diff = std::make_pair(false, 0);
+    int num_deltas = 0;
+    for (size_t i=0; i < qudna1.length(); i++) {
+        if (qudna1[i] != qudna2[i]) {
+            // only merge X vs Y diffs
+            if (qudna1[i] == 'Z' || qudna2[i] == 'Z') return std::make_pair(false, 0);;
+
+            num_deltas++;
+            if (num_deltas > 1) {
+                return std::make_pair(false, 0);
+            }
+            diff = std::make_pair(true, i+1);
+        }
+    }
+    return diff;
+}
 }
