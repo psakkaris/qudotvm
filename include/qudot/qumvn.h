@@ -12,6 +12,7 @@
 #include "mkl_vsl.h"
 #include "tbb/mutex.h"
 #include "tbb/concurrent_unordered_map.h"
+#include "tbb/concurrent_hash_map.h"
 #include "tbb/concurrent_unordered_set.h"
 
 #include "qudot/common.h"
@@ -21,7 +22,8 @@
 
 namespace qudot {
 
-typedef tbb::concurrent_unordered_map<size_t, std::shared_ptr<QuWorld>> WorldMap;
+typedef tbb::concurrent_hash_map<size_t, std::shared_ptr<QuWorld>> WorldMap;
+//typedef tbb::concurrent_unordered_map<size_t, std::shared_ptr<QuWorld>> WorldMap2;
 
 class QuMvN : public Measurable {
     private:
@@ -51,6 +53,7 @@ class QuMvN : public Measurable {
     public:
         QuMvN(const size_t, const size_t);   
         size_t getNumQubits() const;
+        size_t getNextWorld() const;
         double getWorldProbability(const QuAmp64& amp) const;
         void setNumQubits(const size_t); 
         size_t size() const;
