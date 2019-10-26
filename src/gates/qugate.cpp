@@ -8,7 +8,7 @@ namespace qudot {
 void QuGate::applyGate(QuMvN* qumvn, int q) {
     tbb::parallel_for(qumvn->constRange(), [&](const WorldMap::const_range_type &r) {
         for (auto it = r.begin(); it != r.end(); ++it) {
-            applyGate(qumvn->getQuWorld((*it).first), q);
+            applyGate((*it).second.get(), q);
         }
     });
 }
@@ -17,7 +17,7 @@ void QuGate::applyControlGate(QuMvN* qumvn, const int target, const std::vector<
     qumvn->splitWorlds(ctrls);
     tbb::parallel_for(qumvn->constRange(), [&](const WorldMap::const_range_type &r) {
         for (auto it = r.begin(); it != r.end(); it++) {
-            applyControlGate(qumvn->getQuWorld((*it).first), target, ctrls);
+            applyControlGate((*it).second.get(), target, ctrls);
         }
     });    
 
