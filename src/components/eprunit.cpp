@@ -1,6 +1,8 @@
 #include "qudot/components/eprunit.h"
+#include "qudot/components/thanosunit.h"
 
 #include <iostream>
+#include <map>
 #include <string>
 
 #include "tbb/parallel_for.h"
@@ -20,11 +22,12 @@ namespace qudot {
         std::cout << "num worlds: " << qumvn->size() << "\n";
         std::cout << "epsilon: " << epsilon << "\n";
         SigMap world_sigs(qumvn->size() / 2);  
+        ThanosUnit thanos;
 
         tbb::parallel_for(qumvn->range(), [&](const WorldMap::const_range_type &r) {
             for (auto it = r.begin(); it != r.end(); ++it) {
                 QuWorld* quworld = it->second.get();   
-                string sig = quworld->getWorldSigniture();
+                string sig = thanos.getQuDna(quworld);
                 SigMap::accessor a;    
                 if (world_sigs.find(a, sig)) {
                     a->second.insert(quworld->getId());
@@ -45,6 +48,20 @@ namespace qudot {
                 }    
             }
         });
-        std::cout << "worlds merged\n";
+        std::cout << "identical worlds merged\n";
+        
+        // int num_snaps = 0;
+        // for (auto it=qumvn->begin(); it != qumvn->end(); ++it) {
+        //     auto it2 = it;
+        //     ++it2;
+        //     for (; it2 != qumvn->end(); ++it2) {
+        //         auto snap_result = thanos.canSnap(it->second.get(), it2->second.get());
+        //         if (snap_result.first) {
+        //             num_snaps++;
+        //             break;
+        //         }
+        //     }
+        // }
+        // std::cout << "can snap: " << num_snaps << " worlds\n";
     }
 }

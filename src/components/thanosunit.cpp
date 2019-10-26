@@ -38,6 +38,10 @@ std::pair<bool, size_t> ThanosUnit::canSnap(QuWorld* quworld1, QuWorld* quworld2
     std::string qudna1 = getQuDna(quworld1);
     std::string qudna2 = getQuDna(quworld2);
 
+    return canSnap(qudna1, qudna2);
+}
+
+std::pair<bool, size_t> ThanosUnit::canSnap(const std::string& qudna1, const std::string&  qudna2) const {
     auto diff = std::make_pair(false, 0);
     int num_deltas = 0;
     for (size_t i=0; i < qudna1.length(); i++) {
