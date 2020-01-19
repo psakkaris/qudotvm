@@ -75,6 +75,7 @@ namespace qudot {
             // expand / contract number of qubits
             void expandQubits(const int nq);
             void contractQubits(const int nq, const std::pair<int, int>& qubits_above, const std::pair<int, int>& qubits_result, const std::pair<int, int>& qubits_below);
+            void fuse(QuWorld*, const int q);
 
         friend std::ostream& operator<<(std::ostream&, const QuWorld&);    
 

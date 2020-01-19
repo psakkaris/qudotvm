@@ -64,4 +64,38 @@ namespace qudot {
         // }
         // std::cout << "can snap: " << num_snaps << " worlds\n";
     }
+
+    void EPRUnit::factorWorlds(QuMvN* qumvn, double epsilon) {
+        int num_snaps = 0;
+        ThanosUnit thanos;
+        std::cout << "worlds before: " << qumvn->size() << "\n";
+        for (auto it=qumvn->begin(); it != qumvn->end(); ++it) {
+            QuWorld* world1 = it->second.get();
+            // std::cout << "checking world: " << world1->getId() << "\n";
+            std::cout << thanos.getQuDna(it->second.get()) << "\n";
+            /*
+            auto it2 = qumvn->begin();
+            while (it2 != qumvn->end()) {
+                if (it != it2) {
+                QuWorld* world2 = it2->second.get();
+                auto diff = world1->getWorldAmplitude() - world2->getWorldAmplitude();
+                auto canSnap = thanos.canSnap(world1, world2);
+                // std::cout << world1->getId() << " vs " << world2->getId() << "\n";
+                if (canSnap.first) {
+                    std::cout << "snapping\n";
+                    num_snaps++;    
+                    world1->fuse(world2, canSnap.second);
+                    QuAmp64 newAmp = QuAmp64(std::sqrt(2), 0) * world1->getWorldAmplitude();
+                    world1->setWorldAmplitude(newAmp);
+                    qumvn->fuseWorld(world2);
+                    break;
+                }
+                }
+                it2++;
+            }
+            */
+        }
+        std::cout << "-----------------------------\n\n";
+        std::cout << "worlds after: " << qumvn->size() << "\n"; 
+    }
 }

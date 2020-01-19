@@ -65,6 +65,7 @@ class QuMvN : public Measurable {
         void splitAllWorlds();
         void removeWorld(const size_t id);
         void mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, double epsilon = TOLERANCE64);
+        void fuseWorld(QuWorld*);
         WorldMap::iterator begin();
         WorldMap::iterator end();
         WorldMap::range_type range();

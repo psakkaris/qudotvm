@@ -299,6 +299,13 @@ namespace qudot {
         num_qubits = nq;
     }
 
+    void QuWorld::fuse(QuWorld* other, const int q) {
+        int row = getRow(q);
+        for (int i = 0; i < 8; i++) {
+            qudot_net[row + i] = other->qudot_net[row + i];
+        }
+    }
+
     //#################### PRIVATE #####################/
 
     void QuWorld::swapDots(const int qubit_a, const QuAmp& qb_zero_amp, const QuAmp& qb_one_amp) {

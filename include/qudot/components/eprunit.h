@@ -7,6 +7,7 @@
 namespace qudot {
     namespace EPRUnit {
         void mergeWorlds(QuMvN* qumvn, double epsilon = TOLERANCE64);
+        void factorWorlds(QuMvN* qumvn, double espilon = TOLERANCE64);
     }    
 }
 

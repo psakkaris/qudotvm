@@ -318,4 +318,10 @@ void QuMvN::removeWorld(QuWorld* quworld) {
     lock.release();
 }
 
+void QuMvN::fuseWorld(QuWorld* quworld) {
+    tbb::mutex::scoped_lock lock(_remove_world_mutex);    
+    _quworlds.unsafe_erase(quworld->getId());  
+    lock.release();
+}
+
 }
