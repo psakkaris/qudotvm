@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <stdexcept>
 #include <string>
+#include <boost/log/trivial.hpp>
 
 #include "qudot/common.h"
 #include "qudot/qudotvm.h"
@@ -22,7 +23,7 @@ std::string getOutFilename(std::string& in_filename) {
 }
 
 int main(int argc, char *argv[]) {
-   std::cout << "QuDot Virtual Machine |001>" << std::endl;
+   BOOST_LOG_TRIVIAL(info) << "QuDot Virtual Machine |001>";
 
    qudot::QuDotConfig config;
    int arg_ptr = 1;
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
    }
 
    if (filename.size() == 0) {
-      std::cerr << "no input file found" << std::endl;
+      BOOST_LOG_TRIVIAL(error) << "no input file found";
       return 1;
    }
 
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
       if (config.getPrintResults()) {
          qudot::HeisenbergUnit::printResults(std::cout, freq);
       }
-      std::cout << "saving results to file\n";
+      BOOST_LOG_TRIVIAL(info) << "saving results to file";
       std::string out_filename = getOutFilename(filename);
       qudot::HeisenbergUnit::saveResults(out_filename, freq);
 
@@ -72,7 +73,7 @@ int main(int argc, char *argv[]) {
          vm.printWorlds(out_filename + "worlds");
       }
    } catch(std::runtime_error &re) {
-      std::cerr << "error: " << re.what() << std::endl;
+      BOOST_LOG_TRIVIAL(error) << "error: " << re.what();
       return 1;   
    }
 
