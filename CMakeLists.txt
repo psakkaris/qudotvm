@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(kratos)
+project(qudot)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 list(APPEND CMAKE_CXX_FLAGS "-Wall -O3 -march=native")
@@ -16,7 +16,7 @@ link_directories($ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
 #However, the file(GLOB...) allows for wildcard additions:
 #file(GLOB SOURCES "src/*.cpp")
 message("C++ compiler flags: ${CMAKE_CXX_FLAGS_RELEASE}")
-set(KRATOS_SRC 
+set(QUDOTVM_SRC 
   ${PROJECT_SOURCE_DIR}/src/common.cpp
   ${PROJECT_SOURCE_DIR}/include/qudot/fenwicktree.hpp
   ${PROJECT_SOURCE_DIR}/src/gates/qugate.cpp
@@ -26,7 +26,7 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/qudotconfig.cpp
   ${PROJECT_SOURCE_DIR}/src/qureg.cpp
   ${PROJECT_SOURCE_DIR}/src/gatestackframe.cpp
-  ${PROJECT_SOURCE_DIR}/src/kratosvm.cpp
+  ${PROJECT_SOURCE_DIR}/src/qudotvm.cpp
   ${PROJECT_SOURCE_DIR}/src/qufrequency.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/X.cpp
   ${PROJECT_SOURCE_DIR}/src/gates/Y.cpp
@@ -43,9 +43,9 @@ set(KRATOS_SRC
   ${PROJECT_SOURCE_DIR}/src/scalemem.cpp
 )
 
-add_library(qudot SHARED ${KRATOS_SRC})
-add_executable(kratosapp ${PROJECT_SOURCE_DIR}/src/kratosapp.cpp ${KRATOS_SRC})
+add_library(qudot SHARED ${QUDOTVM_SRC})
+add_executable(qudotvm ${PROJECT_SOURCE_DIR}/src/qudotapp.cpp ${QUDOTVM_SRC})
 
-target_link_libraries(kratosapp mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
+target_link_libraries(qudotvm mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})
 # -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
 target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread m dl ${OpenMP_CXX_LIBRARIES})

@@ -6,10 +6,10 @@
 #include <boost/multiprecision/cpp_int.hpp>
 
 namespace qudot {    
-    KratosVM* getVM(std::string& filename, VMVersion vm_version, bool is_bytecode) {
+    QuDotVM* getVM(std::string& filename, VMVersion vm_version, bool is_bytecode) {
         if (vm_version == K1) {
             QuDotConfig config;
-            return new KratosVM(filename, config);
+            return new QuDotVM(filename, config);
         } else {
             throw std::runtime_error("Unrecognized VM Option");
         }                   
@@ -50,7 +50,7 @@ namespace qudot {
                             double error_threshold, bool is_bytecode, bool make_assertion) 
     {
         QuDotConfig config;
-        KratosVM vm(filename, config);
+        QuDotVM vm(filename, config);
         vm.bohr();
         QuFrequency freq(vm.getEnsemble());
         vm.getResults(freq);
@@ -89,7 +89,7 @@ namespace qudot {
         }             
     }
 
-    std::pair<int, int> factor(KratosVM& vm, const int N, const int x, const int k, const int l, const int tm) {
+    std::pair<int, int> factor(QuDotVM& vm, const int N, const int x, const int k, const int l, const int tm) {
         std::string result = vm.measure();
         result.erase(k, l);
         int int_result = std::stoi(result, nullptr, 2);        
@@ -127,7 +127,7 @@ namespace qudot {
 
     bool shorTest(std::string filename, const int N, const int x, const int k, const int l) {
         QuDotConfig config;
-        KratosVM vm(filename, config);
+        QuDotVM vm(filename, config);
         vm.bohr();
         int tm = std::pow(2, k);     
         int num_measurements = 1;

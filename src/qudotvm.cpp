@@ -1,4 +1,4 @@
-#include "qudot/kratosvm.h"
+#include "qudot/qudotvm.h"
 
 #include <cstddef>
 #include <iostream>
@@ -20,7 +20,7 @@
 #include "qudot/intrinsics/qftinv.h"
 
 namespace qudot {
-    KratosVM::KratosVM(const std::string filename, const QuDotConfig& qc) : qudotc_fp(0) {
+    QuDotVM::QuDotVM(const std::string filename, const QuDotConfig& qc) : qudotc_fp(0) {
         num_qubits = qc.getNumQubits();
         ensemble = qc.getEnsembleSize();
 
@@ -78,7 +78,7 @@ namespace qudot {
         delete[] bytes;
     }
 
-    KratosVM::~KratosVM() { 
+    QuDotVM::~QuDotVM() { 
         if (code) delete[] code;
         //if (qu_world) delete qu_world;
 
@@ -86,15 +86,15 @@ namespace qudot {
         //qu_world = nullptr;
     }
 
-    KratosVM::KratosVM(const KratosVM & other) {
+    QuDotVM::QuDotVM(const QuDotVM & other) {
         std::cout << "I'm making a copy!\n";
     }
 
-    KratosVM& KratosVM::operator=(KratosVM& other) {
+    QuDotVM& QuDotVM::operator=(QuDotVM& other) {
         std::cout << "I'm making an assignment!\n";
     }
 
-    void KratosVM::bohr() { 
+    void QuDotVM::bohr() { 
         if (!main_gate) {
             throw std::runtime_error("no main gate found");
         }
@@ -105,7 +105,7 @@ namespace qudot {
         feynmanProcessor();
     }
 
-    void KratosVM::getResults(QuFrequency& freq) { 
+    void QuDotVM::getResults(QuFrequency& freq) { 
         QuMvN* qumvn_ptr = qumvn.get();
         //std::cout << *qumvn << "\n";
         EPRUnit::mergeWorlds(qumvn_ptr);
@@ -113,15 +113,15 @@ namespace qudot {
         HeisenbergUnit::getResults(qumvn_ptr, ensemble, freq);
     }
 
-    unsigned int KratosVM::getEnsemble() const {
+    unsigned int QuDotVM::getEnsemble() const {
         return ensemble;
     }
 
-    std::string KratosVM::measure() {
+    std::string QuDotVM::measure() {
         return qumvn->measure();
     }
 
-    void KratosVM::feynmanProcessor() {
+    void QuDotVM::feynmanProcessor() {
         char qu_code = code[ip];
         int qureg_index;
         int value;
@@ -498,31 +498,31 @@ namespace qudot {
         }
     }
 
-    void KratosVM::printWorlds(const std::string& filename) {
+    void QuDotVM::printWorlds(const std::string& filename) {
         std::ofstream myfile;
         myfile.open(filename);  
         printWorlds(myfile);      
     }
 
-    void KratosVM::printWorlds(std::ostream& out) {
+    void QuDotVM::printWorlds(std::ostream& out) {
         out << *(qumvn.get()) << "\n";
     }
     //################### PRIVATE METHODS ####################
-    void KratosVM::printQuReg(const QuReg& qr) {
+    void QuDotVM::printQuReg(const QuReg& qr) {
         auto qubits = qr.getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
             std::cout << *it << ", ";
         }
     }
 
-    void KratosVM::applyGateToQuMvN(QuGate& qugate) {
+    void QuDotVM::applyGateToQuMvN(QuGate& qugate) {
         for (unsigned int i=1; i <= num_qubits; i++) {
             qugate.applyGate(qumvn.get(), i);
             //qugate.applyGate(qu_world, i);
         }    
     }   
 
-    void KratosVM::applyGateToQuMvN(QuGate& qugate, const std::vector<QuReg>& quregs) {
+    void QuDotVM::applyGateToQuMvN(QuGate& qugate, const std::vector<QuReg>& quregs) {
         int index = getInt(code, ip);
         auto qubits = quregs[index].getQubits();
         for (auto it=qubits.begin(); it != qubits.end(); ++it) {
@@ -532,7 +532,7 @@ namespace qudot {
         }
     }
 
-    void KratosVM::call(const int gate_index, const int first_reg_index) {
+    void QuDotVM::call(const int gate_index, const int first_reg_index) {
         auto gate_symbol = const_pool_gates[gate_index];
         auto f = std::make_shared<GateStackFrame>(gate_symbol, ip);
         f->setIntReg(0, num_qubits);
