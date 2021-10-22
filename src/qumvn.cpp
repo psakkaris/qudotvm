@@ -1,5 +1,7 @@
 #include "qudot/qumvn.h"
 
+#include <boost/log/trivial.hpp>
+
 #include <cmath>
 #include <iostream>
 #include <ctime>
@@ -70,7 +72,7 @@ std::string QuMvN::measure(const double rands[]) {
 }
 
 Qubit QuMvN::measureQubit(const size_t q) {
-    std::cout << "measure qubit: reduce\n";
+    BOOST_LOG_TRIVIAL(info) << "measure qubit: reduce";
     Qubit activeq;
     Qubit deactiveq;
     float zero_prob = tbb::parallel_reduce(range(), 0.f, [&] (const WorldMap::const_range_type &r, float value) -> float {
@@ -90,7 +92,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
         activeq = ONE;
         deactiveq = ZERO;
     }    
-    std::cout << "measure qubit: kill worlds\n";
+    BOOST_LOG_TRIVIAL(info) << "measure qubit: kill worlds";
     tbb::concurrent_unordered_set<size_t> deadworlds;
     tbb::parallel_for(range(), [&] (const WorldMap::const_range_type &r) {
         for (auto it = r.begin(); it != r.end(); ++it) {
@@ -102,7 +104,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
             }        
         }        
     });
-    std::cout << "remove dead worlds\n";
+    BOOST_LOG_TRIVIAL(info) << "remove dead worlds";
     tbb::parallel_for(deadworlds.range(), [&] (const tbb::concurrent_unordered_set<size_t>::range_type &r) {
         for (auto it=r.begin(); it != r.end(); ++it) {
             QuWorld* quworld = getQuWorld(*it);
@@ -126,7 +128,7 @@ Qubit QuMvN::measureQubit(const size_t q) {
     //         removeWorld(quworld);
     //     }
     // }
-    std::cout << "done\n";
+    BOOST_LOG_TRIVIAL(info) << "done";
 
     return activeq;
 }
@@ -264,7 +266,7 @@ QuWorld* QuMvN::measureWorld() {
     auto rand = getRand();
     auto world = ftree->findWorld(rand);
     if (_quworlds.count(world.first) <= 0) {
-        std::cout << "NULL WORLD\n";
+        BOOST_LOG_TRIVIAL(warning) << "NULL WORLD";
     }
     WorldMap::const_accessor ca;
     _quworlds.find(ca, world.first);
@@ -287,7 +289,7 @@ std::shared_ptr<FenwickTree<double>> QuMvN::getWorldFenwickTree() {
                 ++index;
             }
         }
-        std::cout << "total probability: " << tot_prob << "\n";
+        BOOST_LOG_TRIVIAL(info) << "total probability: " << tot_prob;
     }
     return _world_tree;     
 }
