@@ -4,7 +4,7 @@
 #include <string>
 
 #include "qudot/common.h"
-#include "qudot/kratosvm.h"
+#include "qudot/qudotvm.h"
 #include "qudot/qufrequency.h"
 #include "qudot/qureg.h"
 #include "qudot/quworld.h"
@@ -22,7 +22,7 @@ std::string getOutFilename(std::string& in_filename) {
 }
 
 int main(int argc, char *argv[]) {
-   std::cout << "QuDot Kratos Virtual Machine |001>" << std::endl;
+   std::cout << "QuDot Virtual Machine |001>" << std::endl;
 
    qudot::QuDotConfig config;
    int arg_ptr = 1;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
    }
 
    try {
-      qudot::KratosVM vm(filename, config);
+      qudot::QuDotVM vm(filename, config);
       vm.bohr();
       qudot::QuFrequency freq(vm.getEnsemble());
       vm.getResults(freq);

@@ -1,5 +1,5 @@
-#ifndef __QUDOT_KRATOSVM_H
-#define __QUDOT_KRATOSVM_H
+#ifndef __QUDOT_QUDOTVM_H
+#define __QUDOT_QUDOTVM_H
 
 #include <cstddef>
 #include <memory>
@@ -18,7 +18,7 @@
 #include "qudot/intrinsics/fulladder.h"
 
 namespace qudot {
-    class KratosVM : public QuDot {
+    class QuDotVM : public QuDot {
         private:
             int ip;
             int fp;
@@ -44,10 +44,10 @@ namespace qudot {
             void call(const int, const int);
 
         public:
-            KratosVM(const std::string filename, const QuDotConfig& qudot_config);
-            virtual ~KratosVM();
-            KratosVM(const KratosVM&);
-            KratosVM & operator=(KratosVM&);
+            QuDotVM(const std::string filename, const QuDotConfig& qudot_config);
+            virtual ~QuDotVM();
+            QuDotVM(const QuDotVM&);
+            QuDotVM & operator=(QuDotVM&);
 
             void bohr() override;
             void getResults(QuFrequency&) override;
