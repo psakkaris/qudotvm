@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/log/trivial.hpp>
 
 #include "qudot/bytecodes.h"
 #include "qudot/common.h"
@@ -71,7 +72,7 @@ namespace qudot {
         code = new char[bytecode_length];
         code[bytecode_length-1] = 0;
         memcpy(code, &bytes[qudotc_fp], bytecode_length);
-        std::cout << "bytecode length: " << bytecode_length << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "bytecode length: " << bytecode_length;
 
         //qu_world = new QuWorld(num_qubits, 1, ONE_AMP64);
         qumvn = std::make_shared<QuMvN>(num_qubits, 1);
@@ -107,9 +108,8 @@ namespace qudot {
 
     void QuDotVM::getResults(QuFrequency& freq) { 
         QuMvN* qumvn_ptr = qumvn.get();
-        //std::cout << *qumvn << "\n";
         EPRUnit::mergeWorlds(qumvn_ptr);
-        std::cout << qumvn->size() << " worlds left\n";
+        BOOST_LOG_TRIVIAL(debug) << qumvn->size() << " worlds left";
         HeisenbergUnit::getResults(qumvn_ptr, ensemble, freq);
     }
 
@@ -542,7 +542,6 @@ namespace qudot {
         for (unsigned int arg=0; arg < gate_symbol->getArgs(); arg++) {
             // move args, leaving room for r0
             f->setIntReg(arg+1, calling_frame->getIntRegs()[first_reg_index+arg]);
-            //std::cout << "r" << arg+1 << "=" << calling_frame->getIntRegs()[first_reg_index+arg] << "\n";
         }
         // push new stack to frame
         calls.push(f);
