@@ -15,10 +15,10 @@ namespace qudot {
         QuAmp p10 = qw->qudot_net[parents + 2];
         QuAmp p11 = qw->qudot_net[parents + 3];
 
-        qw->qudot_net[parents + 0] = (p00 * ROOT2) + (p01 * ROOT2);
-        qw->qudot_net[parents + 1] = (p00 * ROOT2) + (p01 * MROOT2);
-        qw->qudot_net[parents + 2] = (p10 * ROOT2) + (p11 * ROOT2);
-        qw->qudot_net[parents + 3] = (p10 * ROOT2) + (p11 * MROOT2);
+        qw->qudot_net[parents + 0] = (p00 + p01) * ROOT2;
+        qw->qudot_net[parents + 1] = (p00 - p01) * ROOT2;
+        qw->qudot_net[parents + 2] = (p10 + p11) * ROOT2;
+        qw->qudot_net[parents + 3] = (p10 - p11) * ROOT2;
 
         if (q < qw->num_qubits) {
             int children = qw->getRow(q+1);
