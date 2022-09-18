@@ -36,3 +36,5 @@
 **/profile
 *.code-workspace
 .vscode/**
+.idea/
+cmake-build-debug
