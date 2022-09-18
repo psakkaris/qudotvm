@@ -232,10 +232,11 @@ void QuMvN::mergeWorlds(const tbb::concurrent_unordered_set<size_t>& worlds, dou
     if (!isNotZero(new_amp, epsilon)) {
         // worlds cancel
         for (auto it=worlds.begin(); it != worlds.end(); ++it) {
-            _quworlds.erase(*it);
+            //_quworlds.erase(*it);
+            getQuWorld(*it)->setWorldAmplitude(const_cast<QuAmp64 &>(ZERO_AMP64));
         }
-        tbb::mutex::scoped_lock lock(_remove_world_mutex);
-        _world_additive_factor = new_prob / _quworlds.size();
+        //tbb::mutex::scoped_lock lock(_remove_world_mutex);
+        //_world_additive_factor = new_prob / _quworlds.size();
     } else {
         // worlds add up
         auto it = worlds.begin();
@@ -265,8 +266,10 @@ QuWorld* QuMvN::measureWorld() {
     auto ftree = getWorldFenwickTree();
     auto rand = getRand();
     auto world = ftree->findWorld(rand);
-    if (_quworlds.count(world.first) <= 0) {
+    while (_quworlds.count(world.first) <= 0) {
         BOOST_LOG_TRIVIAL(warning) << "NULL WORLD";
+        rand = getRand();
+        world = ftree->findWorld(rand);
     }
     WorldMap::const_accessor ca;
     _quworlds.find(ca, world.first);
