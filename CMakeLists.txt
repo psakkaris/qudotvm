@@ -7,7 +7,7 @@ list(APPEND CMAKE_CXX_FLAGS "-Wall -O3 -march=native -DBOOST_LOG_DYN_LINK")
 find_package(OpenMP REQUIRED) # Find the package
 
 #Bring the headers, into the project
-include_directories(include $ENV{MKLROOT}/include $ENV{TBBROOT}/include)
+include_directories(include /usr/include/mkl /usr/include/tbb)
 link_directories($ENV{MKLROOT}/lib/intel64 $ENV{TBBROOT}/lib/intel64/gcc4.7)
  
 #Can manually add the sources using the set command as follows:
