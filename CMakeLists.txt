@@ -46,6 +46,4 @@ set(QUDOTVM_SRC
 add_library(qudot SHARED ${QUDOTVM_SRC})
 add_executable(qudotvm ${PROJECT_SOURCE_DIR}/src/qudotapp.cpp ${QUDOTVM_SRC})
 
-target_link_libraries(qudotvm mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread boost_log m dl ${OpenMP_CXX_LIBRARIES})
-# -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_ilp64.a $(MKLROOT)/lib/intel64/libmkl_sequential.a $(MKLROOT)/lib/intel64/libmkl_core.a -Wl,--end-group -lpthread -lm -ldl
-target_link_libraries(qudot mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread boost_log m dl ${OpenMP_CXX_LIBRARIES})
+target_link_libraries(qudotvm mkl_intel_ilp64 mkl_tbb_thread mkl_core tbb tbbmalloc stdc++ pthread /usr/lib/libboost_log.so.1.76.0 m dl ${OpenMP_CXX_LIBRARIES})
