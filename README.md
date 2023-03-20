@@ -1,8 +1,8 @@
 REQUIRED PACKAGES
 ===
 [GTest 1.8.1](https://github.com/google/googletest/releases) <br />
-[Intel Parallel Studio xe 2019.3](https://www.intel.com/content/www/us/en/developer/articles/release-notes/intel-parallel-studio-xe-release-notes-and-new-features.html)
-
+[Intel Parallel Studio xe 2019.3](https://www.intel.com/content/www/us/en/developer/articles/release-notes/intel-parallel-studio-xe-release-notes-and-new-features.html) <br />
+[BOOST Libraries 1.76](https://www.boost.org/)
 
 Building the QuDotVM
 ===
